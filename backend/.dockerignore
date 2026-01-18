@@ -1,0 +1,23 @@
+# Dependency & Build
+node_modules/
+dist/
+generated/
+
+# Tests & Coverage
+test/
+coverage/
+
+# Environment & Secrets
+.env
+
+# Config & Tooling
+.git
+.gitignore
+.prettierrc
+eslint.config.mjs
+README.md
+*.log
+
+# Docker 관련
+docker-compose.yml
+Dockerfile
