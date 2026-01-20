@@ -17,10 +17,11 @@ services:
   nestjs-server:
     container_name: nestjs-server-container
     image: johnpk1007/nestjs-server:latest
+    pull_policy: always
     ports: 
       - 4000:4000
-    environment:
-      - DATABASE_URL=${DATABASE_URL}
+    env_file:
+      - .env.docker
     depends_on:
       postgres-db:
         condition: service_healthy
