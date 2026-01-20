@@ -16,7 +16,7 @@ services:
       timeout: 10s
   nestjs-server:
     container_name: nestjs-server-container
-    image: nestjs-server:latest
+    image: johnpk1007/nestjs-server:latest
     ports: 
       - 4000:4000
     environment:
