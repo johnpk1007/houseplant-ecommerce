@@ -1,48 +1,60 @@
 import { ForbiddenException, Injectable } from "@nestjs/common";
-import { PrismaService } from "../prisma/prisma.service";
 import { AuthDto } from "./dto";
 import * as bcrypt from "bcrypt"
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/client";
+import { JwtService } from "@nestjs/jwt";
+import { ConfigService } from "@nestjs/config";
+import { UserService } from "../user/user.service";
 
 @Injectable()
 export class AuthService {
-    constructor(private prisma: PrismaService) { }
-    async signup(dto: AuthDto) {
-        const hash = await bcrypt.hash(dto.password, 10);
+    constructor(
+        private jwtService: JwtService,
+        // private config: ConfigService,
+        private userService: UserService,
+    ) { }
+
+    async signUp(dto: AuthDto) {
         try {
-            const customer = await this.prisma.customer.create({
-                data: {
-                    email: dto.email,
-                    hash,
-                }
-            })
-            return customer
+            const user = await this.userService.createUser(dto.email, dto.password)
+            return user
         } catch (error) {
-            if (error instanceof PrismaClientKnownRequestError) {
-                if (error.code === 'P2002') {
-                    throw new ForbiddenException('Credential taken')
-                }
-            }
             throw error
         }
-
-
     }
-    async signin(dto: AuthDto) {
-        const customer = await this.prisma.customer.findUnique({
-            where: { email: dto.email }
-        })
-        if (!customer) {
-            throw new ForbiddenException(
-                'Credentials incorrect'
-            )
-        }
-        const pwMatches = await bcrypt.compare(dto.password, customer.hash)
+
+    async signIn(user: any) {
+        const payload = {
+            sub: user.id,
+            email: user.email
+        };
+        return {
+            access_token: this.jwtService.sign(payload),
+        };
+    }
+
+    async validateUser(email: string, password: string) {
+        const user = await this.userService.findUser(email)
+        const pwMatches = await bcrypt.compare(password, user.hash)
         if (!pwMatches) {
             throw new ForbiddenException(
                 'Credentials incorrect'
             )
         }
-        return customer
+        return user
     }
+
+    // async signToken(id: number, email: string): Promise<{ access_token: string }> {
+    //     const payload = {
+    //         sub: id,
+    //         email
+    //     }
+    //     const secret = this.config.get("SECRET")
+    //     const token = await this.jwtService.signAsync(payload, {
+    //         expiresIn: '30m',
+    //         secret: secret
+    //     })
+    //     return {
+    //         access_token: token
+    //     }
+    // }
 }

@@ -8,14 +8,14 @@ datasource db {
   provider = "postgresql"
 }
 
-model Customer {
+model User {
   id     Int     @id @default(autoincrement())
   email  String  @unique
   hash   String
   cart   Cart?
   orders Order[]
 
-  @@map("customer")
+  @@map("user")
 }
 
 model Product {
@@ -47,10 +47,10 @@ model CartItem {
 }
 
 model Cart {
-  id         Int        @id @default(autoincrement())
-  customer   Customer   @relation(fields: [customerId], references: [id])
-  customerId Int        @unique
-  cartItem   CartItem[]
+  id       Int        @id @default(autoincrement())
+  user     User       @relation(fields: [userId], references: [id])
+  userId   Int        @unique
+  cartItem CartItem[]
 
   @@map("cart")
 }
@@ -69,8 +69,8 @@ model OrderItem {
 
 model Order {
   id         Int         @id @default(autoincrement())
-  customer   Customer    @relation(fields: [customerId], references: [id])
-  customerId Int
+  user       User        @relation(fields: [userId], references: [id])
+  userId     Int
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   orderItems OrderItem[]
