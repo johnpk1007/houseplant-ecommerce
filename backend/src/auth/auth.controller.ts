@@ -1,7 +1,9 @@
-import { Body, Controller, Get, Post, Request, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, UseGuards } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { AuthDto } from "./dto";
 import { LocalGuard, JwtGuard } from "./guard";
+import { User } from "./decorator";
+import type { AuthUser } from "./type";
 
 @Controller('auth')
 export class AuthController {
@@ -12,15 +14,16 @@ export class AuthController {
         return this.authService.signUp(dto)
     }
 
+    @HttpCode(HttpStatus.OK)
     @UseGuards(LocalGuard)
     @Post('signin')
-    signin(@Request() req) {
-        return this.authService.signIn(req.user)
+    signin(@User() user: AuthUser) {
+        return this.authService.signIn(user)
     }
 
     @UseGuards(JwtGuard)
     @Get('profile')
-    getProfile(@Request() req) {
-        return req.user;
+    getProfile(@User() user: AuthUser) {
+        return user;
     }
 }

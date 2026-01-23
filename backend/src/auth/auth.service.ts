@@ -15,7 +15,7 @@ export class AuthService {
 
     async signUp(dto: AuthDto) {
         try {
-            const user = await this.userService.createUser(dto.email, dto.password)
+            const { hash, ...user } = await this.userService.createUser(dto.email, dto.password)
             return user
         } catch (error) {
             throw error
@@ -33,8 +33,8 @@ export class AuthService {
     }
 
     async validateUser(email: string, password: string) {
-        const user = await this.userService.findUser(email)
-        const pwMatches = await bcrypt.compare(password, user.hash)
+        const { hash, ...user } = await this.userService.findUser(email)
+        const pwMatches = await bcrypt.compare(password, hash)
         if (!pwMatches) {
             throw new ForbiddenException(
                 'Credentials incorrect'
