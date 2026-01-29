@@ -2,20 +2,18 @@ import { ForbiddenException, Injectable } from "@nestjs/common";
 import { AuthDto } from "./dto";
 import * as bcrypt from "bcrypt"
 import { JwtService } from "@nestjs/jwt";
-import { ConfigService } from "@nestjs/config";
 import { UserService } from "../user/user.service";
 
 @Injectable()
 export class AuthService {
     constructor(
         private jwtService: JwtService,
-        // private config: ConfigService,
         private userService: UserService,
     ) { }
 
-    async signUp(dto: AuthDto) {
+    async signUp(authDto: AuthDto) {
         try {
-            const { hash, ...user } = await this.userService.createUser(dto.email, dto.password)
+            const { hash, ...user } = await this.userService.createUser(authDto.email, authDto.password)
             return user
         } catch (error) {
             throw error
@@ -42,19 +40,4 @@ export class AuthService {
         }
         return user
     }
-
-    // async signToken(id: number, email: string): Promise<{ access_token: string }> {
-    //     const payload = {
-    //         sub: id,
-    //         email
-    //     }
-    //     const secret = this.config.get("SECRET")
-    //     const token = await this.jwtService.signAsync(payload, {
-    //         expiresIn: '30m',
-    //         secret: secret
-    //     })
-    //     return {
-    //         access_token: token
-    //     }
-    // }
 }
