@@ -1,11 +1,11 @@
 import { beforeAll, describe, beforeEach, afterAll, it, expect, vi } from "vitest";
-import { ProductService } from "./product.service";
+import { ProductService } from "../product.service";
 import { Test, TestingModule } from "@nestjs/testing";
-import { PrismaService } from "../prisma/prisma.service";
+import { PrismaService } from "../../prisma/prisma.service";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { S3Service } from "../s3/s3.service";
-import { cleanS3Db, cleanPrismaDb, fakeFile1, fakeFile2, fakeProductDto1, fakeProductDto2 } from "../../test/utils";
-import { AfterUploadProduct } from "./type";
+import { S3Service } from "../../s3/s3.service";
+import { cleanS3Db, cleanPrismaDb, fakeFile1, fakeFile2, fakeProductDto1, fakeProductDto2 } from "./utils";
+import { AfterUploadProduct } from "../type";
 
 describe('Product int', () => {
     let moduleRef: TestingModule

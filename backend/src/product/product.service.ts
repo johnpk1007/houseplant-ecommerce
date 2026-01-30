@@ -6,7 +6,6 @@ import { ConfigService } from '@nestjs/config';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 import { Product } from '../../generated/prisma/client';
 import { AfterUploadProduct } from './type';
-import { Readable } from 'node:stream';
 
 @Injectable()
 export class ProductService {

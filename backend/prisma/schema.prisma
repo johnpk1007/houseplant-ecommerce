@@ -8,12 +8,18 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
 model User {
   id     Int     @id @default(autoincrement())
   email  String  @unique
   hash   String
   cart   Cart?
   orders Order[]
+  role   Role    @default(CUSTOMER)
 
   @@map("user")
 }
