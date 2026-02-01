@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import { ForbiddenException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { AuthDto } from "./dto";
 import * as bcrypt from "bcrypt"
 import { JwtService } from "@nestjs/jwt";
@@ -11,16 +11,12 @@ export class AuthService {
         private userService: UserService,
     ) { }
 
-    async signUp(authDto: AuthDto) {
-        try {
-            const { hash, ...user } = await this.userService.createUser(authDto.email, authDto.password)
-            return user
-        } catch (error) {
-            throw error
-        }
+    async signUp({ dto }: { dto: AuthDto }) {
+        const { hash, ...user } = await this.userService.createUser({ email: dto.email, password: dto.password })
+        return user
     }
 
-    async signIn(user: any) {
+    async signIn({ user }: { user: any }) {
         const payload = {
             sub: user.id,
             email: user.email,
@@ -31,13 +27,11 @@ export class AuthService {
         };
     }
 
-    async validateUser(email: string, password: string) {
-        const { hash, ...user } = await this.userService.findUser(email)
+    async validateUser({ email, password }: { email: string, password: string }) {
+        const { hash, ...user } = await this.userService.findUser({ email })
         const pwMatches = await bcrypt.compare(password, hash)
         if (!pwMatches) {
-            throw new ForbiddenException(
-                'Credentials incorrect'
-            )
+            throw new UnauthorizedException('Invalid email or password')
         }
         return user
     }

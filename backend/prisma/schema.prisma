@@ -38,6 +38,7 @@ model Product {
   isDeleted   Boolean     @default(false)
   deletedAt   DateTime?
   keyName     String
+  version     Int         @default(0)
 
   @@map("product")
 }
@@ -50,6 +51,7 @@ model CartItem {
   cart      Cart    @relation(fields: [cartId], references: [id])
   cartId    Int
 
+  @@unique([productId, cartId])
   @@map("cartItem")
 }
 

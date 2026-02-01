@@ -38,11 +38,11 @@ describe('Product int', () => {
     })
 
     it('should upload', async () => {
-        const productServiceUploadResponse: AfterUploadProduct = await productService.uploadProduct(fakeFile1, fakeProductDto1)
+        const productServiceUploadResponse: AfterUploadProduct = await productService.uploadProduct({ file: fakeFile1, productDto: fakeProductDto1 })
         expect(productServiceUploadResponse).toMatchObject({ ...fakeProductDto1, stock: 0, isDeleted: false, deletedAt: null, url: expect.any(String) })
         const keyName = productServiceUploadResponse.url.slice(productServiceUploadResponse.url.lastIndexOf('/') + 1)
         console.log("keyName:", keyName)
-        const s3ServiceUploadResponse = await s3Service.getObject(keyName)
+        const s3ServiceUploadResponse = await s3Service.getObject({ keyName })
         expect(s3ServiceUploadResponse.$metadata.httpStatusCode).toBe(200)
         expect(s3ServiceUploadResponse.Body).toBeDefined()
         const buffer = Buffer.from(await s3ServiceUploadResponse.Body!.transformToByteArray())
@@ -50,17 +50,17 @@ describe('Product int', () => {
     })
 
     it('should edit with file and dto', async () => {
-        const productServiceUploadResponse: AfterUploadProduct = await productService.uploadProduct(fakeFile1, fakeProductDto1)
-        const productServiceEditResponse: AfterUploadProduct = await productService.editProduct(productServiceUploadResponse.id, fakeFile2, fakeProductDto2)
+        const productServiceUploadResponse: AfterUploadProduct = await productService.uploadProduct({ file: fakeFile1, productDto: fakeProductDto1 })
+        const productServiceEditResponse: AfterUploadProduct = await productService.editProduct({ id: productServiceUploadResponse.id, file: fakeFile2, newProductDto: fakeProductDto2 })
         expect(productServiceEditResponse).toMatchObject({ ...fakeProductDto2, stock: 0, isDeleted: false, deletedAt: null, url: expect.any(String) })
         const uploadKeyName = productServiceUploadResponse.url.slice(productServiceUploadResponse.url.lastIndexOf('/') + 1)
         const editKeyName = productServiceEditResponse.url.slice(productServiceEditResponse.url.lastIndexOf('/') + 1)
-        const s3ServiceEditResponse = await s3Service.getObject(editKeyName)
+        const s3ServiceEditResponse = await s3Service.getObject({ keyName: editKeyName })
         expect(s3ServiceEditResponse.$metadata.httpStatusCode).toBe(200)
         expect(s3ServiceEditResponse.Body).toBeDefined()
         const buffer = Buffer.from(await s3ServiceEditResponse.Body!.transformToByteArray())
         expect(buffer).toEqual(fakeFile2.buffer)
-        await expect(s3Service.getObject(uploadKeyName)).rejects.toThrow('Failed to get object using S3 client')
+        await expect(s3Service.getObject({ keyName: uploadKeyName })).rejects.toThrow('Failed to get object using S3 client')
     })
 
     it('should fail to edit because Prisma Service is down and rollback S3 service data', async () => {
@@ -68,10 +68,10 @@ describe('Product int', () => {
         prismaService.product.update = vi.fn().mockRejectedValue(new Error('DB_ERROR'));
         const s3PutSpy = vi.spyOn(s3Service, 'putObject')
         try {
-            const productServiceUploadResponse: AfterUploadProduct = await productService.uploadProduct(fakeFile1, fakeProductDto1)
-            await expect(productService.editProduct(productServiceUploadResponse.id, fakeFile2, fakeProductDto2)).rejects.toThrow()
+            const productServiceUploadResponse: AfterUploadProduct = await productService.uploadProduct({ file: fakeFile1, productDto: fakeProductDto1 })
+            await expect(productService.editProduct({ id: productServiceUploadResponse.id, file: fakeFile2, newProductDto: fakeProductDto2 })).rejects.toThrow()
             const uploadKeyName = productServiceUploadResponse.url.slice(productServiceUploadResponse.url.lastIndexOf('/') + 1)
-            const s3ServiceUploadResponse = await s3Service.getObject(uploadKeyName)
+            const s3ServiceUploadResponse = await s3Service.getObject({ keyName: uploadKeyName })
             expect(s3ServiceUploadResponse.$metadata.httpStatusCode).toBe(200)
             expect(s3ServiceUploadResponse.Body).toBeDefined()
             const buffer = Buffer.from(await s3ServiceUploadResponse.Body!.transformToByteArray())

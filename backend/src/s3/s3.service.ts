@@ -47,47 +47,32 @@ export class S3Service implements OnModuleInit {
         const command = new PutBucketPolicyCommand(readOnlyUserPolicy)
         await this.s3Client.send(command);
     }
-    async putObject(file: Express.Multer.File): Promise<string> {
-        try {
-            const originalName = file.originalname
-            const extension = path.extname(originalName)
-            const fileName: string = uuid()
-            const keyName: string = `${fileName}${extension}`
-            await this.s3Client.send(new PutObjectCommand({
-                Bucket: this.bucketName,
-                Key: keyName,
-                Body: file.buffer,
-                ContentType: file.mimetype
-            }))
-            return keyName
-        } catch (error) {
-            console.error(error)
-            throw new InternalServerErrorException('Failed to put object using S3 client')
-        }
+    async putObject({ file }: { file: Express.Multer.File }): Promise<string> {
+        const originalName = file.originalname
+        const extension = path.extname(originalName)
+        const fileName: string = uuid()
+        const keyName: string = `${fileName}${extension}`
+        await this.s3Client.send(new PutObjectCommand({
+            Bucket: this.bucketName,
+            Key: keyName,
+            Body: file.buffer,
+            ContentType: file.mimetype
+        }))
+        return keyName
     }
 
-    async getObject(keyName: string): Promise<GetObjectCommandOutput> {
-        try {
-            return await this.s3Client.send(new GetObjectCommand({
-                Bucket: this.bucketName,
-                Key: keyName
-            }))
-        } catch (error) {
-            console.error(error)
-            throw new InternalServerErrorException('Failed to get object using S3 client')
-        }
+    async getObject({ keyName }: { keyName: string }): Promise<GetObjectCommandOutput> {
+        return await this.s3Client.send(new GetObjectCommand({
+            Bucket: this.bucketName,
+            Key: keyName
+        }))
     }
 
-    async deleteObject(keyName: string): Promise<void> {
-        try {
-            await this.s3Client.send(new DeleteObjectCommand({
-                Bucket: this.bucketName,
-                Key: keyName
-            }))
-        } catch (error) {
-            console.error(error)
-            throw new InternalServerErrorException('Failed to delete object using S3 client')
-        }
+    async deleteObject({ keyName }: { keyName: string }): Promise<void> {
+        await this.s3Client.send(new DeleteObjectCommand({
+            Bucket: this.bucketName,
+            Key: keyName
+        }))
     }
 
     async clearBucket() {
