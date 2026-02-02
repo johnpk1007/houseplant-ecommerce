@@ -13,6 +13,12 @@ enum Role {
   ADMIN
 }
 
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
 model User {
   id     Int     @id @default(autoincrement())
   email  String  @unique
@@ -68,7 +74,7 @@ model OrderItem {
   id        Int     @id @default(autoincrement())
   product   Product @relation(fields: [productId], references: [id])
   productId Int
-  quantity  Int     @default(1)
+  quantity  Int
   price     Int
   order     Order   @relation(fields: [orderId], references: [id])
   orderId   Int
@@ -77,12 +83,13 @@ model OrderItem {
 }
 
 model Order {
-  id         Int         @id @default(autoincrement())
-  user       User        @relation(fields: [userId], references: [id])
-  userId     Int
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-  orderItems OrderItem[]
+  id          Int         @id @default(autoincrement())
+  user        User        @relation(fields: [userId], references: [id])
+  userId      Int
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  orderItems  OrderItem[]
+  orderStatus OrderStatus @default(PENDING)
 
   @@map("order")
 }

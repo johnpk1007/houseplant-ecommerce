@@ -14,9 +14,10 @@ export class ProductService {
         private s3Service: S3Service,
         private prismaService: PrismaService,
         private configService: ConfigService,
-        endpoint = this.configService.getOrThrow<string>('S3_ENDPOINT'),
-        bucket = this.configService.getOrThrow<string>('S3_BUCKET_NAME')
-    ) { }
+    ) {
+        this.endpoint = this.configService.getOrThrow<string>('S3_ENDPOINT'),
+            this.bucket = this.configService.getOrThrow<string>('S3_BUCKET_NAME')
+    }
     async uploadProduct({ file, dto }: { file: Express.Multer.File, dto: ProductDto }): Promise<AfterUploadProduct> {
         const s3KeyName = await this.s3Service.putObject({ file })
         const url = `${this.endpoint}/${this.bucket}/${s3KeyName}`

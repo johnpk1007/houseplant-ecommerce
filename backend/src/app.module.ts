@@ -6,10 +6,10 @@ import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { S3Module } from './s3/s3.module';
 import { CommonModule } from './common/common.module';
-import { CartModule } from './cart/cart.module';
 import { CartItemModule } from './cart-item/cart-item.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
-  imports: [AuthModule, ProductModule, PrismaModule, ConfigModule.forRoot({ isGlobal: true }), UserModule, S3Module, CommonModule, CartModule, CartItemModule],
+  imports: [AuthModule, ProductModule, PrismaModule, ConfigModule.forRoot({ isGlobal: true }), UserModule, S3Module, CommonModule, CartItemModule, OrderModule],
 })
 export class AppModule { }
