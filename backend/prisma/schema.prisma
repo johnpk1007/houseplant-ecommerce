@@ -31,20 +31,22 @@ model User {
 }
 
 model Product {
-  id          Int         @id @default(autoincrement())
-  name        String
-  price       Int
-  description String
-  light       String
-  water       String
-  temperature String
-  stock       Int         @default(0)
-  cartItem    CartItem[]
-  orderItem   OrderItem[]
-  isDeleted   Boolean     @default(false)
-  deletedAt   DateTime?
-  keyName     String
-  version     Int         @default(0)
+  id              Int         @id @default(autoincrement())
+  name            String
+  price           Int
+  description     String
+  light           String
+  water           String
+  temperature     String
+  stock           Int         @default(0)
+  cartItem        CartItem[]
+  orderItem       OrderItem[]
+  isDeleted       Boolean     @default(false)
+  deletedAt       DateTime?
+  keyName         String
+  version         Int         @default(0)
+  stripeProductId String
+  stripePriceId   String
 
   @@map("product")
 }

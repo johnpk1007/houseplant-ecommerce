@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ProductDto, EditProductDto } from './dto';
+import { ProductDto, UpdatePriceDto, UpdateProductDto } from './dto';
 import { JwtGuard, RolesGuard } from '../common/guard';
 import { Roles } from '../common/decorator';
 import { Role } from '../common/enum';
@@ -32,13 +32,25 @@ export class ProductController {
     }
 
     @Patch(':id')
+    @Roles(Role.Admin)
+    @UseGuards(JwtGuard, RolesGuard)
     @UseInterceptors(FileInterceptor('file'))
     async updateProduct(
         @Param('id', ParseIntPipe) id: number,
         @UploadedFile() file: Express.Multer.File,
-        @Body() dto: EditProductDto
+        @Body() dto: UpdateProductDto
     ) {
-        return await this.productService.editProduct({ id, file, dto })
+        return await this.productService.updateProduct({ prismaId: id, file, dto })
+    }
+
+    @Patch(':id/price')
+    @Roles(Role.Admin)
+    @UseGuards(JwtGuard, RolesGuard)
+    async updatePrice(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() dto: UpdatePriceDto
+    ) {
+        return await this.productService.updatePrice({ prismaId: id, price: dto.price })
     }
 
     @Delete(':id')
@@ -47,7 +59,7 @@ export class ProductController {
     async deleteProduct(
         @Param('id', ParseIntPipe) id: number,
     ) {
-        return await this.productService.deleteProduct({ id })
+        return await this.productService.deleteProduct({ prismaId: id })
     }
 
     @Patch(':id/restore')
@@ -56,6 +68,6 @@ export class ProductController {
     async restoreProduct(
         @Param('id', ParseIntPipe) id: number,
     ) {
-        return await this.productService.restoreProduct({ id })
+        return await this.productService.restoreProduct({ prismaId: id })
     }
 }

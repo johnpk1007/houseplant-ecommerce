@@ -8,8 +8,9 @@ import { S3Module } from './s3/s3.module';
 import { CommonModule } from './common/common.module';
 import { CartItemModule } from './cart-item/cart-item.module';
 import { OrderModule } from './order/order.module';
+import { StripeModule } from './stripe/stripe.module';
 
 @Module({
-  imports: [AuthModule, ProductModule, PrismaModule, ConfigModule.forRoot({ isGlobal: true }), UserModule, S3Module, CommonModule, CartItemModule, OrderModule],
+  imports: [AuthModule, ProductModule, PrismaModule, ConfigModule.forRoot({ isGlobal: true }), UserModule, S3Module, CommonModule, CartItemModule, OrderModule, StripeModule],
 })
 export class AppModule { }

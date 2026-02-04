@@ -29,15 +29,10 @@ export class ProductDto {
 
 }
 
-export class EditProductDto {
+export class UpdateProductDto {
     @IsString()
     @IsOptional()
     name?: string
-
-    @Type(() => Number)
-    @IsNumber()
-    @IsOptional()
-    price?: number
 
     @IsString()
     @IsOptional()
@@ -59,4 +54,11 @@ export class EditProductDto {
     @IsNumber()
     @IsOptional()
     stock?: number
+}
+
+export class UpdatePriceDto {
+    @Type(() => Number)
+    @IsNumber()
+    @IsNotEmpty()
+    price: number
 }
