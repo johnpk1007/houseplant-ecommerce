@@ -1,27 +1,54 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
+import { ProductService } from '../product/product.service';
 
 @Injectable()
 export class CartItemService {
     constructor(
-        private prismaService: PrismaService
+        private prismaService: PrismaService,
+        private productService: ProductService
     ) { }
 
+    // async createCartItem({ userId, productId, quantity }: { userId: number, productId: number, quantity: number }) {
+    //     const cart = await this.prismaService.cart.upsert({
+    //         where: { userId },
+    //         update: {},
+    //         create: {
+    //             userId
+    //         }
+    //     })
+    //     return await this.prismaService.cartItem.upsert({
+    //         where: {
+    //             productId_cartId: { productId, cartId: cart.id }
+    //         },
+    //         update: { quantity },
+    //         create: { productId, cartId: cart.id, quantity },
+    //         include: { product: true }
+    //     })
+    // }
+
     async createCartItem({ userId, productId, quantity }: { userId: number, productId: number, quantity: number }) {
-        const cart = await this.prismaService.cart.upsert({
-            where: { userId },
-            update: {},
-            create: {
-                userId
+        return await this.prismaService.$transaction(async (tx) => {
+            const cart = await tx.cart.upsert({
+                where: { userId },
+                update: {},
+                create: {
+                    userId
+                }
+            })
+            const product = await this.productService.getProduct({ id: productId, tx })
+            if (product.stock < quantity) {
+                throw new BadRequestException()
             }
-        })
-        return await this.prismaService.cartItem.upsert({
-            where: {
-                productId_cartId: { productId, cartId: cart.id }
-            },
-            update: { quantity },
-            create: { productId, cartId: cart.id, quantity },
-            include: { product: true }
+            return await tx.cartItem.upsert({
+                where: {
+                    productId_cartId: { productId, cartId: cart.id }
+                },
+                update: { quantity },
+                create: { productId, cartId: cart.id, quantity },
+                include: { product: true }
+            })
         })
     }
 
@@ -30,46 +57,63 @@ export class CartItemService {
     }
 
     async editCartItem({ userId, cartItemId, quantity }: { userId: number, cartItemId: number, quantity: number }) {
-        const cartItem = await this.prismaService.cartItem.updateManyAndReturn({
-            where: {
-                id: cartItemId,
-                cart: {
-                    userId
+        try {
+            return await this.prismaService.cartItem.update({
+                where: {
+                    id: cartItemId,
+                    cart: {
+                        userId
+                    }
+                },
+                data: {
+                    quantity
+                },
+                include: { product: true }
+            })
+        } catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === 'P2025') {
+                    throw new NotFoundException()
                 }
-            },
-            data: {
-                quantity
-            },
-            include: { product: true }
-        })
-        if (cartItem.length == 0) {
-            const notFoundCartItem = await this.prismaService.cartItem.findUnique({ where: { id: cartItemId } })
-            if (notFoundCartItem) {
-                throw new UnauthorizedException()
-            } else {
-                throw new NotFoundException()
             }
+            throw new InternalServerErrorException()
         }
-        return cartItem[0]
     }
 
     async deleteCartItem({ userId, cartItemId }: { userId: number, cartItemId: number }) {
-        const cartItem = await this.prismaService.cartItem.deleteMany({
-            where: {
-                id: cartItemId,
-                cart: {
-                    userId
+        try {
+            return await this.prismaService.cartItem.delete({
+                where: {
+                    id: cartItemId,
+                    cart: {
+                        userId
+                    }
+                },
+            })
+        } catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === 'P2025') {
+                    throw new NotFoundException()
                 }
-            },
-        })
-        if (cartItem.count == 0) {
-            const notFoundCartItem = await this.prismaService.cartItem.findUnique({ where: { id: cartItemId } })
-            if (notFoundCartItem) {
-                throw new UnauthorizedException()
-            } else {
-                throw new NotFoundException()
             }
+            throw new InternalServerErrorException()
         }
-        return cartItem
+    }
+
+    async deleteManyCartItem({ cartItemIdArray }: { cartItemIdArray: number[] }) {
+        try {
+            return await this.prismaService.cartItem.deleteMany({
+                where: {
+                    id: { in: cartItemIdArray },
+                },
+            })
+        } catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === 'P2025') {
+                    throw new NotFoundException()
+                }
+            }
+            throw new InternalServerErrorException()
+        }
     }
 }

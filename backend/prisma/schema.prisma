@@ -85,13 +85,15 @@ model OrderItem {
 }
 
 model Order {
-  id          Int         @id @default(autoincrement())
-  user        User        @relation(fields: [userId], references: [id])
-  userId      Int
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  orderItems  OrderItem[]
-  orderStatus OrderStatus @default(PENDING)
+  id              Int         @id @default(autoincrement())
+  user            User        @relation(fields: [userId], references: [id])
+  userId          Int
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  orderItems      OrderItem[]
+  orderStatus     OrderStatus @default(PENDING)
+  stripeSessionId String?     @unique
+  cartItems       Int[]
 
   @@map("order")
 }

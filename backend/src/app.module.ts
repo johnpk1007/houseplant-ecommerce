@@ -9,8 +9,9 @@ import { CommonModule } from './common/common.module';
 import { CartItemModule } from './cart-item/cart-item.module';
 import { OrderModule } from './order/order.module';
 import { StripeModule } from './stripe/stripe.module';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
-  imports: [AuthModule, ProductModule, PrismaModule, ConfigModule.forRoot({ isGlobal: true }), UserModule, S3Module, CommonModule, CartItemModule, OrderModule, StripeModule],
+  imports: [AuthModule, ProductModule, PrismaModule, ConfigModule.forRoot({ isGlobal: true }), UserModule, S3Module, CommonModule, CartItemModule, OrderModule, StripeModule, PaymentModule],
 })
 export class AppModule { }

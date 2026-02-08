@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from "bcrypt"
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 
 @Injectable()
 export class UserService {
@@ -16,8 +17,18 @@ export class UserService {
         })
     }
     async findUser({ email }: { email: string }) {
-        return await this.prismaService.user.findUniqueOrThrow({
-            where: { email }
-        })
+        try {
+            return await this.prismaService.user.findUniqueOrThrow({
+                where: { email }
+            })
+        } catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === 'P2025') {
+                    throw new NotFoundException()
+                }
+            }
+            throw new InternalServerErrorException()
+        }
+
     }
 }

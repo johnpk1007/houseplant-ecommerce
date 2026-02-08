@@ -8,6 +8,7 @@ import { StripeModule } from '../stripe/stripe.module';
 @Module({
   imports: [S3Module, CommonModule, StripeModule],
   providers: [ProductService],
-  controllers: [ProductController]
+  controllers: [ProductController],
+  exports: [ProductService]
 })
 export class ProductModule { }

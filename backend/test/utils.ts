@@ -1,5 +1,4 @@
 import { PrismaService } from "../src/prisma/prisma.service";
-import { S3Service } from "../src/s3/s3.service";
 
 export async function cleanPrismaDb(prisma: PrismaService) {
     await prisma.$transaction([

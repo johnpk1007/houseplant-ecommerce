@@ -1,6 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { OrderStatus } from './enum';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
+import { Prisma } from '../../generated/prisma/client';
 
 @Injectable()
 export class OrderService {
@@ -30,51 +32,71 @@ export class OrderService {
                             quantity: cart.quantity,
                             price: cart.product.price
                         }))
-                    }
+                    },
+                    cartItems: cartItemIdArr
                 },
                 include: { orderItems: { include: { product: true } } }
             })
         })
     }
 
-    async editOrderStatus({ userId, orderId, orderStatus }: { userId: number, orderId: number, orderStatus: OrderStatus }) {
-        const order = await this.prismaService.order.updateManyAndReturn({
-            where: {
-                id: orderId,
-                userId
-            },
-            data: {
-                orderStatus
-            },
-        })
-        if (order.length === 0) {
-            const notFoundOrder = await this.prismaService.order.findUnique({ where: { id: orderId } })
-            if (notFoundOrder) {
-                throw new UnauthorizedException()
-            } else {
-                throw new NotFoundException()
+    async editOrder({ orderId, dto, tx }: { orderId: number, dto: { orderStatus?: OrderStatus, stripeSessionId?: string }, tx?: Prisma.TransactionClient }) {
+        const prismaService = tx ?? this.prismaService
+        try {
+            return await prismaService.order.update({
+                where: {
+                    id: orderId,
+                },
+                data: {
+                    ...dto
+                },
+                include: { orderItems: { include: { product: true } } }
+            })
+        } catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === 'P2025') {
+                    throw new NotFoundException()
+                }
             }
+            throw new InternalServerErrorException()
         }
-        return order[0]
     }
 
     async getOrder({ userId, orderId }: { userId: number, orderId: number }) {
-        const order = await this.prismaService.order.findMany({
-            where: {
-                id: orderId,
-                userId
-            },
-            include: { orderItems: { include: { product: true } } }
-        })
-        if (order.length === 0) {
-            const notFoundOrder = await this.prismaService.order.findUnique({ where: { id: orderId } })
-            if (notFoundOrder) {
-                throw new UnauthorizedException()
-            } else {
-                throw new NotFoundException()
+        try {
+            return await this.prismaService.order.findUnique({
+                where: {
+                    id: orderId,
+                    userId
+                },
+                include: { orderItems: { include: { product: true } } }
+            })
+        } catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === 'P2025') {
+                    throw new NotFoundException()
+                }
             }
+            throw new InternalServerErrorException()
         }
-        return order[0]
+    }
+
+    async sessionIdgetOrder({ sessionId }: { sessionId: string }) {
+        try {
+            return await this.prismaService.order.findUnique({
+                where: {
+                    stripeSessionId: sessionId
+                },
+                include: { orderItems: { include: { product: true } } }
+            })
+        } catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === 'P2025') {
+                    throw new NotFoundException()
+                }
+            }
+            throw new InternalServerErrorException()
+        }
     }
 
     async getAllOrder({ userId }: { userId: number }) {

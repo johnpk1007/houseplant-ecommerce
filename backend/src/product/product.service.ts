@@ -3,10 +3,11 @@ import { S3Service } from '../s3/s3.service';
 import { ProductDto, UpdateProductDto } from './dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
-import { Product } from '../../generated/prisma/client';
+import { Prisma, Product } from '../../generated/prisma/client';
 import { AfterUploadProduct } from './type';
 import { StripeService } from '../stripe/stripe.service';
 import Stripe from 'stripe';
+import { OrderForPayment } from '../payment/type';
 
 @Injectable()
 export class ProductService {
@@ -53,13 +54,22 @@ export class ProductService {
         }
     }
 
-    async getProduct({ id }: { id: number }): Promise<AfterUploadProduct> {
-        const { keyName, ...rest } = await this.prismaService.product.findFirstOrThrow({ where: { id } })
+    async getProduct({ id, tx }: { id: number, tx?: Prisma.TransactionClient }): Promise<AfterUploadProduct> {
+        const prismaService = tx ?? this.prismaService
+        const { keyName, ...rest } = await prismaService.product.findFirstOrThrow({ where: { id } })
         const url = `${this.endpoint}/${this.bucket}/${keyName}`
         return { ...rest, url }
     }
 
-    async getAllProduct(): Promise<AfterUploadProduct[]> {
+    async getManyProducts({ productIdArray, tx }: { productIdArray: number[], tx?: Prisma.TransactionClient }) {
+        const prismaService = tx ?? this.prismaService
+        return await prismaService.product.findMany({
+            where: { id: { in: productIdArray }, isDeleted: false },
+            select: { id: true, stock: true, version: true }
+        })
+    }
+
+    async getAllProducts(): Promise<AfterUploadProduct[]> {
         const products = await this.prismaService.product.findMany()
         return products.map((product) => {
             const { keyName, ...rest } = product
@@ -193,5 +203,17 @@ export class ProductService {
             }
             throw new InternalServerErrorException('Failed to restore product')
         }
+    }
+
+    async decreaseManyProductStock({ orderArray, tx }: { orderArray: OrderForPayment[], tx?: Prisma.TransactionClient }) {
+        const prismaService = tx ?? this.prismaService
+        return Promise.all(
+            orderArray.map(async (order) => {
+                return await prismaService.product.update({
+                    where: { id: order.productId, version: order.productVersion },
+                    data: { stock: { decrement: order.quantity }, version: { increment: 1 } }
+                })
+            })
+        )
     }
 }

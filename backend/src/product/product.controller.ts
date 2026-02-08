@@ -28,7 +28,7 @@ export class ProductController {
 
     @Get()
     async getAllProduct() {
-        return await this.productService.getAllProduct()
+        return await this.productService.getAllProducts()
     }
 
     @Patch(':id')
