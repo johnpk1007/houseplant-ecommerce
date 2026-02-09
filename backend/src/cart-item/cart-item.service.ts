@@ -10,24 +10,6 @@ export class CartItemService {
         private productService: ProductService
     ) { }
 
-    // async createCartItem({ userId, productId, quantity }: { userId: number, productId: number, quantity: number }) {
-    //     const cart = await this.prismaService.cart.upsert({
-    //         where: { userId },
-    //         update: {},
-    //         create: {
-    //             userId
-    //         }
-    //     })
-    //     return await this.prismaService.cartItem.upsert({
-    //         where: {
-    //             productId_cartId: { productId, cartId: cart.id }
-    //         },
-    //         update: { quantity },
-    //         create: { productId, cartId: cart.id, quantity },
-    //         include: { product: true }
-    //     })
-    // }
-
     async createCartItem({ userId, productId, quantity }: { userId: number, productId: number, quantity: number }) {
         return await this.prismaService.$transaction(async (tx) => {
             const cart = await tx.cart.upsert({

@@ -9,7 +9,7 @@ export class StripeService {
         this.stripe = new Stripe(this.configService.getOrThrow<string>('STRIPE_SECRET'))
     }
 
-    async creatProduct({ name, description, price, image }: { name: string, description: string, price: number, image: string }) {
+    async createProduct({ name, description, price, image }: { name: string, description: string, price: number, image: string }) {
         return await this.stripe.products.create({
             name, description, images: [image], default_price_data: { currency: 'usd', unit_amount: price * 100 }
         })

@@ -31,4 +31,20 @@ export class UserService {
         }
 
     }
+    async updateUser({ email, dto }: { email: string, dto: { hashedRefreshToken: string | null } }) {
+        try {
+            return await this.prismaService.user.update({
+                where: { email },
+                data: { ...dto }
+            })
+        } catch (error) {
+            if (error instanceof PrismaClientKnownRequestError) {
+                if (error.code === 'P2025') {
+                    throw new NotFoundException()
+                }
+            }
+            throw new InternalServerErrorException()
+        }
+
+    }
 }

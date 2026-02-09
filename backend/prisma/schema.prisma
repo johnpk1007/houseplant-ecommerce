@@ -20,12 +20,13 @@ enum OrderStatus {
 }
 
 model User {
-  id     Int     @id @default(autoincrement())
-  email  String  @unique
-  hash   String
-  cart   Cart?
-  orders Order[]
-  role   Role    @default(CUSTOMER)
+  id                 Int     @id @default(autoincrement())
+  email              String  @unique
+  hash               String
+  cart               Cart?
+  orders             Order[]
+  role               Role    @default(CUSTOMER)
+  hashedRefreshToken String?
 
   @@map("user")
 }

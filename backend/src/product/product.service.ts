@@ -29,7 +29,7 @@ export class ProductService {
         try {
             s3KeyName = await this.s3Service.putObject({ file })
             const url = `${this.endpoint}/${this.bucket}/${s3KeyName}`
-            const stripeProduct = await this.stripeService.creatProduct({
+            const stripeProduct = await this.stripeService.createProduct({
                 name: dto.name,
                 description: dto.description,
                 price: dto.price,
@@ -42,7 +42,7 @@ export class ProductService {
                     keyName: s3KeyName, stripeProductId, stripePriceId, ...dto
                 }
             })
-            return { ...rest, url: url }
+            return { ...rest, url }
         } catch (error) {
             if (stripeProductId) {
                 await this.stripeService.updateProduct({ id: stripeProductId, dto: { active: false } }).catch((error) => { console.error(error) })
@@ -50,6 +50,7 @@ export class ProductService {
             if (s3KeyName) {
                 await this.s3Service.deleteObject({ keyName: s3KeyName }).catch((error) => { console.error(error) })
             }
+            console.error(error)
             throw new InternalServerErrorException();
         }
     }
@@ -97,11 +98,12 @@ export class ProductService {
             }
             const stripeProductObject = Object.fromEntries(Object.entries(newData).filter((entry) => ['name', 'description'].includes(entry[0])))
             updatedStripeProduct = await this.stripeService.updateProduct({ id: product.stripeProductId, dto: stripeProductObject })
-            updatedPrismaProduct = await this.prismaService.product.update({ where: { id: prismaId, version: product.version }, data: { ...newData, version: { increment: 1 } } })
+            const { keyName, ...rest } = await this.prismaService.product.update({ where: { id: prismaId, version: product.version }, data: { ...newData, version: { increment: 1 } } })
+            const url = `${this.endpoint}/${this.bucket}/${keyName}`
             if (file) {
                 await this.s3Service.deleteObject({ keyName: product.keyName }).catch((error) => { console.error(error) })
             }
-            return updatedPrismaProduct
+            return { ...rest, url }
         } catch (error) {
             if (product) {
                 if (updatedStripeProduct) {
