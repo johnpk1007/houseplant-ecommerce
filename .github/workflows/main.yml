@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres-db:
-        container_name:  postgres-db-container
         image: postgres:17-alpine
         ports:
           - 5432:5432
@@ -24,7 +23,6 @@ jobs:
           --health-timeout 5s
           --health-retries 5
       minio:
-        container_name:  minio-container
         image: minio/minio:latest
         ports:
           - 9000:9000
