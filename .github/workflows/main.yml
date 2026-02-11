@@ -8,6 +8,7 @@ on:
 jobs:
   e2e-test:
     runs-on: ubuntu-latest
+    
     services:
       postgres-db:
         image: postgres:17-alpine
@@ -22,22 +23,21 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-      minio:
-        image: quay.io/minio/minio:latest
-        ports:
-          - 9000:9000
-          - 9001:9001
-        env:
-          MINIO_ROOT_USER: admin
-          MINIO_ROOT_PASSWORD: password
-        options: >-
-          --health-cmd "curl -f http://localhost:9000/minio/health/live"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v6
+
+      - name: Start MinIO Server
+        run: |
+          docker run -d \
+            --name minio \
+            -p 9000:9000 \
+            -p 9001:9001 \
+            -e "MINIO_ROOT_USER=admin" \
+            -e "MINIO_ROOT_PASSWORD=password" \
+            minio/minio:latest server /data --console-address ":9001"
+          sleep 5
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
