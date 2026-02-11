@@ -1,7 +1,7 @@
 services:
   postgres-db:
     container_name:  postgres-db-container
-    profiles: ['dev']
+    profiles: ['dev', 'api']
     image: postgres:17-alpine
     ports:
       - 5432:5432
@@ -15,9 +15,11 @@ services:
       retries: 5
       start_period: 30s
       timeout: 10s
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
   minio:
     container_name:  minio-container
-    profiles: ['dev']
+    profiles: ['dev', 'api']
     image: minio/minio:latest
     ports:
       - 9000:9000
@@ -26,15 +28,38 @@ services:
       MINIO_ROOT_USER: admin
       MINIO_ROOT_PASSWORD: password
     command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
   nestjs-server:
     container_name: nestjs-server-container
+    profiles: ['api']
     image: johnpk1007/nestjs-server:latest
     pull_policy: always
     ports: 
       - 4000:4000
     env_file:
       - .env.dev
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:4000/"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
     depends_on:
       postgres-db:
         condition: service_healthy
         restart: true
+  stripe:
+    image: stripe/stripe-cli:latest
+    profiles: ['dev', 'api']
+    container_name: stripe-webhook
+    command: >
+      listen --api-key ${STRIPE_SECRET}
+      --forward-to nestjs-server:4000/payment/webhook
+    depends_on:
+      nestjs-server:
+        condition: service_healthy
+        restart: true
+volumes:
+  minio_data:
+  postgres_data:
