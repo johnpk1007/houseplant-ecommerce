@@ -44,6 +44,7 @@ export class PaymentService {
             if (order.orderStatus === 'PAID') {
                 return
             }
+
             const checkoutSession = await this.stripeService.checkoutSession({ sessionId })
             if (checkoutSession.payment_status === 'paid') {
                 try {
@@ -74,7 +75,6 @@ export class PaymentService {
                     })
                 } catch (error) {
                     if (error instanceof BadRequestException) {
-
                         try {
                             refund = await this.stripeService.refund({ payment_intent: checkoutSession.payment_intent })
                             await this.orderService.editOrder({ orderId: order.id, dto: { orderStatus: OrderStatus.Failed } })
@@ -90,6 +90,7 @@ export class PaymentService {
                         console.error(error)
                     }
                 }
+                console.log('done!')
                 return
             } else {
                 throw new InternalServerErrorException()

@@ -22,12 +22,6 @@ export const fakeFile1 = {
     mimetype: 'image/jpeg'
 } as Express.Multer.File
 
-export const fakeFile2 = {
-    originalname: 'fakeFile2.jpg',
-    buffer: Buffer.from('fake file 2'),
-    mimetype: 'image/jpeg'
-} as Express.Multer.File
-
 export const fakeProductDto1 = {
     name: 'fake product 1',
     price: 10,
@@ -37,11 +31,28 @@ export const fakeProductDto1 = {
     temperature: 'fake product 1'
 }
 
+export const fakeFile2 = {
+    originalname: 'fakeFile2.jpg',
+    buffer: Buffer.from('fake file 2'),
+    mimetype: 'image/jpeg'
+} as Express.Multer.File
+
 export const fakeProductDto2 = {
     name: 'fake product 2',
-    price: 20,
+    price: 10,
     description: 'fake product 2',
     light: 'fake product 2',
     water: 'fake product 2',
     temperature: 'fake product 2'
 }
+
+export const customerDto1 = {
+    email: 'john1@gmail.com',
+    password: '123456'
+}
+
+export const customerDto2 = {
+    email: 'john2@gmail.com',
+    password: '654321'
+}
+

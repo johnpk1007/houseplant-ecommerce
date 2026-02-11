@@ -15,22 +15,6 @@ services:
       retries: 5
       start_period: 30s
       timeout: 10s
-  test-db:
-    container_name:  test-db-container
-    profiles: ['test']
-    image: postgres:17-alpine
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123
-      POSTGRES_DB: nest
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
-      interval: 10s
-      retries: 5
-      start_period: 30s
-      timeout: 10s
   minio:
     container_name:  minio-container
     profiles: ['dev']
@@ -42,20 +26,8 @@ services:
       MINIO_ROOT_USER: admin
       MINIO_ROOT_PASSWORD: password
     command: server /data --console-address ":9001"
-  test-minio:
-    container_name:  test-minio-container
-    profiles: ['test']
-    image: minio/minio:latest
-    ports:
-      - 9000:9000
-      - 9001:9001 
-    environment:
-      MINIO_ROOT_USER: admin
-      MINIO_ROOT_PASSWORD: password
-    command: server /data --console-address ":9001"
   nestjs-server:
     container_name: nestjs-server-container
-    profiles: ['deploy']
     image: johnpk1007/nestjs-server:latest
     pull_policy: always
     ports: 

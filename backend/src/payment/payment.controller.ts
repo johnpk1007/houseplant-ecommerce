@@ -14,8 +14,10 @@ export class PaymentController {
         private stripeService: StripeService
     ) { }
 
+
     @UseGuards(JwtGuard)
     @Post()
+    @HttpCode(HttpStatus.OK)
     async createPayment(@User() user: {
         userId: number;
         email: string;
