@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Start Infrastructure (Docker Compose)
-        run: docker compose --profile dev up -d postgres-db minio
+        run: docker compose -f ./backend/docker-compose.yml --profile dev up -d postgres-db minio
 
       - name: Wait for Health
         run: sleep 15 
