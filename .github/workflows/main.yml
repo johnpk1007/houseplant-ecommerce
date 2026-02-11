@@ -23,7 +23,7 @@ jobs:
           --health-timeout 5s
           --health-retries 5
       minio:
-        image: image: bitnami/minio:latest
+        image: bitnami/minio:latest
         ports:
           - 9000:9000
           - 9001:9001
