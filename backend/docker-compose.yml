@@ -1,7 +1,7 @@
 services:
   postgres-db:
     container_name:  postgres-db-container
-    profiles: ['dev', 'api']
+    profiles: ['dev','test','api']
     image: postgres:17-alpine
     ports:
       - 5432:5432
@@ -19,7 +19,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
   minio:
     container_name:  minio-container
-    profiles: ['dev', 'api']
+    profiles: ['dev','test','api']
     image: minio/minio:latest
     ports:
       - 9000:9000
