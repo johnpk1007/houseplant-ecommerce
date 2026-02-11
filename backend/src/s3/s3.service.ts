@@ -11,7 +11,7 @@ export class S3Service implements OnModuleInit {
     constructor(private configService: ConfigService) {
         this.s3Client = new S3Client({
             endpoint: this.configService.getOrThrow<string>('S3_ENDPOINT'),
-            region: 'us-east-1',
+            region: 'auto',
             credentials: {
                 accessKeyId: this.configService.getOrThrow<string>('S3_ACCESS_KEY_ID'),
                 secretAccessKey: this.configService.getOrThrow<string>('S3_SECRET_ACCESS_KEY'),
