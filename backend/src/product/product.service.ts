@@ -19,7 +19,7 @@ export class ProductService {
         private configService: ConfigService,
         private stripeService: StripeService
     ) {
-        this.endpoint = this.configService.getOrThrow<string>('S3_ENDPOINT'),
+        this.endpoint = this.configService.getOrThrow<string>('S3_PUBLIC_ENDPOINT'),
             this.bucket = this.configService.getOrThrow<string>('S3_BUCKET_NAME')
     }
 
