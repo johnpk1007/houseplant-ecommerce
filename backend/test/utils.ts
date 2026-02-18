@@ -16,9 +16,11 @@ export async function cleanS3Db(s3Service: S3Service) {
     await s3Service.clearBucket()
 }
 
+const transparentPixel = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+
 export const fakeFile1 = {
     originalname: 'fakeFile1.jpg',
-    buffer: Buffer.from('fake file 1'),
+    buffer: Buffer.from(transparentPixel, 'base64'),
     mimetype: 'image/jpeg'
 } as Express.Multer.File
 
@@ -33,7 +35,7 @@ export const fakeProductDto1 = {
 
 export const fakeFile2 = {
     originalname: 'fakeFile2.jpg',
-    buffer: Buffer.from('fake file 2'),
+    buffer: Buffer.from(transparentPixel, 'base64'),
     mimetype: 'image/jpeg'
 } as Express.Multer.File
 
