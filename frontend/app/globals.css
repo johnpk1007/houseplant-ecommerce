@@ -3,6 +3,8 @@
 @theme {
   --font-vogue: var(--font-vogue);
   --font-playfairDisplay: var(--font-playfairDisplay);
+  --font-bebasNeue: var(--font-bebasNeue);
+  --font-roboto: var(--font-roboto);
   --breakpoint-1850px: 115rem;
   --breakpoint-1700px: 106rem;
   --breakpoint-1500px: 93rem;

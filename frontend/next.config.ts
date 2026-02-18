@@ -1,8 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
+  },
   images: {
-    remotePatterns: [new URL('http://minio:9000/**')],
+    unoptimized: true,
+    remotePatterns: [new URL('http://localhost:9000/**')],
   },
 };
 

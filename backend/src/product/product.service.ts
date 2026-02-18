@@ -8,6 +8,7 @@ import { AfterUploadProduct } from './type';
 import { StripeService } from '../stripe/stripe.service';
 import Stripe from 'stripe';
 import { OrderForPayment } from '../payment/type';
+import { imageSize } from 'image-size'
 
 @Injectable()
 export class ProductService {
@@ -37,9 +38,10 @@ export class ProductService {
             })
             stripeProductId = stripeProduct.id
             const stripePriceId = stripeProduct.default_price as string
+            const { height, width } = imageSize(file.buffer)
             const { keyName, ...rest } = await this.prismaService.product.create({
                 data: {
-                    keyName: s3KeyName, stripeProductId, stripePriceId, ...dto
+                    keyName: s3KeyName, stripeProductId, stripePriceId, height, width, ...dto
                 }
             })
             return { ...rest, url }
@@ -71,7 +73,9 @@ export class ProductService {
     }
 
     async getAllProducts(): Promise<AfterUploadProduct[]> {
-        const products = await this.prismaService.product.findMany()
+        const products = await this.prismaService.product.findMany({
+            where: { isDeleted: false }
+        })
         return products.map((product) => {
             const { keyName, ...rest } = product
             const url = `${this.endpoint}/${this.bucket}/${keyName}`
@@ -84,7 +88,6 @@ export class ProductService {
         let newS3keyName: string | null = null
         let s3KeyUpdatedStripeProduct: Stripe.Response<Stripe.Product> | null = null
         let updatedStripeProduct: Stripe.Response<Stripe.Product> | null = null
-        let updatedPrismaProduct: Product | null = null
         const newData: Partial<Product> = {
             ...(dto ?? {})
         }
@@ -95,6 +98,9 @@ export class ProductService {
                 newData.keyName = newS3keyName
                 const url = `${this.endpoint}/${this.bucket}/${newS3keyName}`
                 s3KeyUpdatedStripeProduct = await this.stripeService.updateProduct({ id: product.stripeProductId, dto: { images: [url] } })
+                const dimentions = imageSize(file.buffer)
+                newData.height = dimentions.height
+                newData.width = dimentions.width
             }
             const stripeProductObject = Object.fromEntries(Object.entries(newData).filter((entry) => ['name', 'description'].includes(entry[0])))
             updatedStripeProduct = await this.stripeService.updateProduct({ id: product.stripeProductId, dto: stripeProductObject })
