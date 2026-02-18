@@ -14,7 +14,6 @@ export default async function Product({ params }: { params: Promise<{ product: s
         <div className="w-full 1100px:h-[700px] 750px:h-[560px] 500px:h-[380px] h-screen flex flex-row justify-center">
             <div className="1100px:flex-1 750px:flex-7/3 flex-1 flex flex-col 1100px:items-end 500px:justify-center 500px:items-center">
                 <div className="relative 1100px:w-[400px] 1100px:h-[600px] 1100px:mr-[20%] 970px:w-[440px] 750px:w-[340px] 750px:h-[460px] 500px:w-[80%] 500px:h-[280px] 500px:m-[10%] w-full h-full">
-                    {/* <Image src={productData.url} alt="Product" width={0} height={0} className="w-full h-full object-cover" /> */}
                     <LoadingImage url={productData.url} />
                     <div className="absolute right-5 bottom-5 750px:text-[40px] 500px:text-[24px] font-roboto text font-bold z-2">${productData.price}</div>
                     <div className="absolute left-5 bottom-5 flex flex-col z-2">

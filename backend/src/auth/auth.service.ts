@@ -14,8 +14,22 @@ export class AuthService {
     ) { }
 
     async signUp({ dto }: { dto: AuthDto }) {
-        const { hash, hashedRefreshToken, ...user } = await this.userService.createUser({ email: dto.email, password: dto.password })
-        return user
+        const refreshTokenPayload = {
+            email: dto.email,
+        }
+        const refresh_token = this.jwtService.sign(refreshTokenPayload, { secret: this.configService.get('JWT_REFRESH_SECRET'), expiresIn: '7d' })
+        const hashedRefreshToken = await bcrypt.hash(refresh_token, 10);
+        const { hash, ...user } = await this.userService.createUser({ email: dto.email, password: dto.password, hashedRefreshToken })
+        const accessTokenPayload = {
+            sub: user.id,
+            email: user.email,
+            role: user.role
+        };
+        const access_token = this.jwtService.sign(accessTokenPayload)
+        return {
+            access_token,
+            refresh_token
+        };
     }
 
     async signIn({ user }: { user: any }) {

@@ -7,12 +7,13 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 export class UserService {
     constructor(private prismaService: PrismaService) { }
 
-    async createUser({ email, password }: { email: string, password: string }) {
+    async createUser({ email, password, hashedRefreshToken }: { email: string, password: string, hashedRefreshToken: string }) {
         const hash = await bcrypt.hash(password, 10);
         return await this.prismaService.user.create({
             data: {
                 email,
                 hash,
+                hashedRefreshToken
             }
         })
     }

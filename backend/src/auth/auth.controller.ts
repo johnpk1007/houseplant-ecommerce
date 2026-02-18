@@ -11,8 +11,15 @@ export class AuthController {
     constructor(private authService: AuthService) { }
 
     @Post('signup')
-    signup(@Body() dto: AuthDto) {
-        return this.authService.signUp({ dto })
+    async signup(@Body() dto: AuthDto, @Res({ passthrough: true }) res: Response) {
+        const { access_token, refresh_token } = await this.authService.signUp({ dto })
+        res.cookie('refresh_token', refresh_token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        })
+        return { access_token }
     }
 
     @Post('signin')
