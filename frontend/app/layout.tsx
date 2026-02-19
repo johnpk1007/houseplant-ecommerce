@@ -3,6 +3,8 @@ import { Playfair_Display, Bebas_Neue, Roboto } from "next/font/google";
 import localFont from 'next/font/local'
 import "./globals.css";
 import Header from "@/components/header/header";
+import Provider from "@/components/context/context";
+import { initialRefresh } from "@/services/auth.server";
 
 export const metadata: Metadata = {
   title: "Houseplant ecommerce"
@@ -33,18 +35,21 @@ const vogueFont = localFont({
   variable: '--font-vogue',
 })
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const accessToken = await initialRefresh().catch(() => null);
   return (
     <html lang="en" className={`${playfairDisplay.variable} ${vogueFont.variable} ${bebasNeue.variable} ${roboto.variable}`}>
       <body className="min-h-screen flex flex-col relative">
-        <Header />
-        <main className="flex-1 w-full max-w-[1923px] mx-auto">
-          {children}
-        </main>
+        <Provider initialAccessToken={accessToken}>
+          <Header />
+          <main className="flex-1 w-full max-w-[1923px] mx-auto">
+            {children}
+          </main>
+        </Provider>
       </body>
     </html >
   );

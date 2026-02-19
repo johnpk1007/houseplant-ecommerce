@@ -3,16 +3,31 @@
 import Login from "@/public/icons/login.svg"
 import Google from "@/public/icons/Google__G__logo.svg"
 import { useState } from "react"
-import signUp from "@/services/auth"
+import { signIn, signUp } from "@/services/auth"
+import { useContext } from "react"
+import { Context } from "@/components/context/context"
+import { useRouter } from 'next/navigation'
 
 export default function SignIn() {
     const [isSignUp, setIsSignUp] = useState(false)
+    const router = useRouter()
+    const { setAccessToken } = useContext(Context)
     const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
+        event.preventDefault()
         if (isSignUp) {
             const formData = new FormData(event.currentTarget);
             const email = formData.get("email") as string
             const password = formData.get("password") as string
-            const user = await signUp({ email, password })
+            const access_token = await signUp({ email, password })
+            setAccessToken(access_token)
+            router.replace('/')
+        } else {
+            const formData = new FormData(event.currentTarget);
+            const email = formData.get("email") as string
+            const password = formData.get("password") as string
+            const access_token = await signIn({ email, password })
+            setAccessToken(access_token)
+            router.replace('/')
         }
     }
 
@@ -23,7 +38,7 @@ export default function SignIn() {
                     <div className="w-[312px] h-[455px] flex flex-col items-center flex-shrink-0">
                         <div className="font-playfairDisplay text-[40px]">Sign In</div>
                         <button type="button" className="font-playfairDisplay text-[16px] text-[#ADADAD] mb-[50px]" onClick={() => setIsSignUp(true)}>Or create an account</button>
-                        <form className="flex flex-col items-center w-full">
+                        <form className="flex flex-col items-center w-full" onSubmit={handleSubmit}>
                             <input name="email" type="email" className="w-full h-[42px] border border-[#ADADAD] mb-[18px] pl-3" placeholder="Email" />
                             <input name="password" type="password" className="w-full h-[42px] border border-[#ADADAD] mb-[114px] pl-3" placeholder="Password" />
                             <button className="bg-black border-solid border-black border-2 rounded-full flex justify-start items-center w-full h-[40px] mb-[18px]">
