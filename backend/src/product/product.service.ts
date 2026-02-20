@@ -141,7 +141,7 @@ export class ProductService {
             await this.stripeService.updateProduct({ id: product.stripeProductId, dto: { default_price: product.stripePriceId } }).catch((error) => { console.error(error) })
             await this.stripeService.updatePrice({ priceId: product.stripePriceId, activeStatus: true }).catch((error) => { console.error(error) })
             await this.stripeService.updatePrice({ priceId: newStripePriceId, activeStatus: false }).catch((error) => { console.error(error) })
-            throw new InternalServerErrorException('Failed to update price')
+            throw new InternalServerErrorException({ message: 'UPDATE PRICE FAILED' })
         }
     }
 
@@ -166,7 +166,7 @@ export class ProductService {
                     await this.stripeService.updatePrice({ priceId: newPrice.id as string, activeStatus: false }).catch((error) => { console.error(error) })
                 }
             }
-            throw new InternalServerErrorException('Failed to update price')
+            throw new InternalServerErrorException({ message: 'UPDATE PRICE FAILED' })
         }
     }
 
@@ -185,10 +185,10 @@ export class ProductService {
                 try {
                     await this.stripeService.updateProduct({ id: prismaProduct.stripeProductId, dto: { active: true } })
                 } catch (error) {
-                    throw new InternalServerErrorException('Failed to rollback using Stripe')
+                    throw new InternalServerErrorException({ message: 'ROLLBACK USING STRIPE FAILED' })
                 }
             }
-            throw new InternalServerErrorException('Failed to delete product')
+            throw new InternalServerErrorException({ message: 'DELETE PRICE FAILED' })
         }
     }
 
@@ -206,10 +206,10 @@ export class ProductService {
                 try {
                     await this.stripeService.updateProduct({ id: prismaProduct.stripeProductId, dto: { active: false } })
                 } catch (error) {
-                    throw new InternalServerErrorException('Failed to rollback using Stripe')
+                    throw new InternalServerErrorException({ message: 'ROLLBACK USING STRIPE FAILED' })
                 }
             }
-            throw new InternalServerErrorException('Failed to restore product')
+            throw new InternalServerErrorException({ message: 'RESTORE PRODUCT FAILED' })
         }
     }
 

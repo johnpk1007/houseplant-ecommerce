@@ -1,6 +1,7 @@
+import { Product } from "@/types/product"
 import LoadingImage from "./loadingImage"
 
-export default function Products({ productsArray }: { productsArray: any[] }) {
+export default function Products({ productsArray }: { productsArray: Product[] }) {
     return (
         <div className="w-full flex flex-col items-center">
             <div className="1700px:h-[100px] h-[40px] w-full"></div>

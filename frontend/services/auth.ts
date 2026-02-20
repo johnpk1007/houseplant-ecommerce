@@ -8,7 +8,7 @@ export async function signUp({ email, password }: { email: string, password: str
         credentials: 'include'
     })
     if (!response.ok) {
-        throw new Error('Sign up failed')
+        throw new Error('SIGN UP FAILED')
     }
     const { access_token } = await response.json()
     return access_token
@@ -24,7 +24,7 @@ export async function signIn({ email, password }: { email: string, password: str
         credentials: 'include'
     })
     if (!response.ok) {
-        throw new Error('Sign in failed')
+        throw new Error('SIGN IN FAIED')
     }
     const { access_token } = await response.json()
     return access_token
@@ -36,7 +36,7 @@ export async function refresh() {
         credentials: 'include'
     })
     if (!response.ok) {
-        throw new Error('refresh failed')
+        throw new Error('REFRESH TOKEN FAILED')
     }
     const data = await response.json()
     return data.access_token
@@ -48,7 +48,7 @@ export async function signOut() {
         credentials: 'include'
     })
     if (!response.ok) {
-        throw new Error('refresh failed')
+        throw new Error('SIGN OUT FAILED')
     }
     return
 }

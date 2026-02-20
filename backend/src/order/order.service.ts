@@ -11,7 +11,7 @@ export class OrderService {
     async createOrder({ userId, cartItemIdArr }: { userId: number, cartItemIdArr: number[] }) {
         return this.prismaService.$transaction(async (tx) => {
             if (cartItemIdArr.length === 0) {
-                throw new BadRequestException()
+                throw new BadRequestException({ message: 'NO CART ITEMS IN REQUEST' })
             }
             const cartItems = await tx.cartItem.findMany({
                 where: {
@@ -21,7 +21,7 @@ export class OrderService {
                 include: { product: true }
             })
             if (cartItems.length === 0) {
-                throw new NotFoundException()
+                throw new NotFoundException({ message: 'CART ITEMS NOT FOUND' })
             }
             return await tx.order.create({
                 data: {
@@ -55,7 +55,7 @@ export class OrderService {
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
-                    throw new NotFoundException()
+                    throw new NotFoundException({ message: 'ORDER NOT FOUND' })
                 }
             }
             throw new InternalServerErrorException()
@@ -74,7 +74,7 @@ export class OrderService {
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
-                    throw new NotFoundException()
+                    throw new NotFoundException({ message: 'ORDER NOT FOUND' })
                 }
             }
             throw new InternalServerErrorException()
@@ -92,7 +92,7 @@ export class OrderService {
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
-                    throw new NotFoundException()
+                    throw new NotFoundException({ message: 'ORDER NOT FOUND' })
                 }
             }
             throw new InternalServerErrorException()

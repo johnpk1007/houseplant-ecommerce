@@ -4,14 +4,13 @@ import Login from "@/public/icons/login.svg"
 import Google from "@/public/icons/Google__G__logo.svg"
 import { useState } from "react"
 import { signIn, signUp } from "@/services/auth"
-import { useContext } from "react"
-import { Context } from "@/components/context/context"
+import { useAccessTokenStore } from "@/services/stores/accessTokenStore"
 import { useRouter } from 'next/navigation'
 
 export default function SignIn() {
     const [isSignUp, setIsSignUp] = useState(false)
     const router = useRouter()
-    const { setAccessToken } = useContext(Context)
+    const setAccessToken = useAccessTokenStore((state) => state.setAccessToken)
     const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault()
         if (isSignUp) {
@@ -42,13 +41,13 @@ export default function SignIn() {
                             <input name="email" type="email" className="w-full h-[42px] border border-[#ADADAD] mb-[18px] pl-3" placeholder="Email" />
                             <input name="password" type="password" className="w-full h-[42px] border border-[#ADADAD] mb-[114px] pl-3" placeholder="Password" />
                             <button className="bg-black border-solid border-black border-2 rounded-full flex justify-start items-center w-full h-[40px] mb-[18px]">
-                                <div className="h-[22px] w-[22px] text-white ml-[12px] mr-[12px] mb-[5px]">
+                                <div className="h-[22px] w-[22px] text-white ml-[12px] mr-[12px]">
                                     <Login />
                                 </div>
                                 <div className="text-white font-roboto text-[16px] font-bold text-nowrap">Sign in</div>
                             </button>
                             <button type="button" className="border-solid border-[#ADADAD] border-2 rounded-full flex justify-start items-center w-full h-[40px]">
-                                <div className="h-[22px] w-[22px] text-white ml-[12px] mr-[12px] mb-[5px]">
+                                <div className="h-[22px] w-[22px] text-white ml-[12px] mr-[12px]">
                                     <Google />
                                 </div>
                                 <div className="text-[#ADADAD] font-roboto text-[16px] font-bold text-nowrap">Sign in with Google</div>
@@ -62,13 +61,13 @@ export default function SignIn() {
                             <input name="email" type="email" className="w-full h-[42px] border border-[#ADADAD] mb-[18px] pl-3" placeholder="Email" />
                             <input name="password" type="password" className="w-full h-[42px] border border-[#ADADAD] mb-[114px] pl-3" placeholder="Password" />
                             <button type="submit" className="bg-black border-solid border-black border-2 rounded-full flex justify-start items-center w-full h-[40px] mb-[18px]">
-                                <div className="h-[22px] w-[22px] text-white ml-[12px] mr-[12px] mb-[5px]">
+                                <div className="h-[22px] w-[22px] text-white ml-[12px] mr-[12px]">
                                     <Login />
                                 </div>
                                 <div className="text-white font-roboto text-[16px] font-bold text-nowrap">Sign up</div>
                             </button>
                             <button type="button" className="border-solid border-[#ADADAD] border-2 rounded-full flex justify-start items-center w-full h-[40px]">
-                                <div className="h-[22px] w-[22px] text-white ml-[12px] mr-[12px] mb-[5px]">
+                                <div className="h-[22px] w-[22px] text-white ml-[12px] mr-[12px]">
                                     <Google />
                                 </div>
                                 <div className="text-[#ADADAD] font-roboto text-[16px] font-bold text-nowrap">Sign up with Google</div>

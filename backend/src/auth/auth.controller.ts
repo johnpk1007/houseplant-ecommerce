@@ -41,7 +41,7 @@ export class AuthController {
     async refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
         const refreshToken = req.cookies['refresh_token']
         if (!refreshToken) {
-            throw new UnauthorizedException()
+            throw new UnauthorizedException({ message: 'NO REFRESH TOKEN' })
         }
         const user = await this.authService.validateRefreshToken({ refreshToken })
         const { access_token, refresh_token } = await this.authService.signIn({ user })

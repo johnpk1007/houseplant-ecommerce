@@ -21,7 +21,7 @@ export class CartItemService {
             })
             const product = await this.productService.getProduct({ id: productId, tx })
             if (product.stock < quantity) {
-                throw new BadRequestException()
+                throw new BadRequestException({ message: 'NOT ENOUGH STOCK' })
             }
             return await tx.cartItem.upsert({
                 where: {
@@ -55,7 +55,7 @@ export class CartItemService {
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
-                    throw new NotFoundException()
+                    throw new NotFoundException({ message: 'CART ITEM NOT FOUND' })
                 }
             }
             throw new InternalServerErrorException()
@@ -75,7 +75,7 @@ export class CartItemService {
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
-                    throw new NotFoundException()
+                    throw new NotFoundException({ message: 'CART ITEM NOT FOUND' })
                 }
             }
             throw new InternalServerErrorException()
@@ -92,7 +92,7 @@ export class CartItemService {
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
-                    throw new NotFoundException()
+                    throw new NotFoundException({ message: 'CART ITEM NOT FOUND' })
                 }
             }
             throw new InternalServerErrorException()

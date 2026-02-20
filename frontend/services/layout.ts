@@ -11,7 +11,7 @@ export async function initialRefresh() {
         },
     });
     if (!response.ok) {
-        throw new Error('refresh failed')
+        throw new Error('REFRESH TOKEN FAILED')
     }
     const data = await response.json()
     return data.access_token

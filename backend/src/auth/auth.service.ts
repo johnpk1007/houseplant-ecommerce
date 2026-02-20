@@ -56,7 +56,7 @@ export class AuthService {
         const user = await this.userService.findUser({ email: payload.email })
         const valid = await bcrypt.compare(refreshToken, user.hashedRefreshToken as string)
         if (!valid) {
-            throw new UnauthorizedException()
+            throw new UnauthorizedException({ message: 'NOT VALID REFRESH TOKEN' })
         }
         return user
     }
@@ -81,7 +81,7 @@ export class AuthService {
         const { hash, ...user } = await this.userService.findUser({ email })
         const pwMatches = await bcrypt.compare(password, hash)
         if (!pwMatches) {
-            throw new UnauthorizedException('Invalid email or password')
+            throw new UnauthorizedException('INVALID EMAIL OR PASSWORD')
         }
         return user
     }

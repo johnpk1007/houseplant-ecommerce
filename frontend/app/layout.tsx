@@ -3,8 +3,8 @@ import { Playfair_Display, Bebas_Neue, Roboto } from "next/font/google";
 import localFont from 'next/font/local'
 import "./globals.css";
 import Header from "@/components/header/header";
-import Provider from "@/components/context/context";
-import { initialRefresh } from "@/services/auth.server";
+import { initialRefresh } from "@/services/layout";
+import AuthInitializer from "@/components/layout/authInitializer";
 
 export const metadata: Metadata = {
   title: "Houseplant ecommerce"
@@ -44,12 +44,11 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${playfairDisplay.variable} ${vogueFont.variable} ${bebasNeue.variable} ${roboto.variable}`}>
       <body className="min-h-screen flex flex-col relative">
-        <Provider initialAccessToken={accessToken}>
-          <Header />
-          <main className="flex-1 w-full max-w-[1923px] mx-auto">
-            {children}
-          </main>
-        </Provider>
+        <AuthInitializer accessToken={accessToken} />
+        <Header />
+        <main className="flex-1 w-full max-w-[1923px] mx-auto">
+          {children}
+        </main>
       </body>
     </html >
   );

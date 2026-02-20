@@ -44,7 +44,6 @@ export class PaymentService {
             if (order.orderStatus === 'PAID') {
                 return
             }
-
             const checkoutSession = await this.stripeService.checkoutSession({ sessionId })
             if (checkoutSession.payment_status === 'paid') {
                 try {
@@ -64,10 +63,10 @@ export class PaymentService {
                                 product.id === order.productId
                             )
                             if (!foundProduct) {
-                                throw new NotFoundException();
+                                throw new NotFoundException({ message: 'PRODUCT NOT FOUND' });
                             }
                             if (foundProduct.stock < order.quantity) {
-                                throw new BadRequestException()
+                                throw new BadRequestException({ message: 'NOT ENOUGH STOCK' })
                             }
                             order.productVersion = foundProduct.version
                         }
@@ -90,7 +89,6 @@ export class PaymentService {
                         console.error(error)
                     }
                 }
-                console.log('done!')
                 return
             } else {
                 throw new InternalServerErrorException()
