@@ -1,17 +1,18 @@
 'use client'
 
 import { useAccessTokenStore } from "@/services/stores/accessTokenStore"
-import { useTotalCartItemStore } from "@/services/stores/totalCartItemStore"
+import { useCartItemStore } from "@/services/stores/cartItemStore"
 import { useEffect } from "react"
+import { CartItem } from "@/types/cartItem"
 
-export default function AuthInitializer({ accessToken, totalCartItemQuantity }: { accessToken: string | null, totalCartItemQuantity: number | null }) {
+export default function AuthInitializer({ accessToken, cartItemsArray }: { accessToken: string | null, cartItemsArray: CartItem[] | null }) {
     const setAccessToken = useAccessTokenStore((state) => state.setAccessToken)
-    const setTotalCartItemStore = useTotalCartItemStore((state) => state.setTotalCartItem)
+    const setCartItemsArray = useCartItemStore((state) => state.setCartItemsArray)
     useEffect(() => {
-        if (!!accessToken && !!totalCartItemQuantity) {
+        if (!!accessToken && !!cartItemsArray) {
             setAccessToken(accessToken)
-            setTotalCartItemStore(totalCartItemQuantity)
+            setCartItemsArray(cartItemsArray)
         }
-    }, [accessToken, setAccessToken, totalCartItemQuantity, setTotalCartItemStore])
+    }, [accessToken, setAccessToken, cartItemsArray, setCartItemsArray])
     return null
 }

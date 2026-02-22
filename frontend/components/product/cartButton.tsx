@@ -6,16 +6,15 @@ import { useRouter } from "next/navigation";
 import Cart from "@/public/icons/cart.svg"
 import { Product } from "@/types/product";
 import { useCartItemStore } from "@/services/stores/cartItemStore";
-import { useTotalCartItemStore } from "@/services/stores/totalCartItemStore";
 import { errorToast } from "@/services/toast/toast";
 
-export default function CartButton({ product }: { product: Pick<Product, 'id' | 'stock'> }) {
+export default function CartButton({ product, cartQuantity }: { product: Pick<Product, 'id' | 'stock'>, cartQuantity: number }) {
     const spanRef = useRef<HTMLSpanElement>(null);
     const [left, setLeft] = useState(0);
     const [top, setTop] = useState(0);
     const router = useRouter()
-    const cartItem = useCartItemStore((state) => state.cartItem)
-    const addTotalCartItem = useTotalCartItemStore((state) => state.addTotalCartItem)
+    const upsertCartItem = useCartItemStore((state) => state.upsertCartItem)
+
     const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
         if (!spanRef.current) return
         spanRef.current.classList.remove("ripple");
@@ -23,8 +22,8 @@ export default function CartButton({ product }: { product: Pick<Product, 'id' | 
         setTop(event.clientY - event.currentTarget.getBoundingClientRect().top)
         spanRef.current.classList.add("ripple");
         try {
-            await createCartItem({ productId: product.id, quantity: cartItem })
-            addTotalCartItem(cartItem)
+            const cartItem = await createCartItem({ productId: product.id, quantity: cartQuantity })
+            upsertCartItem(cartItem)
         } catch (error) {
             if (error instanceof Error) {
                 if (error.message === 'REFRESH TOKEN EXPIRED') {

@@ -27,7 +27,11 @@ export class CartItemService {
                 where: {
                     productId_cartId: { productId, cartId: cart.id }
                 },
-                update: { quantity },
+                update: {
+                    quantity: {
+                        increment: quantity
+                    }
+                },
                 create: { productId, cartId: cart.id, quantity },
                 include: { product: true }
             })

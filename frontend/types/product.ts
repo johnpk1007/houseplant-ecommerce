@@ -15,4 +15,5 @@ export type Product = {
     version: number
     water: string
     width: number
+    url: string
 }

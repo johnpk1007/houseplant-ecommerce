@@ -44,15 +44,14 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const accessToken: string | null = await initialRefresh().catch(() => null);
-  let totalCartItemQuantity: number | null = null
+  let cartItemsArray: CartItem[] | null = null
   if (accessToken) {
-    const cartItems = await getAllCartItem({ accessToken: accessToken })
-    totalCartItemQuantity = (cartItems || []).reduce((sum: number, item: CartItem) => sum + item.quantity, 0);
+    cartItemsArray = await getAllCartItem({ accessToken: accessToken })
   }
   return (
     <html lang="en" className={`${playfairDisplay.variable} ${vogueFont.variable} ${bebasNeue.variable} ${roboto.variable}`}>
       <body className="min-h-screen flex flex-col relative">
-        <AuthInitializer accessToken={accessToken} totalCartItemQuantity={totalCartItemQuantity} />
+        <AuthInitializer accessToken={accessToken} cartItemsArray={cartItemsArray} />
         <Toaster
           toastOptions={{
             success: {
@@ -79,7 +78,7 @@ export default async function RootLayout({
         />
         <Header
           initialAccessToken={accessToken}
-          initialTotalCartItemQuantity={totalCartItemQuantity}
+          initialCartItemsArray={cartItemsArray}
         />
         <main className="flex-1 w-full max-w-[1923px] mx-auto">
           {children}

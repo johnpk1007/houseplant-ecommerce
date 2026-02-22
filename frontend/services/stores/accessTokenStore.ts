@@ -8,6 +8,6 @@ type AccessTokenStore = {
 
 export const useAccessTokenStore = create<AccessTokenStore>((set) => ({
     accessToken: undefined,
-    setAccessToken: (token) => set(() => ({ accessToken: token })),
-    removeAccessToken: () => set(() => ({ accessToken: null }))
+    setAccessToken: (token) => set({ accessToken: token }),
+    removeAccessToken: () => set({ accessToken: null })
 }))

@@ -5,7 +5,7 @@ import Google from "@/public/icons/Google__G__logo.svg"
 import { useState } from "react"
 import { signIn, signUp } from "@/services/auth"
 import { useAccessTokenStore } from "@/services/stores/accessTokenStore"
-import { useTotalCartItemStore } from "@/services/stores/totalCartItemStore"
+import { useCartItemStore } from "@/services/stores/cartItemStore"
 import { useRouter } from 'next/navigation'
 import { getAllCartItem } from "@/services/cart"
 import { CartItem } from "@/types/cartItem"
@@ -14,7 +14,7 @@ export default function SignIn() {
     const [isSignUp, setIsSignUp] = useState(false)
     const router = useRouter()
     const setAccessToken = useAccessTokenStore((state) => state.setAccessToken)
-    const setTotalCartItem = useTotalCartItemStore((state) => state.setTotalCartItem)
+    const setCartItemsArray = useCartItemStore((state) => state.setCartItemsArray)
     const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault()
         if (isSignUp) {
@@ -30,9 +30,8 @@ export default function SignIn() {
             const password = formData.get("password") as string
             const accessToken = await signIn({ email, password })
             const cartItems = await getAllCartItem({ accessToken: accessToken })
-            const totalCartItemQuantity = (cartItems || []).reduce((sum: number, item: CartItem) => sum + item.quantity, 0);
             setAccessToken(accessToken)
-            setTotalCartItem(totalCartItemQuantity)
+            setCartItemsArray(cartItems)
             router.replace('/')
         }
     }
