@@ -12,6 +12,7 @@ export class CartItemService {
 
     async createCartItem({ userId, productId, quantity }: { userId: number, productId: number, quantity: number }) {
         return await this.prismaService.$transaction(async (tx) => {
+            const product = await this.productService.getProduct({ id: productId, tx })
             const cart = await tx.cart.upsert({
                 where: { userId },
                 update: {},
@@ -19,8 +20,15 @@ export class CartItemService {
                     userId
                 }
             })
-            const product = await this.productService.getProduct({ id: productId, tx })
-            if (product.stock < quantity) {
+            const cartItem = await tx.cartItem.findUnique({
+                where: { productId_cartId: { productId, cartId: cart.id } }
+            })
+            let cartItemQuantity = 0
+            if (cartItem) {
+                cartItemQuantity = cartItem.quantity
+            }
+            cartItemQuantity += quantity
+            if (product.stock < cartItemQuantity) {
                 throw new BadRequestException({ message: 'NOT ENOUGH STOCK' })
             }
             return await tx.cartItem.upsert({
