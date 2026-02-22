@@ -10,3 +10,14 @@ export async function createCartItem({ productId, quantity }: { productId: numbe
         credentials: 'include'
     });
 }
+
+export async function getAllCartItem({ accessToken }: { accessToken?: string }) {
+    return await requestWithAccessToken(
+        `${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
+        {
+            method: 'GET',
+            credentials: 'include'
+        },
+        accessToken
+    );
+}

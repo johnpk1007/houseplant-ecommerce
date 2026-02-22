@@ -5,27 +5,34 @@ import Google from "@/public/icons/Google__G__logo.svg"
 import { useState } from "react"
 import { signIn, signUp } from "@/services/auth"
 import { useAccessTokenStore } from "@/services/stores/accessTokenStore"
+import { useTotalCartItemStore } from "@/services/stores/totalCartItemStore"
 import { useRouter } from 'next/navigation'
+import { getAllCartItem } from "@/services/cart"
+import { CartItem } from "@/types/cartItem"
 
 export default function SignIn() {
     const [isSignUp, setIsSignUp] = useState(false)
     const router = useRouter()
     const setAccessToken = useAccessTokenStore((state) => state.setAccessToken)
+    const setTotalCartItem = useTotalCartItemStore((state) => state.setTotalCartItem)
     const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault()
         if (isSignUp) {
             const formData = new FormData(event.currentTarget);
             const email = formData.get("email") as string
             const password = formData.get("password") as string
-            const access_token = await signUp({ email, password })
-            setAccessToken(access_token)
+            const accessToken = await signUp({ email, password })
+            setAccessToken(accessToken)
             router.replace('/')
         } else {
             const formData = new FormData(event.currentTarget);
             const email = formData.get("email") as string
             const password = formData.get("password") as string
-            const access_token = await signIn({ email, password })
-            setAccessToken(access_token)
+            const accessToken = await signIn({ email, password })
+            const cartItems = await getAllCartItem({ accessToken: accessToken })
+            const totalCartItemQuantity = (cartItems || []).reduce((sum: number, item: CartItem) => sum + item.quantity, 0);
+            setAccessToken(accessToken)
+            setTotalCartItem(totalCartItemQuantity)
             router.replace('/')
         }
     }

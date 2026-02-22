@@ -1,12 +1,18 @@
 export type Product = {
+    deletedAt: null | Date
+    description: string
+    height: number
     id: number
+    isDeleted: boolean
+    keyName: string
+    light: string
     name: string
     price: number
-    description: string
-    light: string
-    water: string
+    stock: number
+    stripePriceId: string
+    stripeProductId: string
     temperature: string
-    url: string,
-    height: number,
+    version: number
+    water: string
     width: number
 }

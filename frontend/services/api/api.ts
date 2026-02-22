@@ -3,22 +3,27 @@
 import { useAccessTokenStore } from "../stores/accessTokenStore"
 import { refresh, signOut } from "../auth"
 
-export async function requestWithAccessToken(input: string, init: RequestInit = {}) {
-    const { accessToken, setAccessToken } = useAccessTokenStore.getState()
-    const headerWithAccessToken = { ...init.headers, 'Authorization': `Bearer ${accessToken}` }
-    if (!accessToken) {
+export async function requestWithAccessToken(input: string, init: RequestInit = {}, initialAccessToken?: string) {
+    let accessToken = useAccessTokenStore.getState().accessToken
+    const setAccessToken = useAccessTokenStore.getState().setAccessToken
+    if (!accessToken && !initialAccessToken) {
         throw new Error('NO ACCESS TOKEN')
     }
+    if (!accessToken && !!initialAccessToken) {
+        accessToken = initialAccessToken
+    }
+    const headerWithAccessToken = { ...init.headers, Authorization: `Bearer ${accessToken}` }
+
     const response = await fetch(input, {
         ...init, headers: headerWithAccessToken
     })
     let data = await response.json()
-    if (data.status === 400) {
-        if (data.message === 'PRODUCT OUT OF STOCK') {
-            throw new Error('PRODUCT OUT OF STOCK')
+    if (response.status === 400) {
+        if (data.message === 'NOT ENOUGH STOCK') {
+            throw new Error('NOT ENOUGH STOCK')
         }
     }
-    if (data.status === 401) {
+    if (response.status === 401) {
         try {
             const newAccessToken = await refresh()
             setAccessToken(newAccessToken)
@@ -36,6 +41,5 @@ export async function requestWithAccessToken(input: string, init: RequestInit = 
             throw new Error('REQUEST FAILED')
         }
     }
-    console.log('data:', data)
     return data
 }

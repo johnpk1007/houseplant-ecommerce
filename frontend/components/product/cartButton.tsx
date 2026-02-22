@@ -6,26 +6,37 @@ import { useRouter } from "next/navigation";
 import Cart from "@/public/icons/cart.svg"
 import { Product } from "@/types/product";
 import { useCartItemStore } from "@/services/stores/cartItemStore";
+import { useTotalCartItemStore } from "@/services/stores/totalCartItemStore";
+import { errorToast } from "@/services/toast/toast";
 
-export default function CartButton({ product }: { product: Pick<Product, 'id'> }) {
+export default function CartButton({ product }: { product: Pick<Product, 'id' | 'stock'> }) {
     const spanRef = useRef<HTMLSpanElement>(null);
     const [left, setLeft] = useState(0);
     const [top, setTop] = useState(0);
     const router = useRouter()
     const cartItem = useCartItemStore((state) => state.cartItem)
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const addTotalCartItem = useTotalCartItemStore((state) => state.addTotalCartItem)
+    const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
         if (!spanRef.current) return
         spanRef.current.classList.remove("ripple");
         setLeft(event.clientX - event.currentTarget.getBoundingClientRect().left)
         setTop(event.clientY - event.currentTarget.getBoundingClientRect().top)
         spanRef.current.classList.add("ripple");
         try {
-            createCartItem({ productId: product.id, quantity: cartItem })
+            await createCartItem({ productId: product.id, quantity: cartItem })
+            addTotalCartItem(cartItem)
         } catch (error) {
-            if (error instanceof Error && error.message === 'REFRESH TOKEN EXPIRED') {
-                router.push('/auth/signin')
+            if (error instanceof Error) {
+                if (error.message === 'REFRESH TOKEN EXPIRED') {
+                    router.push('/auth/signin')
+                }
+                if (error.message === 'NOT ENOUGH STOCK') {
+                    errorToast(`Only ${product.stock} items available.`)
+                }
+                if (error.message === 'NO ACCESS TOKEN') {
+                    errorToast('Sign in required to add items to cart.')
+                }
             }
-            throw new Error('REQUEST FAILED')
         }
     };
     return (

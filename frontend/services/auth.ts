@@ -24,7 +24,7 @@ export async function signIn({ email, password }: { email: string, password: str
         credentials: 'include'
     })
     if (!response.ok) {
-        throw new Error('SIGN IN FAIED')
+        throw new Error('SIGN IN FAILED')
     }
     const { access_token } = await response.json()
     return access_token
