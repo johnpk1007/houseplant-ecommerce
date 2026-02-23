@@ -27,7 +27,6 @@ export default function Header(
             ? cartItemsArray
             : initialCartItemsArray
 
-    console.log('cartItemsArray:', cartItemsArray)
     return (
         <header className="fixed top-0 right-0 w-[50px] z-3 flex flex-row justify-center">
             {

@@ -2,13 +2,30 @@ import { BadRequestException, Injectable, InternalServerErrorException, NotFound
 import { PrismaService } from '../prisma/prisma.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 import { ProductService } from '../product/product.service';
+import { ConfigService } from '@nestjs/config';
+import { Product, CartItem } from '../../generated/prisma/client';
+
+type ProductWithUrl = Omit<Product, 'keyName'> & {
+    url: string
+}
+
+type CartItemWithProduct = Omit<CartItem, 'product'> & {
+    product: ProductWithUrl
+}
 
 @Injectable()
 export class CartItemService {
+
+    private readonly endpoint: string;
+    private readonly bucket: string;
     constructor(
         private prismaService: PrismaService,
-        private productService: ProductService
-    ) { }
+        private productService: ProductService,
+        private configService: ConfigService,
+    ) {
+        this.endpoint = this.configService.getOrThrow<string>('S3_PUBLIC_ENDPOINT'),
+            this.bucket = this.configService.getOrThrow<string>('S3_BUCKET_NAME')
+    }
 
     async createCartItem({ userId, productId, quantity }: { userId: number, productId: number, quantity: number }) {
         return await this.prismaService.$transaction(async (tx) => {
@@ -46,8 +63,19 @@ export class CartItemService {
         })
     }
 
-    async getAllCartItem({ userId }: { userId: number }) {
-        return await this.prismaService.cartItem.findMany({ where: { cart: { userId } }, include: { product: true } })
+    async getAllCartItem({ userId }: { userId: number }): Promise<CartItemWithProduct[]> {
+        const cartItems = await this.prismaService.cartItem.findMany({ where: { cart: { userId } }, include: { product: true } })
+        return cartItems.map((cartItem) => {
+            const { keyName, ...rest } = cartItem.product
+            const url = `${this.endpoint}/${this.bucket}/${keyName}`
+            return {
+                ...cartItem,
+                product: {
+                    ...rest,
+                    url
+                }
+            }
+        })
     }
 
     async editCartItem({ userId, cartItemId, quantity }: { userId: number, cartItemId: number, quantity: number }) {

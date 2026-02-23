@@ -5,7 +5,7 @@ import Image from "next/image"
 
 export default function Cart() {
     const cartItemsArray = useCartItemStore((state) => state.cartItemsArray)
-    console.log(cartItemsArray)
+
     return (
         <div className="w-full flex flex-row justify-center items-start 1100px:h-[950px] 750px:h-[560px] 500px:h-[380px]">
             <div className="flex-1 h-full flex flex-row justify-end items-center">

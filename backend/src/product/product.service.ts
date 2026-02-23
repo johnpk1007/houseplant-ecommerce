@@ -66,14 +66,9 @@ export class ProductService {
 
     async getManyProducts({ productIdArray, tx }: { productIdArray: number[], tx?: Prisma.TransactionClient }) {
         const prismaService = tx ?? this.prismaService
-        const products = await prismaService.product.findMany({
+        return await prismaService.product.findMany({
             where: { id: { in: productIdArray }, isDeleted: false },
-            select: { id: true, stock: true, version: true, keyName: true }
-        })
-        return products.map((product) => {
-            const { keyName, ...rest } = product
-            const url = `${this.endpoint}/${this.bucket}/${keyName}`
-            return { ...rest, url }
+            select: { id: true, stock: true, version: true }
         })
     }
 
