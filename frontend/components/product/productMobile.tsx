@@ -12,6 +12,7 @@ import Right from "@/public/icons/right.svg"
 import { useRef } from "react"
 import { Product } from "@/types/product"
 import QuantityButton from "./quantityButton"
+import ButtonFrame from "./buttonFrame"
 
 
 export default function ProductMobile({ productData }: { productData: Product }) {
@@ -34,13 +35,8 @@ export default function ProductMobile({ productData }: { productData: Product })
                             <Right />
                         </button>
                         <div className="font-playfairDisplay text-[32px]">{productData.name}</div>
-                        <div className="flex flex-row justify-between">
-                            <div className="flex flex-col z-2">
-                                <QuantityButton />
-                                <CartButton product={productData} />
-                            </div>
-                            <div className="text-[24px] font-roboto text font-bold z-2 self-end">${productData.price}</div>
-                        </div>
+                        <ButtonFrame productData={productData} />
+                        <div className="text-[24px] font-roboto text font-bold z-2 absolute right-5 bottom-5">${productData.price}</div>
                     </div>
                     <div className="w-screen h-full flex-shrink-0 flex flex-col justify-end items-start p-[30px] bg-black/20 relative snap-start">
                         <button type="button" onClick={() => scrollTo('left')} className="w-[18px] h-[18px] shrink-0 text-white animate-pulse absolute top-[50%] left-[30px] flex justify-center items-center">

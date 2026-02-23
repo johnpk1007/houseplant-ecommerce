@@ -3,8 +3,6 @@ import Water from "@/public/icons/water.svg"
 import Temperature from "@/public/icons/temperature.svg"
 import LoadingImage from "@/components/product/loadingImage";
 import { Product } from "@/types/product";
-import CartButton from "./cartButton";
-import QuantityButton from "./quantityButton";
 import ButtonFrame from "./buttonFrame";
 
 export default async function ProductScreen({ productData }: { productData: Product }) {
@@ -14,10 +12,6 @@ export default async function ProductScreen({ productData }: { productData: Prod
                 <div className="relative 1100px:w-[400px] 1100px:h-[600px] 1100px:mr-[20%] 970px:w-[440px] 750px:w-[340px] 750px:h-[460px] 500px:w-[80%] 500px:h-[280px] 500px:m-[10%] w-full h-full">
                     <LoadingImage url={productData.url} />
                     <div className="absolute right-5 bottom-5 750px:text-[40px] 500px:text-[24px] font-roboto text font-bold z-2">${productData.price}</div>
-                    {/* <div className="absolute left-5 bottom-5 flex flex-col z-2">
-                        <QuantityButton />
-                        <CartButton product={productData} />
-                    </div> */}
                     <ButtonFrame productData={productData} />
                 </div>
             </div>

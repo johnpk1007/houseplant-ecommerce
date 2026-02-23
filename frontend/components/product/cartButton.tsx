@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Cart from "@/public/icons/cart.svg"
 import { Product } from "@/types/product";
 import { useCartItemStore } from "@/services/stores/cartItemStore";
-import { errorToast } from "@/services/toast/toast";
+import { errorToast, successToast } from "@/services/toast/toast";
 
 export default function CartButton({ product, cartQuantity }: { product: Pick<Product, 'id' | 'stock'>, cartQuantity: number }) {
     const spanRef = useRef<HTMLSpanElement>(null);
@@ -14,6 +14,7 @@ export default function CartButton({ product, cartQuantity }: { product: Pick<Pr
     const [top, setTop] = useState(0);
     const router = useRouter()
     const upsertCartItem = useCartItemStore((state) => state.upsertCartItem)
+    const [isLoading, setIsLoading] = useState(false)
 
     const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
         if (!spanRef.current) return
@@ -22,9 +23,13 @@ export default function CartButton({ product, cartQuantity }: { product: Pick<Pr
         setTop(event.clientY - event.currentTarget.getBoundingClientRect().top)
         spanRef.current.classList.add("ripple");
         try {
+            setIsLoading(true)
             const cartItem = await createCartItem({ productId: product.id, quantity: cartQuantity })
             upsertCartItem(cartItem)
+            setIsLoading(false)
+            successToast('Added to cart')
         } catch (error) {
+            setIsLoading(false)
             if (error instanceof Error) {
                 if (error.message === 'REFRESH TOKEN EXPIRED') {
                     router.push('/auth/signin')
@@ -39,12 +44,28 @@ export default function CartButton({ product, cartQuantity }: { product: Pick<Pr
         }
     };
     return (
-        <button onClick={handleClick} className="relative border-solid border-black border-2 rounded-full flex justify-start items-center bg-black text-white hover:bg-black/40 hover:border-black/10 750px:w-[170px] 750px:h-[40px] w-[125px] h-[30px] mb-[14px] duration-300 ease-in-out cursor-pointer text-inherit overflow-hidden">
-            <div className="750px:w-[24px] 750px:h-[24px] w-[18px] h-[18px] 750px:ml-[16px] ml-[10px] mr-[8px] flex-shrink-0">
-                <Cart />
-            </div>
-            <div className="font-roboto 750px:text-[16px] text-[12px] font-bold text-nowrap text-inherit">ADD TO CART</div>
-            <span ref={spanRef} className="w-[20px] h-[20px]" style={{ left, top }}></span>
+        <button onClick={handleClick} className="relative border-solid border-black border-2 rounded-full bg-black text-white hover:bg-black/40 hover:border-black/10 750px:w-[170px] 750px:h-[40px] w-[125px] h-[30px] duration-300 ease-in-out cursor-pointer overflow-hidden">
+            {isLoading ?
+                <div className="h-full w-full flex flex-row justify-center">
+                    <div className="h-full w-[40%] flex flex-row justify-around items-center">
+                        <span className="h-[10px] w-[10px] rounded-full animate-pulse [animation-duration:900ms] bg-white" />
+                        <span className="h-[10px] w-[10px] rounded-full animate-pulse [animation-duration:900ms] [animation-delay:300ms] bg-white" />
+                        <span className="h-[10px] w-[10px] rounded-full animate-pulse [animation-duration:900ms] [animation-delay:600ms] bg-white" />
+                    </div>
+                </div>
+                :
+                <div className="h-full w-full flex justify-start items-center ">
+                    <div className="750px:w-[24px] 750px:h-[24px] w-[18px] h-[18px] 750px:ml-[16px] ml-[10px] mr-[8px] flex-shrink-0">
+                        <Cart />
+                    </div>
+                    <div className="font-roboto 750px:text-[16px] text-[12px] font-bold text-nowrap text-inherit">ADD TO CART</div>
+                    <span ref={spanRef} className="w-[20px] h-[20px]" style={{ left, top }}></span>
+                </div>
+            }
+
+
+
+
         </button>
     )
 }
