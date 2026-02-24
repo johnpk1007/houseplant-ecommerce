@@ -26,7 +26,7 @@ export default function Cart() {
     const handlePrev = () => {
         if (page > 0) setPage(p => p - 1)
     }
-    const handlePlus = async ({ cartItemId, quantity }: { cartItemId: number, quantity: number }) => {
+    const handlePlusMinus = async ({ cartItemId, quantity }: { cartItemId: number, quantity: number }) => {
         const cartItem = await editCartItem({ cartItemId, quantity })
         upsertCartItem(cartItem)
     }
@@ -79,8 +79,8 @@ export default function Cart() {
                                                 <div className="flex flex-row items-center">
                                                     <div className="font-roboto font-light text-[16px] mr-[10px]">{cartItem.quantity}</div>
                                                     <div className="font-roboto font-light text-[16px] mr-[10px]">{cartItem.product.name}</div>
-                                                    <button type="button" className="border-1 border-[#ADADAD] rounded-full h-[12px] w-[11px] text-[8px] text-[#ADADAD] flex justify-center items-center mr-[5px]"><Minus /></button>
-                                                    <button type="button" onClick={() => handlePlus({ cartItemId: cartItem.id, quantity: cartItem.quantity + 1 })} className="border-1 border-[#ADADAD] rounded-full h-[12px] w-[11px] text-[8px] text-[#ADADAD] flex justify-center items-center"><Plus /></button>
+                                                    <button type="button" onClick={() => handlePlusMinus({ cartItemId: cartItem.id, quantity: cartItem.quantity - 1 })} className="border-1 border-[#ADADAD] rounded-full h-[12px] w-[11px] text-[8px] text-[#ADADAD] flex justify-center items-center mr-[5px]"><Minus /></button>
+                                                    <button type="button" onClick={() => handlePlusMinus({ cartItemId: cartItem.id, quantity: cartItem.quantity + 1 })} className="border-1 border-[#ADADAD] rounded-full h-[12px] w-[11px] text-[8px] text-[#ADADAD] flex justify-center items-center"><Plus /></button>
                                                 </div>
                                                 <div className="font-roboto font-light text-[16px]">${cartItem.product.price}</div>
                                             </div>

@@ -18,8 +18,10 @@ export const useCartItemStore = create<CartItemStore>((set, get) => ({
             if (!existingCartItem) {
                 set({ cartItemsArray: [...cartItemsArray, cartItem] })
             } else {
-                const updatedCartItemArray = cartItemsArray.filter(item => item.productId !== cartItem.productId)
-                set({ cartItemsArray: [...updatedCartItemArray, cartItem] })
+                const updated = cartItemsArray.map(item =>
+                    item.productId === cartItem.productId ? cartItem : item
+                )
+                set({ cartItemsArray: updated })
             }
         } else {
             set({ cartItemsArray: [cartItem] })

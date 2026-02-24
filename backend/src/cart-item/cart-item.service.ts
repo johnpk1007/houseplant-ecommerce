@@ -88,19 +88,25 @@ export class CartItemService {
     }
 
     async editCartItem({ userId, cartItemId, quantity }: { userId: number, cartItemId: number, quantity: number }) {
-        try {
-            const cartItem = await this.prismaService.cartItem.update({
+        return await this.prismaService.$transaction(async (tx) => {
+            const foundCartItem = await this.prismaService.cartItem.findFirst({
                 where: {
                     id: cartItemId,
-                    cart: {
-                        userId
-                    }
-                },
-                data: {
-                    quantity
+                    cart: { userId }
                 },
                 include: { product: true }
-            })
+            });
+            if (!foundCartItem) {
+                throw new NotFoundException({ message: 'CART ITEM NOT FOUND' })
+            }
+            if (foundCartItem.product.stock < quantity) {
+                throw new BadRequestException({ message: 'NOT ENOUGH STOCK' })
+            }
+            const cartItem = await this.prismaService.cartItem.update({
+                where: { id: cartItemId },
+                data: { quantity },
+                include: { product: true }
+            });
             const { keyName, ...rest } = cartItem.product
             const url = `${this.endpoint}/${this.bucket}/${keyName}`
             return {
@@ -110,14 +116,7 @@ export class CartItemService {
                     url
                 }
             }
-        } catch (error) {
-            if (error instanceof PrismaClientKnownRequestError) {
-                if (error.code === 'P2025') {
-                    throw new NotFoundException({ message: 'CART ITEM NOT FOUND' })
-                }
-            }
-            throw new InternalServerErrorException()
-        }
+        })
     }
 
     async deleteCartItem({ userId, cartItemId }: { userId: number, cartItemId: number }) {
