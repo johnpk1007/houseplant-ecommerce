@@ -37,18 +37,18 @@ export class CartItemService {
                     userId
                 }
             })
-            const cartItem = await tx.cartItem.findUnique({
+            const foundCartItem = await tx.cartItem.findUnique({
                 where: { productId_cartId: { productId, cartId: cart.id } }
             })
             let cartItemQuantity = 0
-            if (cartItem) {
-                cartItemQuantity = cartItem.quantity
+            if (foundCartItem) {
+                cartItemQuantity = foundCartItem.quantity
             }
             cartItemQuantity += quantity
             if (product.stock < cartItemQuantity) {
                 throw new BadRequestException({ message: 'NOT ENOUGH STOCK' })
             }
-            return await tx.cartItem.upsert({
+            const cartItem = await tx.cartItem.upsert({
                 where: {
                     productId_cartId: { productId, cartId: cart.id }
                 },
@@ -60,6 +60,15 @@ export class CartItemService {
                 create: { productId, cartId: cart.id, quantity },
                 include: { product: true }
             })
+            const { keyName, ...rest } = cartItem.product
+            const url = `${this.endpoint}/${this.bucket}/${keyName}`
+            return {
+                ...cartItem,
+                product: {
+                    ...rest,
+                    url
+                }
+            }
         })
     }
 
@@ -80,7 +89,7 @@ export class CartItemService {
 
     async editCartItem({ userId, cartItemId, quantity }: { userId: number, cartItemId: number, quantity: number }) {
         try {
-            return await this.prismaService.cartItem.update({
+            const cartItem = await this.prismaService.cartItem.update({
                 where: {
                     id: cartItemId,
                     cart: {
@@ -92,6 +101,15 @@ export class CartItemService {
                 },
                 include: { product: true }
             })
+            const { keyName, ...rest } = cartItem.product
+            const url = `${this.endpoint}/${this.bucket}/${keyName}`
+            return {
+                ...cartItem,
+                product: {
+                    ...rest,
+                    url
+                }
+            }
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {

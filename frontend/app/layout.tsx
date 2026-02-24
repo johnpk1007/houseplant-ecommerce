@@ -47,7 +47,6 @@ export default async function RootLayout({
   let cartItemsArray: CartItem[] | null = null
   if (accessToken) {
     cartItemsArray = await getAllCartItem({ accessToken: accessToken })
-    console.log('cartItemsArray:', cartItemsArray)
   }
   return (
     <html lang="en" className={`${playfairDisplay.variable} ${vogueFont.variable} ${bebasNeue.variable} ${roboto.variable}`}>
