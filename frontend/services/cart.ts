@@ -33,5 +33,16 @@ export async function editCartItem({ cartItemId, quantity }: { cartItemId: numbe
             body: JSON.stringify({ cartItemId, quantity }),
             credentials: 'include'
         });
+}
 
+export async function deleteCartItem({ cartItemId }: { cartItemId: number }) {
+    return await requestWithAccessToken(`${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
+        {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ cartItemId }),
+            credentials: 'include'
+        });
 }

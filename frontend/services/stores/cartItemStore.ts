@@ -27,10 +27,10 @@ export const useCartItemStore = create<CartItemStore>((set, get) => ({
             set({ cartItemsArray: [cartItem] })
         }
     },
-    removeCartItem: (productId: number) => {
+    removeCartItem: (cartItemId: number) => {
         const cartItemsArray = get().cartItemsArray
         if (!!cartItemsArray) {
-            const updatedCartItemArray = cartItemsArray.filter(item => item.productId !== productId)
+            const updatedCartItemArray = cartItemsArray.filter(item => item.id !== cartItemId)
             set({ cartItemsArray: updatedCartItemArray })
         }
     },

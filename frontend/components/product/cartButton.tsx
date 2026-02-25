@@ -59,13 +59,9 @@ export default function CartButton({ product, cartQuantity }: { product: Pick<Pr
                         <Cart />
                     </div>
                     <div className="font-roboto 750px:text-[16px] text-[12px] font-bold text-nowrap text-inherit">ADD TO CART</div>
-                    <span ref={spanRef} className="w-[20px] h-[20px]" style={{ left, top }}></span>
                 </div>
             }
-
-
-
-
+            <span ref={spanRef} className="w-[20px] h-[20px]" style={{ left, top }}></span>
         </button>
     )
 }
