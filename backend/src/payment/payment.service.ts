@@ -3,7 +3,7 @@ import { OrderService } from '../order/order.service';
 import { StripeService } from '../stripe/stripe.service';
 import { OrderStatus } from '../order/enum';
 import { ProductService } from '../product/product.service';
-import { OrderForPayment } from './type';
+import { AddressState, OrderForPayment } from './type';
 import { CartItemService } from '../cart-item/cart-item.service';
 import { PrismaService } from '../prisma/prisma.service';
 import Stripe from 'stripe';
@@ -17,22 +17,17 @@ export class PaymentService {
         private cartItemService: CartItemService,
         private prismaService: PrismaService
     ) { }
-    async createPayment({ userId, email, cartItemIdArr }: { userId: number, email: string, cartItemIdArr: number[] }) {
-        type orderType = Awaited<ReturnType<typeof this.orderService.createOrder>>
-        let order: orderType | null = null
-        let editedOrder: orderType | null = null
+    async createPayment({ userId, addressState, cartItemIdArray }: { userId: number, addressState: AddressState, cartItemIdArray: number[] }) {
+        const order = await this.orderService.createOrder({ userId, addressState, cartItemIdArray })
         try {
-            order = await this.orderService.createOrder({ userId, cartItemIdArr })
-            const line_items_array = order.orderItems.map((orderItem) => {
-                const stripePriceId = orderItem.product.stripePriceId
-                const quantity = orderItem.quantity
-                return { price: stripePriceId, quantity }
+            const totalOrderAmount = order.orderItems.reduce((sum: number, item: { quantity: number, price: number }) => sum + item.quantity * item.price, 0)
+            const paymentIntent = await this.stripeService.createPayment({
+                totalOrderAmount: totalOrderAmount * 100, metadata: { orderId: order.id.toString() }
             })
-            const stripeResponse = await this.stripeService.createSession({ customer_email: email, line_items_array })
-            editedOrder = await this.orderService.editOrder({ orderId: order.id, dto: { stripeSessionId: stripeResponse.id } })
-            return stripeResponse
+            return { clientSecret: paymentIntent.clientSecret }
         } catch (error) {
-            console.error(error)
+            await this.orderService.editOrder({ orderId: order.id, dto: { orderStatus: OrderStatus.Failed } }).catch(err => console.error('Prisma Rollback Failed:', err))
+            throw new InternalServerErrorException({ message: 'CREATE ORDER FAILED' })
         }
     }
 

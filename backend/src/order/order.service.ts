@@ -3,19 +3,20 @@ import { PrismaService } from '../prisma/prisma.service';
 import { OrderStatus } from './enum';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 import { Prisma } from '../../generated/prisma/client';
+import { AddressState } from '../payment/type';
 
 @Injectable()
 export class OrderService {
     constructor(private prismaService: PrismaService) { }
 
-    async createOrder({ userId, cartItemIdArr }: { userId: number, cartItemIdArr: number[] }) {
+    async createOrder({ userId, addressState, cartItemIdArray }: { userId: number, addressState: AddressState, cartItemIdArray: number[] }) {
         return this.prismaService.$transaction(async (tx) => {
-            if (cartItemIdArr.length === 0) {
+            if (cartItemIdArray.length === 0) {
                 throw new BadRequestException({ message: 'NO CART ITEMS IN REQUEST' })
             }
             const cartItems = await tx.cartItem.findMany({
                 where: {
-                    id: { in: cartItemIdArr },
+                    id: { in: cartItemIdArray },
                     cart: { userId: userId }
                 },
                 include: { product: true }
@@ -33,7 +34,16 @@ export class OrderService {
                             price: cart.product.price
                         }))
                     },
-                    cartItems: cartItemIdArr
+                    cartItems: cartItemIdArray,
+                    firstName: addressState.firstName,
+                    lastName: addressState.lastName,
+                    phoneNumber: addressState.phoneNumber,
+                    extendedAddress: addressState.extendedAddress,
+                    streetNumber: addressState.streetNumber,
+                    route: addressState.route,
+                    locality: addressState.locality,
+                    administrativeAreaLevel1: addressState.administrativeAreaLevel1,
+                    postalCode: addressState.postalCode
                 },
                 include: { orderItems: { include: { product: true } } }
             })

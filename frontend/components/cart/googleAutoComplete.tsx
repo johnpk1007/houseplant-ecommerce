@@ -67,7 +67,7 @@ export default function GoogleAutocomplete({ setAddress }: { setAddress: Dispatc
 
     const validateField = (value: string) => {
         if (!value.trim()) return "Please enter your street address.";
-        if (!/^[A-Za-z0-9]+$/.test(value)) return "Please enter letters and numbers only.";
+        if (!/^[A-Za-z0-9 ]+$/.test(value)) return "Please enter letters and numbers only.";
         return "";
     }
 
@@ -106,7 +106,11 @@ export default function GoogleAutocomplete({ setAddress }: { setAddress: Dispatc
 
                 setAddress((prev) => ({
                     ...prev,
-                    ...componentMap
+                    streetNumber: componentMap.street_number,
+                    route: componentMap.route,
+                    locality: componentMap.locality,
+                    administrativeAreaLevel1: componentMap.administrative_area_level_1,
+                    postalCode: componentMap.postal_code
                 }));
 
                 const formatted = [componentMap.street_number, componentMap.route]

@@ -2,9 +2,11 @@
 
 import Image from "next/image"
 import { CartItem } from "@/types/cartItem"
-import { SetStateAction, useState } from "react"
+import { SetStateAction } from "react"
+import { useCartItemStore } from "@/services/stores/cartItemStore"
 
-export default function SmallScreenCartItemImage({ cartItemsArray, page, url, setUrl }: { cartItemsArray: CartItem[] | null | undefined, page: number, url: string | null, setUrl: React.Dispatch<SetStateAction<string | null>> }) {
+export default function SmallScreenCartItemImage({ page, url, setUrl }: { page: number, url: string | null, setUrl: React.Dispatch<SetStateAction<string | null>> }) {
+    const cartItemsArray = useCartItemStore((state) => state.cartItemsArray)
     const itemsPerPage = 4
     let maxPage: number = cartItemsArray ? Math.ceil(cartItemsArray.length / itemsPerPage) - 1 : 0
     if (!!cartItemsArray) {

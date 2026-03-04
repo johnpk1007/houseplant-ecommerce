@@ -20,10 +20,8 @@ export class PaymentController {
     @HttpCode(HttpStatus.OK)
     async createPayment(@User() user: {
         userId: number;
-        email: string;
-        role: Role;
     }, @Body() dto: PaymentDto) {
-        return await this.paymentService.createPayment({ userId: user.userId, email: user.email, cartItemIdArr: dto.cartItemIdArr })
+        return await this.paymentService.createPayment({ userId: user.userId, addressState: dto.addressState, cartItemIdArray: dto.cartItemIdArray })
     }
 
     @Post('/webhook')

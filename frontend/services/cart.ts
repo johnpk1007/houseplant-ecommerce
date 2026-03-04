@@ -1,3 +1,4 @@
+import { AddressState } from "@/types/addressState";
 import { requestWithAccessToken } from "./api/api";
 
 export async function createCartItem({ productId, quantity }: { productId: number, quantity: number }) {
@@ -43,6 +44,18 @@ export async function deleteCartItem({ cartItemId }: { cartItemId: number }) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ cartItemId }),
+            credentials: 'include'
+        });
+}
+
+export async function createPaymentIntent({ cartItemIdArray, addressState }: { cartItemIdArray: number[], addressState: AddressState }) {
+    return await requestWithAccessToken(`${process.env.NEXT_PUBLIC_NEST_API_URL}/payment`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ cartItemIdArray, addressState }),
             credentials: 'include'
         });
 }

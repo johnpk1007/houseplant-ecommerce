@@ -3,15 +3,28 @@
 import { useCartItemStore } from "@/services/stores/cartItemStore"
 import { useState } from "react"
 import CartItemImage from "@/components/cart/cartItemImage"
-import SmallScreenCartItemCheck from "@/components/cart/smallScreenCartItemImage"
+import SmallScreenCartItemImage from "@/components/cart/smallScreenCartItemImage"
 import CartItemList from "@/components/cart/cartItemList"
 import Address from "@/components/cart/address"
+import PaymentRequest from "@/components/cart/paymentRequest"
+import { AddressState } from "@/types/addressState"
 
-export default function CartItemCheck() {
+export default function Cart() {
     const cartItemsArray = useCartItemStore((state) => state.cartItemsArray)
     const [page, setPage] = useState(0)
     const [url, setUrl] = useState<string | null>(null)
     const [stage, setStage] = useState(0)
+    const [address, setAddress] = useState<AddressState>({
+        firstName: "",
+        lastName: "",
+        phoneNumber: "",
+        extendedAddress: "",
+        streetNumber: "",
+        route: "",
+        locality: "",
+        administrativeAreaLevel1: "",
+        postalCode: ""
+    });
 
     return (
         <div className="w-full 1700px:h-[950px] h-[700px] flex flex-row justify-center items-start">
@@ -31,10 +44,11 @@ export default function CartItemCheck() {
                             }
                         }
                     `}</style>
-                    <CartItemImage cartItemsArray={cartItemsArray} page={page} />
-                    <SmallScreenCartItemCheck cartItemsArray={cartItemsArray} page={page} url={url} setUrl={setUrl} />
-                    <CartItemList cartItemsArray={cartItemsArray} page={page} setPage={setPage} setUrl={setUrl} stage={stage} setStage={setStage} />
-                    <Address />
+                    <CartItemImage page={page} />
+                    <SmallScreenCartItemImage page={page} url={url} setUrl={setUrl} />
+                    <CartItemList page={page} setPage={setPage} setUrl={setUrl} stage={stage} setStage={setStage} />
+                    <Address stage={stage} setStage={setStage} address={address} setAddress={setAddress} />
+                    <PaymentRequest stage={stage} setStage={setStage} address={address} setAddress={setAddress} />
                 </div>
             </div>
         </div >

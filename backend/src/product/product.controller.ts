@@ -43,16 +43,6 @@ export class ProductController {
         return await this.productService.updateProduct({ prismaId: id, file, dto })
     }
 
-    @Patch(':id/price')
-    @Roles(Role.Admin)
-    @UseGuards(JwtGuard, RolesGuard)
-    async updatePrice(
-        @Param('id', ParseIntPipe) id: number,
-        @Body() dto: UpdatePriceDto
-    ) {
-        return await this.productService.updatePrice({ prismaId: id, price: dto.price })
-    }
-
     @Delete(':id')
     @Roles(Role.Admin)
     @UseGuards(JwtGuard, RolesGuard)

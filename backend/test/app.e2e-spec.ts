@@ -11,6 +11,7 @@ import { ConfigService } from '@nestjs/config'
 import { fakeFile1, fakeProductDto1, fakeFile2, fakeProductDto2, customerDto1, customerDto2 } from './utils'
 import cookieParser from 'cookie-parser'
 import { StripeService } from '../src/stripe/stripe.service'
+import { customerAddress } from './utils'
 
 describe('App e2e', () => {
   let app: INestApplication
@@ -162,7 +163,7 @@ describe('App e2e', () => {
     it('should order and pay', () => {
       return spec()
         .post('/payment')
-        .withBody({ cartItemIdArr: ['$S{cartItemId}'] })
+        .withBody({ cartItemIdArr: ['$S{cartItemId}'], addressState: customerAddress })
         .withBearerToken('$S{customer1AccessToken}')
         .withCookies('$S{customer1RefreshToken}')
         .expectStatus(200)

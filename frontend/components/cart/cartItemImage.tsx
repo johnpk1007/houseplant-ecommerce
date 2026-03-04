@@ -2,8 +2,10 @@
 
 import Image from "next/image"
 import { CartItem } from "@/types/cartItem"
+import { useCartItemStore } from "@/services/stores/cartItemStore"
 
-export default function CartItemImage({ cartItemsArray, page }: { cartItemsArray: CartItem[] | null | undefined, page: number }) {
+export default function CartItemImage({ page }: { page: number }) {
+    const cartItemsArray = useCartItemStore((state) => state.cartItemsArray)
     const itemsPerPage = 4
     let maxPage: number = cartItemsArray ? Math.ceil(cartItemsArray.length / itemsPerPage) - 1 : 0
     if (!!cartItemsArray) {

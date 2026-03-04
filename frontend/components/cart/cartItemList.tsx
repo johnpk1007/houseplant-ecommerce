@@ -7,8 +7,10 @@ import Left from "@/public/icons/left.svg"
 import MinusButton from "@/components/cart/minusButton"
 import PlusButton from "@/components/cart/plusButton"
 import Map from '@/public/icons/filledMap.svg'
+import { useCartItemStore } from "@/services/stores/cartItemStore"
 
-export default function CartItemList({ cartItemsArray, page, setPage, setUrl, stage, setStage }: { cartItemsArray: CartItem[] | null | undefined, page: number, setPage: React.Dispatch<SetStateAction<number>>, setUrl: React.Dispatch<SetStateAction<string | null>>, stage: number, setStage: React.Dispatch<SetStateAction<number>> }) {
+export default function CartItemList({ page, setPage, setUrl, stage, setStage }: { page: number, setPage: React.Dispatch<SetStateAction<number>>, setUrl: React.Dispatch<SetStateAction<string | null>>, stage: number, setStage: React.Dispatch<SetStateAction<number>> }) {
+    const cartItemsArray = useCartItemStore((state) => state.cartItemsArray)
     const itemsPerPage = 4
     let maxPage: number = cartItemsArray ? Math.ceil(cartItemsArray.length / itemsPerPage) - 1 : 0
     if (!!cartItemsArray) {

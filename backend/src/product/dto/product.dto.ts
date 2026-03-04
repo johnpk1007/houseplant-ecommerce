@@ -34,6 +34,11 @@ export class UpdateProductDto {
     @IsOptional()
     name?: string
 
+    @Type(() => Number)
+    @IsNumber()
+    @IsOptional()
+    price: number
+
     @IsString()
     @IsOptional()
     description?: string

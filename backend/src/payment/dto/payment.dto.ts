@@ -1,8 +1,15 @@
-import { ArrayNotEmpty, IsArray, IsInt, IsNotEmpty } from "class-validator";
+import { ArrayNotEmpty, IsArray, IsInt, IsString, IsNotEmpty } from "class-validator";
+import { AddressStateDto } from "./address.dto";
+import { ValidateNested } from "class-validator";
+import { Type } from "class-transformer";
 
 export class PaymentDto {
     @IsArray()
     @ArrayNotEmpty()
     @IsInt({ each: true })
-    cartItemIdArr: number[]
+    cartItemIdArray: number[]
+
+    @ValidateNested()
+    @Type(() => AddressStateDto)
+    addressState: AddressStateDto
 }

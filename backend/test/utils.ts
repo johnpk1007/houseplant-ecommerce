@@ -58,3 +58,14 @@ export const customerDto2 = {
     password: '654321'
 }
 
+export const customerAddress = {
+    firstName: 'John',
+    lastName: 'Doe',
+    phoneNumber: '(123)-456-7890',
+    extendedAddress: '1234',
+    streetNumber: '123',
+    route: 'Sesame street',
+    locality: 'Miami',
+    administrativeAreaLevel1: 'Florida',
+    postalCode: '123'
+}

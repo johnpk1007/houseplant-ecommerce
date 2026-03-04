@@ -9,43 +9,15 @@ export class StripeService {
         this.stripe = new Stripe(this.configService.getOrThrow<string>('STRIPE_SECRET'))
     }
 
-    async createProduct({ name, description, price, image }: { name: string, description: string, price: number, image: string }) {
-        return await this.stripe.products.create({
-            name, description, images: [image], default_price_data: { currency: 'usd', unit_amount: price * 100 }
-        })
-    }
+    async createPayment({ totalOrderAmount, metadata }: { totalOrderAmount: number, metadata: { orderId: string } }) {
+        const paymentIntent = await this.stripe.paymentIntents.create({
+            amount: totalOrderAmount,
+            currency: "usd",
+            payment_method_types: ['card'],
+            metadata
+        });
 
-    async getProduct({ id }: { id: string }) {
-        return await this.stripe.products.retrieve(id)
-    }
-
-    async updateProduct({ id, dto }: { id: string, dto: { name?: string, description?: string, images?: string[], default_price?: string, active?: boolean } }) {
-        return await this.stripe.products.update(id, dto)
-    }
-
-    async createPrice({ productId, price }: { productId: string, price: number }) {
-        return await this.stripe.prices.create({
-            currency: 'usd',
-            unit_amount: price * 100,
-            product: productId
-        })
-    }
-
-    async updatePrice({ priceId, activeStatus }: { priceId: string, activeStatus: boolean }) {
-        return await this.stripe.prices.update(priceId, {
-            active: activeStatus
-        })
-    }
-
-    async createSession({ customer_email, line_items_array }: { customer_email: string, line_items_array: { price: string, quantity: number }[] }) {
-        return await this.stripe.checkout.sessions.create({
-            customer_email,
-            success_url: 'https://example.com/success',
-            mode: 'payment',
-            line_items: [
-                ...line_items_array
-            ],
-        })
+        return { clientSecret: paymentIntent.client_secret }
     }
 
     constructEvent({ payload, sig }) {
