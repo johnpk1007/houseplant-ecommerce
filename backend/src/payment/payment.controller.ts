@@ -31,7 +31,7 @@ export class PaymentController {
         if (
             event.type === 'payment_intent.succeeded'
         ) {
-            return await this.paymentService.fullfillCheckout({ paymentIntentId: event.data.object.id, orderId: event.data.object.metadata.orderId });
+            return await this.paymentService.fullfillCheckout({ paymentIntentId: event.data.object.id });
         }
     }
 }
