@@ -9,7 +9,7 @@ import { AddressState } from '../payment/type';
 export class OrderService {
     constructor(private prismaService: PrismaService) { }
 
-    async createOrder({ userId, addressState, cartItemIdArray }: { userId: number, addressState: AddressState, cartItemIdArray: number[] }) {
+    async createOrder({ userId, addressState, cartItemIdArray, paymentIntentId }: { userId: number, addressState: AddressState, cartItemIdArray: number[], paymentIntentId: string }) {
         return this.prismaService.$transaction(async (tx) => {
             if (cartItemIdArray.length === 0) {
                 throw new BadRequestException({ message: 'NO CART ITEMS IN REQUEST' })
@@ -35,6 +35,7 @@ export class OrderService {
                         }))
                     },
                     cartItems: cartItemIdArray,
+                    paymentIntentId,
                     firstName: addressState.firstName,
                     lastName: addressState.lastName,
                     phoneNumber: addressState.phoneNumber,

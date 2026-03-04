@@ -56,8 +56,9 @@ export default function CompletePage() {
         {/* <h2 id="status-text">{STATUS_CONTENT_MAP[status as keyof typeof STATUS_CONTENT_MAP].text}</h2> */}
         <div className="flex flex-col h-[1000px] w-full">
             <div className="w-full flex-1" />
-            <div className="w-full h-[300px]">
+            <div className="w-full h-[300px] relative">
                 <Image src={Complete} alt="Complete" width={0} height={0} className="w-full h-full object-cover relative" />
+                <div className="absolute top-0 left-0">hello</div>
             </div>
             <div className="w-full flex-1 flex flex-row justify-end">
                 <div className="flex flex-col justify-start items-end pt-[80px] pr-[100px]">

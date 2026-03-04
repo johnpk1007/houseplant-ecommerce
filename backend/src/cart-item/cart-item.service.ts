@@ -72,6 +72,30 @@ export class CartItemService {
         })
     }
 
+    async getCartItems({ userId, cartItemIdArray }: { userId: number, cartItemIdArray: number[] }) {
+        const cartItems = await this.prismaService.cartItem.findMany({
+            where: {
+                id: { in: cartItemIdArray },
+                cart: { userId: userId }
+            },
+            include: { product: true }
+        })
+        if (cartItems.length === 0) {
+            throw new NotFoundException({ message: 'CART ITEMS NOT FOUND' })
+        }
+        return cartItems.map((cartItem) => {
+            const { keyName, ...rest } = cartItem.product
+            const url = `${this.endpoint}/${this.bucket}/${keyName}`
+            return {
+                ...cartItem,
+                product: {
+                    ...rest,
+                    url
+                }
+            }
+        })
+    }
+
     async getAllCartItem({ userId }: { userId: number }): Promise<CartItemWithProduct[]> {
         const cartItems = await this.prismaService.cartItem.findMany({ where: { cart: { userId } }, include: { product: true } })
         return cartItems.map((cartItem) => {

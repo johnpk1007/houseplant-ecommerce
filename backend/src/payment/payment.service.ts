@@ -18,15 +18,17 @@ export class PaymentService {
         private prismaService: PrismaService
     ) { }
     async createPayment({ userId, addressState, cartItemIdArray }: { userId: number, addressState: AddressState, cartItemIdArray: number[] }) {
-        const order = await this.orderService.createOrder({ userId, addressState, cartItemIdArray })
+
+        const cartItems = await this.cartItemService.getCartItems({ userId, cartItemIdArray })
         try {
-            const totalOrderAmount = order.orderItems.reduce((sum: number, item: { quantity: number, price: number }) => sum + item.quantity * item.price, 0)
+            const totalOrderAmount = cartItems.reduce((sum: number, item) => { return sum + (item.quantity * item.product.price) }, 0);
             const paymentIntent = await this.stripeService.createPayment({
-                totalOrderAmount: totalOrderAmount * 100, metadata: { orderId: order.id.toString() }
+                totalOrderAmount: totalOrderAmount * 100
             })
+            const paymentIntentId = paymentIntent.clientSecret?.split('_secret_')[0] as string
+            await this.orderService.createOrder({ userId, addressState, cartItemIdArray, paymentIntentId })
             return { clientSecret: paymentIntent.clientSecret }
         } catch (error) {
-            await this.orderService.editOrder({ orderId: order.id, dto: { orderStatus: OrderStatus.Failed } }).catch(err => console.error('Prisma Rollback Failed:', err))
             throw new InternalServerErrorException({ message: 'CREATE ORDER FAILED' })
         }
     }

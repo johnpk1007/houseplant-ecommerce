@@ -94,6 +94,7 @@ model Order {
   orderItems               OrderItem[]
   orderStatus              OrderStatus @default(PENDING)
   cartItems                Int[]
+  paymentIntentId          String
   firstName                String
   lastName                 String
   phoneNumber              String

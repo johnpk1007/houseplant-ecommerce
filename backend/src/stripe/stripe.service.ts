@@ -9,15 +9,18 @@ export class StripeService {
         this.stripe = new Stripe(this.configService.getOrThrow<string>('STRIPE_SECRET'))
     }
 
-    async createPayment({ totalOrderAmount, metadata }: { totalOrderAmount: number, metadata: { orderId: string } }) {
-        const paymentIntent = await this.stripe.paymentIntents.create({
-            amount: totalOrderAmount,
-            currency: "usd",
-            payment_method_types: ['card'],
-            metadata
-        });
+    async createPayment({ totalOrderAmount }: { totalOrderAmount: number }) {
+        try {
+            const paymentIntent = await this.stripe.paymentIntents.create({
+                amount: totalOrderAmount,
+                currency: "usd",
+                payment_method_types: ['card'],
+            });
+            return { clientSecret: paymentIntent.client_secret }
+        } catch (error) {
+            throw new InternalServerErrorException()
+        }
 
-        return { clientSecret: paymentIntent.client_secret }
     }
 
     constructEvent({ payload, signature }) {
@@ -29,6 +32,11 @@ export class StripeService {
     }
 
     async refund({ payment_intent }) {
-        return await this.stripe.refunds.create({ payment_intent })
+        try {
+            return await this.stripe.refunds.create({ payment_intent })
+        } catch (error) {
+            throw new InternalServerErrorException()
+        }
+
     }
 }
