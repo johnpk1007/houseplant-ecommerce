@@ -20,24 +20,10 @@ describe('App e2e', () => {
   let s3Service: S3Service
   let configService: ConfigService
   let adminDto: AuthDto
-  let capturedMetadata = { orderId: '' };
 
   const mockStripeService = {
-    createPayment: vi.fn().mockImplementation(async ({ metadata }) => {
-      capturedMetadata = metadata;
-      return { clientSecret: 'fakeClientSecret' };
-    }),
-    constructEvent: vi.fn().mockImplementation(() => {
-      return {
-        type: 'payment_intent.succeeded',
-        data: {
-          object: {
-            id: 'fakePaymentIntentId',
-            metadata: capturedMetadata,
-          },
-        },
-      };
-    }),
+    createPayment: vi.fn().mockResolvedValue({ clientSecret: 'fakePaymentIntentId_secret_fakeClientSecret' }),
+    constructEvent: vi.fn().mockReturnValue({ type: 'payment_intent.succeeded', data: { object: { id: 'fakePaymentIntentId' } } }),
   }
 
   beforeAll(async () => {
@@ -187,6 +173,7 @@ describe('App e2e', () => {
         .withBearerToken('$S{customer1AccessToken}')
         .withCookies('$S{customer1RefreshToken}')
         .expectStatus(200)
+        .inspect()
     })
     it('should check payment', () => {
       return spec()

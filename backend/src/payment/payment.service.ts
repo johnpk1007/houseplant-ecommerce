@@ -18,10 +18,10 @@ export class PaymentService {
         private prismaService: PrismaService
     ) { }
     async createPayment({ userId, addressState, cartItemIdArray }: { userId: number, addressState: AddressState, cartItemIdArray: number[] }) {
-
         const cartItems = await this.cartItemService.getCartItems({ userId, cartItemIdArray })
         try {
             const totalOrderAmount = cartItems.reduce((sum: number, item) => { return sum + (item.quantity * item.product.price) }, 0);
+            console.log('check 1')
             const paymentIntent = await this.stripeService.createPayment({
                 totalOrderAmount: totalOrderAmount * 100
             })
