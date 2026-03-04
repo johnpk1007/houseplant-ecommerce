@@ -26,13 +26,12 @@ export class PaymentController {
 
     @Post('/webhook')
     @HttpCode(HttpStatus.OK)
-    async fullfillOrder(@Req() req: RawBodyRequest<Request>, @Headers('stripe-signature') sig: string) {
-        const event = this.stripeService.constructEvent({ payload: req.rawBody, sig })
+    async fullfillOrder(@Req() req: RawBodyRequest<Request>, @Headers('stripe-signature') signature: string) {
+        const event = this.stripeService.constructEvent({ payload: req.rawBody, signature })
         if (
-            event.type === 'checkout.session.completed'
-            || event.type === 'checkout.session.async_payment_succeeded'
+            event.type === 'payment_intent.succeeded'
         ) {
-            return await this.paymentService.fullfillCheckout({ sessionId: event.data.object.id });
+            return await this.paymentService.fullfillCheckout({ paymentIntentId: event.data.object.id, orderId: event.data.object.metadata.orderId });
         }
     }
 }

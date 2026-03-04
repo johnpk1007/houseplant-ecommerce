@@ -20,18 +20,12 @@ export class StripeService {
         return { clientSecret: paymentIntent.client_secret }
     }
 
-    constructEvent({ payload, sig }) {
+    constructEvent({ payload, signature }) {
         try {
-            return this.stripe.webhooks.constructEvent(payload, sig, this.configService.getOrThrow('STRIPE_ENDPOINT'))
+            return this.stripe.webhooks.constructEvent(payload, signature, this.configService.getOrThrow('STRIPE_ENDPOINT'))
         } catch (err) {
             throw new InternalServerErrorException()
         }
-    }
-
-    async checkoutSession({ sessionId }) {
-        return await this.stripe.checkout.sessions.retrieve(sessionId, {
-            expand: ['line_items'],
-        });
     }
 
     async refund({ payment_intent }) {

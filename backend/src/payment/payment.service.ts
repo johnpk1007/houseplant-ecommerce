@@ -31,63 +31,58 @@ export class PaymentService {
         }
     }
 
-    async fullfillCheckout({ sessionId }) {
+    async fullfillCheckout({ paymentIntentId, orderId }) {
         let refund: Stripe.Response<Stripe.Refund> | null = null
 
-        const order = await this.orderService.sessionIdgetOrder({ sessionId })
+        const order = await this.orderService.orderIdgetOrder({ orderId })
         if (order) {
             if (order.orderStatus === 'PAID') {
                 return
             }
-            const checkoutSession = await this.stripeService.checkoutSession({ sessionId })
-            if (checkoutSession.payment_status === 'paid') {
-                try {
-                    await this.prismaService.$transaction(async (tx) => {
-                        await this.orderService.editOrder({ orderId: order.id, dto: { orderStatus: OrderStatus.Paid }, tx })
-                        const orderArray: OrderForPayment[] = order.orderItems.map(orderItem => {
-                            const productId = orderItem.productId
-                            const quantity = orderItem.quantity
-                            return { productId, quantity }
-                        })
-                        const productIdArray = orderArray.map((order) => {
-                            return order.productId
-                        })
-                        const productArray = await this.productService.getManyProducts({ productIdArray, tx })
-                        for (const order of orderArray) {
-                            const foundProduct = productArray.find((product) =>
-                                product.id === order.productId
-                            )
-                            if (!foundProduct) {
-                                throw new NotFoundException({ message: 'PRODUCT NOT FOUND' });
-                            }
-                            if (foundProduct.stock < order.quantity) {
-                                throw new BadRequestException({ message: 'NOT ENOUGH STOCK' })
-                            }
-                            order.productVersion = foundProduct.version
-                        }
-                        await this.productService.decreaseManyProductStock({ orderArray, tx })
+            try {
+                await this.prismaService.$transaction(async (tx) => {
+                    await this.orderService.editOrder({ orderId: order.id, dto: { orderStatus: OrderStatus.Paid }, tx })
+                    const orderArray: OrderForPayment[] = order.orderItems.map(orderItem => {
+                        const productId = orderItem.productId
+                        const quantity = orderItem.quantity
+                        return { productId, quantity }
                     })
-                } catch (error) {
-                    if (error instanceof BadRequestException) {
-                        try {
-                            refund = await this.stripeService.refund({ payment_intent: checkoutSession.payment_intent })
-                            await this.orderService.editOrder({ orderId: order.id, dto: { orderStatus: OrderStatus.Failed } })
-                        } catch (error) {
-                            console.error(error)
+                    const productIdArray = orderArray.map((order) => {
+                        return order.productId
+                    })
+                    const productArray = await this.productService.getManyProducts({ productIdArray, tx })
+                    for (const order of orderArray) {
+                        const foundProduct = productArray.find((product) =>
+                            product.id === order.productId
+                        )
+                        if (!foundProduct) {
+                            throw new NotFoundException({ message: 'PRODUCT NOT FOUND' });
                         }
+                        if (foundProduct.stock < order.quantity) {
+                            throw new BadRequestException({ message: 'NOT ENOUGH STOCK' })
+                        }
+                        order.productVersion = foundProduct.version
                     }
-                }
-                if (!refund) {
+                    await this.productService.decreaseManyProductStock({ orderArray, tx })
+                })
+            } catch (error) {
+                if (error instanceof BadRequestException) {
                     try {
-                        await this.cartItemService.deleteManyCartItem({ cartItemIdArray: order.cartItems })
+                        refund = await this.stripeService.refund({ payment_intent: paymentIntentId })
+                        await this.orderService.editOrder({ orderId: order.id, dto: { orderStatus: OrderStatus.Failed } })
                     } catch (error) {
                         console.error(error)
                     }
                 }
-                return
-            } else {
-                throw new InternalServerErrorException()
             }
+            if (!refund) {
+                try {
+                    await this.cartItemService.deleteManyCartItem({ cartItemIdArray: order.cartItems })
+                } catch (error) {
+                    console.error(error)
+                }
+            }
+            return
         }
     }
 }

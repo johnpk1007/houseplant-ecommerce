@@ -12,6 +12,7 @@ import { fakeFile1, fakeProductDto1, fakeFile2, fakeProductDto2, customerDto1, c
 import cookieParser from 'cookie-parser'
 import { StripeService } from '../src/stripe/stripe.service'
 import { customerAddress } from './utils'
+import { metadata } from 'reflect-metadata/no-conflict'
 
 describe('App e2e', () => {
   let app: INestApplication
@@ -19,14 +20,24 @@ describe('App e2e', () => {
   let s3Service: S3Service
   let configService: ConfigService
   let adminDto: AuthDto
+  let capturedMetadata = { orderId: '' };
 
   const mockStripeService = {
-    createProduct: vi.fn().mockResolvedValue({ id: 'fakeStripeId', default_price: 'fakeStripePrice' } as any),
-    updateProduct: vi.fn().mockResolvedValue({} as any),
-    createSession: vi.fn().mockResolvedValue({ id: 'fakeStripeSessionId' } as any),
-    constructEvent: vi.fn().mockReturnValue({ type: 'checkout.session.completed', data: { object: { id: 'fakeStripeSessionId' } } } as any),
-    checkoutSession: vi.fn().mockResolvedValue({ payment_status: 'paid' } as any),
-    refund: vi.fn().mockResolvedValue({} as any)
+    createPayment: vi.fn().mockImplementation(async ({ metadata }) => {
+      capturedMetadata = metadata;
+      return { clientSecret: 'fakeClientSecret' };
+    }),
+    constructEvent: vi.fn().mockImplementation(() => {
+      return {
+        type: 'payment_intent.succeeded',
+        data: {
+          object: {
+            id: 'fakePaymentIntentId',
+            metadata: capturedMetadata,
+          },
+        },
+      };
+    }),
   }
 
   beforeAll(async () => {
@@ -144,10 +155,18 @@ describe('App e2e', () => {
   })
 
   describe('Customer put product 1 in the cart and order', () => {
-    it('should put product in cart', () => {
+    it('should put product 1 in cart', () => {
       return spec()
         .post('/cart-item')
         .withBody({ productId: '$S{productId1}', quantity: 1 })
+        .withBearerToken('$S{customer1AccessToken}')
+        .withCookies('$S{customer1RefreshToken}')
+        .expectStatus(201)
+    })
+    it('should put product 2 in cart', () => {
+      return spec()
+        .post('/cart-item')
+        .withBody({ productId: '$S{productId2}', quantity: 1 })
         .withBearerToken('$S{customer1AccessToken}')
         .withCookies('$S{customer1RefreshToken}')
         .expectStatus(201)
@@ -158,12 +177,13 @@ describe('App e2e', () => {
         .withBearerToken('$S{customer1AccessToken}')
         .withCookies('$S{customer1RefreshToken}')
         .expectStatus(200)
-        .stores('cartItemId', '[0].id')
+        .stores('cartItemId1', '[0].id')
+        .stores('cartItemId2', '[1].id')
     })
     it('should order and pay', () => {
       return spec()
         .post('/payment')
-        .withBody({ cartItemIdArr: ['$S{cartItemId}'], addressState: customerAddress })
+        .withBody({ cartItemIdArray: ['$S{cartItemId1}', '$S{cartItemId2}'], addressState: customerAddress })
         .withBearerToken('$S{customer1AccessToken}')
         .withCookies('$S{customer1RefreshToken}')
         .expectStatus(200)
@@ -179,7 +199,7 @@ describe('App e2e', () => {
     it('should put product in cart', () => {
       return spec()
         .post('/cart-item')
-        .withBody({ productId: '$S{productId1}', quantity: 1 })
+        .withBody({ productId: '$S{productId2}', quantity: 1 })
         .withBearerToken('$S{customer2AccessToken}')
         .withCookies('$S{customer2RefreshToken}')
         .expectStatus(400)

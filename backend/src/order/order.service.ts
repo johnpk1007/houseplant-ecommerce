@@ -50,7 +50,7 @@ export class OrderService {
         })
     }
 
-    async editOrder({ orderId, dto, tx }: { orderId: number, dto: { orderStatus?: OrderStatus, stripeSessionId?: string }, tx?: Prisma.TransactionClient }) {
+    async editOrder({ orderId, dto, tx }: { orderId: number, dto: { orderStatus: OrderStatus }, tx?: Prisma.TransactionClient }) {
         const prismaService = tx ?? this.prismaService
         try {
             return await prismaService.order.update({
@@ -91,11 +91,11 @@ export class OrderService {
         }
     }
 
-    async sessionIdgetOrder({ sessionId }: { sessionId: string }) {
+    async orderIdgetOrder({ orderId }: { orderId: string }) {
         try {
             return await this.prismaService.order.findUnique({
                 where: {
-                    stripeSessionId: sessionId
+                    id: Number(orderId)
                 },
                 include: { orderItems: { include: { product: true } } }
             })
