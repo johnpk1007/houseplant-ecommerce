@@ -73,26 +73,17 @@ export class OrderService {
         }
     }
 
-    async getOrder({ userId, orderId }: { userId: number, orderId: number }) {
-        try {
-            return await this.prismaService.order.findUnique({
-                where: {
-                    id: orderId,
-                    userId
-                },
-                include: { orderItems: { include: { product: true } } }
-            })
-        } catch (error) {
-            if (error instanceof PrismaClientKnownRequestError) {
-                if (error.code === 'P2025') {
-                    throw new NotFoundException({ message: 'ORDER NOT FOUND' })
-                }
-            }
-            throw new InternalServerErrorException()
-        }
+    async getOrderWithUserId({ userId, paymentIntentId }: { userId: number, paymentIntentId: string }) {
+        return await this.prismaService.order.findFirstOrThrow({
+            where: {
+                paymentIntentId,
+                userId
+            },
+            include: { orderItems: { include: { product: true } } }
+        })
     }
 
-    async orderIdgetOrder({ paymentIntentId }: { paymentIntentId: string }) {
+    async getOrder({ paymentIntentId }: { paymentIntentId: string }) {
         return await this.prismaService.order.findFirstOrThrow({
             where: {
                 paymentIntentId

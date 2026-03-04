@@ -35,7 +35,7 @@ export class PaymentService {
 
     async fullfillCheckout({ paymentIntentId }) {
         let refund: Stripe.Response<Stripe.Refund> | null = null
-        const order = await this.orderService.orderIdgetOrder({ paymentIntentId })
+        const order = await this.orderService.getOrder({ paymentIntentId })
         if (order) {
             if (order.orderStatus === 'PAID') {
                 return
