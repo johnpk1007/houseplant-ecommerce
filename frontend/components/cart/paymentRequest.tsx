@@ -28,6 +28,7 @@ export default function PaymentRequest({ stage, setStage, address, setAddress }:
                 const data = await createPaymentIntent({ cartItemIdArray, addressState: address });
                 console.log('check 4')
                 setClientSecret(data.clientSecret);
+                console.log('client secret:', data.clientSecret)
                 console.log('check 5')
             } catch (error) {
                 console.error("Failed to create payment intent:", error);

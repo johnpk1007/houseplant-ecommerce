@@ -93,7 +93,6 @@ model Order {
   updatedAt                DateTime    @updatedAt
   orderItems               OrderItem[]
   orderStatus              OrderStatus @default(PENDING)
-  stripeSessionId          String?     @unique
   cartItems                Int[]
   firstName                String
   lastName                 String
