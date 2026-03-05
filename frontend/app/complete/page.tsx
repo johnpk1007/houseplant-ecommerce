@@ -51,33 +51,41 @@ export default function CompletePage() {
             <div className="w-full flex-1 500px:block hidden" />
             <div className="w-full 500px:h-[30%] h-full relative">
                 <Image src={Complete} alt="Complete" width={0} height={0} className="w-full h-full object-cover relative" />
-                <div className="absolute 970px:top-[15px] 500px:top-[8px] top-[50px] left-[40px] z-2">
-                    <button className={`text-[#ADADAD] w-[20px] h-[20px] duration-300 ease-in-out ${page === 0 ? 'text-[#ADADAD]' : 'text-[#E2E2E2] hover:text-[#E2E2E2]/70 cursor-pointer'}`} onClick={handlePrev}><Left /></button>
-                    <button className={`text-[#ADADAD] w-[20px] h-[20px] duration-300 ease-in-out ${page === maxPage ? 'text-[#ADADAD]' : 'text-[#E2E2E2] hover:text-[#E2E2E2]/70 cursor-pointer'} ml-[10px]`} onClick={handleNext}><Right /></button>
-                </div>
-                <div className="absolute 970px:top-[20px] 500px:top-[35px] top-[100px] 970px:left-[40px] left-[5%] 1300px:w-[25%] 970px:w-[33%] 970px:aspect-square 500px:w-[400px] w-[90%] 970px:aspect-5/3 500px:aspect-7/3 aspect-3/2 overflow-hidden z-2">
-                    <div className="w-full h-full flex flex-col transition-transform duration-300"
-                        style={{
-                            transform: `translateY(-${page * 100}%)`
-                        }}>
-                        {
-                            !!orderItemsArray &&
-                            Array.from({ length: Math.ceil(orderItemsArray.length / 4) }).map((_, pageIndex) => (
-                                <div key={pageIndex} className="flex flex-col w-full h-full flex-shrink-0">
-                                    {orderItemsArray
-                                        .slice(pageIndex * 4, pageIndex * 4 + 4)
-                                        .map((orderItem, index) => (
-                                            <div key={index} className={`w-full h-1/4 flex flex-row justify-between items-center ${index < 2 ? 'text-white/80 ' : '970px:text-[#ADADAD] text-white/80'}`}>
-                                                <div className="flex flex-row items-center">
-                                                    <div className="font-roboto font-light 1300px:text-[16px] text-[14px] mr-[10px]">{orderItem.quantity}</div>
-                                                    <div className="font-roboto font-light 1300px:text-[16px] text-[14px] mr-[10px]">{orderItem.name}</div>
+                <div className="absolute top-0 left-0 flex flex-col w-full pt-[20px] pl-[40px]">
+                    <div className={`970px:top-[15px] 500px:top-[8px] top-[50px] left-[40px] z-3 ${maxPage === 0 && 'hidden'}`}>
+                        <button className={`text-[#ADADAD] w-[20px] h-[20px] duration-300 ease-in-out ${page === 0 ? 'text-[#ADADAD]' : 'text-[#E2E2E2] hover:text-[#E2E2E2]/70 cursor-pointer'}`} onClick={handlePrev}><Left /></button>
+                        <button className={`text-[#ADADAD] w-[20px] h-[20px] duration-300 ease-in-out ${page === maxPage ? 'text-[#ADADAD]' : 'text-[#E2E2E2] hover:text-[#E2E2E2]/70 cursor-pointer'} ml-[10px]`} onClick={handleNext}><Right /></button>
+                    </div>
+                    <div className="970px:top-[20px] 500px:top-[35px] top-[100px] 970px:left-[40px] left-[5%] 1300px:w-[25%] 970px:w-[33%] 970px:aspect-9/7 500px:w-[400px] w-[90%] 970px:aspect-5/3 500px:aspect-7/3 aspect-3/2 overflow-hidden z-2">
+                        <div className="w-full h-full flex flex-col transition-transform duration-300"
+                            style={{
+                                transform: `translateY(-${page * 100}%)`
+                            }}>
+                            {
+                                !!orderItemsArray &&
+                                Array.from({ length: Math.ceil(orderItemsArray.length / 4) }).map((_, pageIndex) => (
+                                    <div key={pageIndex} className="flex flex-col w-full h-full flex-shrink-0">
+                                        {orderItemsArray
+                                            .slice(pageIndex * 4, pageIndex * 4 + 4)
+                                            .map((orderItem, index) => (
+                                                <div key={index} className={`w-full h-1/4 flex flex-row justify-between items-center ${index < 2 ? 'text-white/80 ' : index === 2 ? '1700px:text-white 1400px:text-[#ADADAD] 1300px:text-white/80 1100px:text-[#ADADAD] 970px:text-white/80 text-white/80' : '970px:text-[#ADADAD] text-white/80'}`}>
+                                                    <div className="flex flex-row items-center">
+                                                        <div className="font-roboto font-light 1300px:text-[16px] text-[14px] mr-[10px]">{orderItem.quantity}</div>
+                                                        <div className="font-roboto font-light 1300px:text-[16px] text-[14px] mr-[10px]">{orderItem.name}</div>
+                                                    </div>
+                                                    <div className="font-roboto font-light 1300px:text-[16px] text-[14px]">${orderItem.price}</div>
                                                 </div>
-                                                <div className="font-roboto font-light 1300px:text-[16px] text-[14px]">${orderItem.price}</div>
-                                            </div>
-                                        ))}
-                                </div>
-                            ))
-                        }
+                                            ))}
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </div>
+                    <div className="font-playfairDisplay h-[110px] 1300px:w-[25%] 970px:w-[33%] 500px:w-[400px] w-[90%] border-t-[2px] 500px:border-[#E2E2E2] border-white/80 flex-col justify-center 970px:flex 500px:hidden flex z-1">
+                        <div className="flex flex-row w-full justify-between items-center mt-[10px] 500px:text-[#ADADAD] text-white/80">
+                            <div className="font-roboto 1300px:text-[20px] 750px:text-[18px]">Total</div>
+                            <div className="font-roboto 1300px:text-[20px] 750px:text-[18px]"> ${orderItemsArray.reduce((sum: number, item) => sum + item.price * item.quantity, 0)}</div>
+                        </div>
                     </div>
                 </div>
                 <div className="w-full h-full absolute top-0 left-0 bg-black/40 items-end 500px:hidden flex">

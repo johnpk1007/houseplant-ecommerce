@@ -12,10 +12,10 @@ import { useCartItemStore } from "@/services/stores/cartItemStore"
 export default function CartItemList({ page, setPage, setUrl, stage, setStage }: { page: number, setPage: React.Dispatch<SetStateAction<number>>, setUrl: React.Dispatch<SetStateAction<string | null>>, stage: number, setStage: React.Dispatch<SetStateAction<number>> }) {
     const cartItemsArray = useCartItemStore((state) => state.cartItemsArray)
     const itemsPerPage = 4
-    let maxPage: number = cartItemsArray ? Math.ceil(cartItemsArray.length / itemsPerPage) - 1 : 0
-    if (!!cartItemsArray) {
-        maxPage = Math.ceil(cartItemsArray.length / itemsPerPage) - 1
-    }
+    const maxPage: number = cartItemsArray ? Math.ceil(cartItemsArray.length / itemsPerPage) - 1 : 0
+    // if (!!cartItemsArray) {
+    //     maxPage = Math.ceil(cartItemsArray.length / itemsPerPage) - 1
+    // }
     const handleNext = () => {
         if (page < maxPage) {
             setUrl(null)
@@ -49,7 +49,7 @@ export default function CartItemList({ page, setPage, setUrl, stage, setStage }:
                     <div className="font-playfairDisplay 1300px:text-[32px] text-[24px]">
                         Shopping Cart
                     </div>
-                    <div>
+                    <div className={`${maxPage === 0 && 'hidden'}`}>
                         <button className={`text-[#ADADAD] w-[20px] h-[20px] duration-300 ease-in-out ${page === 0 ? 'text-[#E2E2E2]' : 'text-[#ADADAD] hover:text-[#ADADAD]/70 cursor-pointer'}`} onClick={handlePrev}><Left /></button>
                         <button className={`text-[#ADADAD] w-[20px] h-[20px] duration-300 ease-in-out ${page === maxPage ? 'text-[#E2E2E2]' : 'text-[#ADADAD] hover:text-[#ADADAD]/70 cursor-pointer'} ml-[10px]`} onClick={handleNext}><Right /></button>
                     </div>

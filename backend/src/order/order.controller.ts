@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { JwtGuard } from '../common/guard';
 import { User } from '../common/decorator';
@@ -12,5 +12,11 @@ export class OrderController {
     @Post()
     async getOrder(@User('userId') userId: number, @Body() dto: OrderDto) {
         return await this.orderService.getOrderWithUserId({ userId, paymentIntentId: dto.paymentIntentId })
+    }
+
+    @UseGuards(JwtGuard)
+    @Get()
+    async getAllOrder(@User('userId') userId: number) {
+        return await this.orderService.getAllOrder({ userId })
     }
 }
