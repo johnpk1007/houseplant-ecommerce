@@ -10,7 +10,6 @@ import PaymentRequest from "@/components/cart/paymentRequest"
 import { AddressState } from "@/types/addressState"
 
 export default function Cart() {
-    const cartItemsArray = useCartItemStore((state) => state.cartItemsArray)
     const [page, setPage] = useState(0)
     const [url, setUrl] = useState<string | null>(null)
     const [stage, setStage] = useState(0)

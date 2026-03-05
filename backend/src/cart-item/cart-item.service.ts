@@ -15,7 +15,6 @@ type CartItemWithProduct = Omit<CartItem, 'product'> & {
 
 @Injectable()
 export class CartItemService {
-
     private readonly endpoint: string;
     private readonly bucket: string;
     constructor(

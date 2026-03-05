@@ -4,10 +4,19 @@ import { OrderStatus } from './enum';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 import { Prisma } from '../../generated/prisma/client';
 import { AddressState } from '../payment/type';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class OrderService {
-    constructor(private prismaService: PrismaService) { }
+    private readonly endpoint: string;
+    private readonly bucket: string;
+    constructor(
+        private prismaService: PrismaService,
+        private configService: ConfigService,
+    ) {
+        this.endpoint = this.configService.getOrThrow<string>('S3_PUBLIC_ENDPOINT'),
+            this.bucket = this.configService.getOrThrow<string>('S3_BUCKET_NAME')
+    }
 
     async createOrder({ userId, addressState, cartItemIdArray, paymentIntentId }: { userId: number, addressState: AddressState, cartItemIdArray: number[], paymentIntentId: string }) {
         return this.prismaService.$transaction(async (tx) => {
@@ -93,6 +102,23 @@ export class OrderService {
     }
 
     async getAllOrder({ userId }: { userId: number }) {
-        return await this.prismaService.order.findMany({ where: { userId }, include: { orderItems: { include: { product: true } } } })
+        const orders = await this.prismaService.order.findMany({ where: { userId }, include: { orderItems: { include: { product: true } } } })
+        return orders.map((order) => {
+            const { orderItems, ...rest } = order
+            const editedOrderItems = orderItems.map((orderItem) => {
+                const { keyName, ...rest } = orderItem.product
+                const url = `${this.endpoint}/${this.bucket}/${keyName}`
+                return {
+                    ...orderItem,
+                    product: {
+                        ...rest,
+                        url
+                    }
+                }
+            })
+            return {
+                orderItems: editedOrderItems, ...rest
+            }
+        })
     }
 }
