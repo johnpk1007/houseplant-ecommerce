@@ -62,17 +62,15 @@ describe('App e2e', () => {
       return spec()
         .post('/auth/local/signin')
         .withBody({ ...adminDto })
+        .stores('adminToken0', 'res.headers.set-cookie[0]')
+        .stores('adminToken1', 'res.headers.set-cookie[1]')
         .expectStatus(200)
-        .stores('adminAccessToken',
-          'res.headers["set-cookie"].find(c => c.startsWith("access_token"))')
-        .stores('adminRefreshToken',
-          'res.headers["set-cookie"].find(c => c.startsWith("refresh_token"))')
     })
     it('should upload product 1', () => {
       return spec()
         .post('/product')
-        .withCookies('$S{adminAccessToken}')
-        .withCookies('$S{adminRefreshToken}')
+        .withCookies('$S{adminToken0}')
+        .withCookies('$S{adminToken1}')
         .withMultiPartFormData('file', fakeFile1.buffer, {
           filename: fakeFile1.originalname,
           contentType: fakeFile1.mimetype,
@@ -84,8 +82,8 @@ describe('App e2e', () => {
     it('should upload product 2', () => {
       return spec()
         .post('/product')
-        .withCookies('$S{adminAccessToken}')
-        .withCookies('$S{adminRefreshToken}')
+        .withCookies('$S{adminToken0}')
+        .withCookies('$S{adminToken1}')
         .withMultiPartFormData('file', fakeFile2.buffer, {
           filename: fakeFile2.originalname,
           contentType: fakeFile2.mimetype,
@@ -97,24 +95,24 @@ describe('App e2e', () => {
     it('should update product 1 quantity', () => {
       return spec()
         .patch('/product/$S{productId1}')
-        .withCookies('$S{adminAccessToken}')
-        .withCookies('$S{adminRefreshToken}')
+        .withCookies('$S{adminToken0}')
+        .withCookies('$S{adminToken1}')
         .withMultiPartFormData({ stock: 1 })
         .expectStatus(200)
     })
     it('should update product 2 quantity', () => {
       return spec()
         .patch('/product/$S{productId2}')
-        .withCookies('$S{adminAccessToken}')
-        .withCookies('$S{adminRefreshToken}')
+        .withCookies('$S{adminToken0}')
+        .withCookies('$S{adminToken1}')
         .withMultiPartFormData({ stock: 1 })
         .expectStatus(200)
     })
     it('should signout', () => {
       return spec()
         .post('/auth/signout')
-        .withCookies('$S{adminAccessToken}')
-        .withCookies('$S{adminRefreshToken}')
+        .withCookies('$S{adminToken0}')
+        .withCookies('$S{adminToken1}')
         .expectStatus(200)
     })
   })
@@ -125,10 +123,8 @@ describe('App e2e', () => {
         .post('/auth/local/signup')
         .withBody({ ...customerDto1 })
         .expectStatus(201)
-        .stores('customer1AccessToken',
-          'res.headers["set-cookie"].find(c => c.startsWith("access_token"))')
-        .stores('customer1RefreshToken',
-          'res.headers["set-cookie"].find(c => c.startsWith("refresh_token"))')
+        .stores('customer1Token0', 'res.headers.set-cookie[0]')
+        .stores('customer1Token1', 'res.headers.set-cookie[1]')
     })
   })
 
@@ -138,10 +134,8 @@ describe('App e2e', () => {
         .post('/auth/local/signup')
         .withBody({ ...customerDto2 })
         .expectStatus(201)
-        .stores('customer2AccessToken',
-          'res.headers["set-cookie"].find(c => c.startsWith("access_token"))')
-        .stores('customer2RefreshToken',
-          'res.headers["set-cookie"].find(c => c.startsWith("refresh_token"))')
+        .stores('customer2Token0', 'res.headers.set-cookie[0]')
+        .stores('customer2Token1', 'res.headers.set-cookie[1]')
     })
   })
 
@@ -150,33 +144,34 @@ describe('App e2e', () => {
       return spec()
         .post('/cart-item')
         .withBody({ productId: '$S{productId1}', quantity: 1 })
-        .withCookies('$S{customer1AccessToken}')
-        .withCookies('$S{customer1RefreshToken}')
+        .withCookies('$S{customer1Token0}')
+        .withCookies('$S{customer1Token1}')
         .expectStatus(201)
     })
     it('should put product 2 in cart', () => {
       return spec()
         .post('/cart-item')
         .withBody({ productId: '$S{productId2}', quantity: 1 })
-        .withCookies('$S{customer1AccessToken}')
-        .withCookies('$S{customer1RefreshToken}')
+        .withCookies('$S{customer1Token0}')
+        .withCookies('$S{customer1Token1}')
         .expectStatus(201)
     })
     it('should get all cart item', () => {
       return spec()
         .get('/cart-item')
-        .withCookies('$S{customer1AccessToken}')
-        .withCookies('$S{customer1RefreshToken}')
+        .withCookies('$S{customer1Token0}')
+        .withCookies('$S{customer1Token1}')
         .expectStatus(200)
         .stores('cartItemId1', '[0].id')
         .stores('cartItemId2', '[1].id')
+        .inspect()
     })
     it('should order and pay', () => {
       return spec()
         .post('/payment')
         .withBody({ cartItemIdArray: ['$S{cartItemId1}', '$S{cartItemId2}'], addressState: customerAddress })
-        .withCookies('$S{customer1AccessToken}')
-        .withCookies('$S{customer1RefreshToken}')
+        .withCookies('$S{customer1Token0}')
+        .withCookies('$S{customer1Token1}')
         .expectStatus(200)
         .inspect()
     })
@@ -192,8 +187,8 @@ describe('App e2e', () => {
       return spec()
         .post('/cart-item')
         .withBody({ productId: '$S{productId2}', quantity: 1 })
-        .withCookies('$S{customer2AccessToken}')
-        .withCookies('$S{customer2RefreshToken}')
+        .withCookies('$S{customer2Token0}')
+        .withCookies('$S{customer2Token1}')
         .expectStatus(400)
     })
   })

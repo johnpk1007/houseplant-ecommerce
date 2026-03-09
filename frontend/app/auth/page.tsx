@@ -7,7 +7,6 @@ import { localSignIn, localSignUp } from "@/services/clientSide/auth"
 import { useCartItemStore } from "@/services/stores/cartItemStore"
 import { useRouter } from 'next/navigation'
 import { getAllCartItem } from "@/services/clientSide/cart"
-import { redirect } from "next/navigation"
 
 export default function SignIn() {
     const [isSignUp, setIsSignUp] = useState(false)
