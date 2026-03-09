@@ -60,7 +60,7 @@ describe('App e2e', () => {
   describe('Admin sign in as admin and upload product and edit the quantity', () => {
     it('should signin as admin', () => {
       return spec()
-        .post('/auth/signin')
+        .post('/auth/local/signin')
         .withBody({ ...adminDto })
         .expectStatus(200)
         .stores('adminAccessToken',
@@ -122,7 +122,7 @@ describe('App e2e', () => {
   describe('Customer 1 signup and signin', () => {
     it('should signup', () => {
       return spec()
-        .post('/auth/signup')
+        .post('/auth/local/signup')
         .withBody({ ...customerDto1 })
         .expectStatus(201)
         .stores('customer1AccessToken',
@@ -135,7 +135,7 @@ describe('App e2e', () => {
   describe('Customer 2 signup and signin', () => {
     it('should signup', () => {
       return spec()
-        .post('/auth/signup')
+        .post('/auth/local/signup')
         .withBody({ ...customerDto2 })
         .expectStatus(201)
         .stores('customer2AccessToken',
@@ -188,7 +188,7 @@ describe('App e2e', () => {
   })
 
   describe('Customer put product which is out of stock', () => {
-    it('should put product in cart', () => {
+    it('should fail to put product in cart', () => {
       return spec()
         .post('/cart-item')
         .withBody({ productId: '$S{productId2}', quantity: 1 })
