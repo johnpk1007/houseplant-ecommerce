@@ -5,21 +5,20 @@ import { INestApplication, ValidationPipe } from '@nestjs/common'
 import { cleanPrismaDb, cleanS3Db } from './utils'
 import { PrismaService } from '../src/prisma/prisma.service'
 import { spec, request } from 'pactum'
-import { AuthDto } from '../src/auth/dto'
+import { LocalAuthDto } from '../src/auth/dto'
 import { S3Service } from '../src/s3/s3.service'
 import { ConfigService } from '@nestjs/config'
 import { fakeFile1, fakeProductDto1, fakeFile2, fakeProductDto2, customerDto1, customerDto2 } from './utils'
 import cookieParser from 'cookie-parser'
 import { StripeService } from '../src/stripe/stripe.service'
 import { customerAddress } from './utils'
-import { metadata } from 'reflect-metadata/no-conflict'
 
 describe('App e2e', () => {
   let app: INestApplication
   let prismaService: PrismaService
   let s3Service: S3Service
   let configService: ConfigService
-  let adminDto: AuthDto
+  let adminDto: LocalAuthDto
 
   const mockStripeService = {
     createPayment: vi.fn().mockResolvedValue({ clientSecret: 'fakePaymentIntentId_secret_fakeClientSecret' }),
@@ -64,13 +63,15 @@ describe('App e2e', () => {
         .post('/auth/signin')
         .withBody({ ...adminDto })
         .expectStatus(200)
-        .stores('adminAccessToken', 'access_token')
-        .stores('adminRefreshToken', 'res.headers.set-cookie[0]')
+        .stores('adminAccessToken',
+          'res.headers["set-cookie"].find(c => c.startsWith("access_token"))')
+        .stores('adminRefreshToken',
+          'res.headers["set-cookie"].find(c => c.startsWith("refresh_token"))')
     })
     it('should upload product 1', () => {
       return spec()
         .post('/product')
-        .withBearerToken('$S{adminAccessToken}')
+        .withCookies('$S{adminAccessToken}')
         .withCookies('$S{adminRefreshToken}')
         .withMultiPartFormData('file', fakeFile1.buffer, {
           filename: fakeFile1.originalname,
@@ -83,7 +84,7 @@ describe('App e2e', () => {
     it('should upload product 2', () => {
       return spec()
         .post('/product')
-        .withBearerToken('$S{adminAccessToken}')
+        .withCookies('$S{adminAccessToken}')
         .withCookies('$S{adminRefreshToken}')
         .withMultiPartFormData('file', fakeFile2.buffer, {
           filename: fakeFile2.originalname,
@@ -96,7 +97,7 @@ describe('App e2e', () => {
     it('should update product 1 quantity', () => {
       return spec()
         .patch('/product/$S{productId1}')
-        .withBearerToken('$S{adminAccessToken}')
+        .withCookies('$S{adminAccessToken}')
         .withCookies('$S{adminRefreshToken}')
         .withMultiPartFormData({ stock: 1 })
         .expectStatus(200)
@@ -104,7 +105,7 @@ describe('App e2e', () => {
     it('should update product 2 quantity', () => {
       return spec()
         .patch('/product/$S{productId2}')
-        .withBearerToken('$S{adminAccessToken}')
+        .withCookies('$S{adminAccessToken}')
         .withCookies('$S{adminRefreshToken}')
         .withMultiPartFormData({ stock: 1 })
         .expectStatus(200)
@@ -112,7 +113,7 @@ describe('App e2e', () => {
     it('should signout', () => {
       return spec()
         .post('/auth/signout')
-        .withBearerToken('$S{adminAccessToken}')
+        .withCookies('$S{adminAccessToken}')
         .withCookies('$S{adminRefreshToken}')
         .expectStatus(200)
     })
@@ -124,8 +125,10 @@ describe('App e2e', () => {
         .post('/auth/signup')
         .withBody({ ...customerDto1 })
         .expectStatus(201)
-        .stores('customer1AccessToken', 'access_token')
-        .stores('customer1RefreshToken', 'res.headers.set-cookie[0]')
+        .stores('customer1AccessToken',
+          'res.headers["set-cookie"].find(c => c.startsWith("access_token"))')
+        .stores('customer1RefreshToken',
+          'res.headers["set-cookie"].find(c => c.startsWith("refresh_token"))')
     })
   })
 
@@ -135,8 +138,10 @@ describe('App e2e', () => {
         .post('/auth/signup')
         .withBody({ ...customerDto2 })
         .expectStatus(201)
-        .stores('customer2AccessToken', 'access_token')
-        .stores('customer2RefreshToken', 'res.headers.set-cookie[0]')
+        .stores('customer2AccessToken',
+          'res.headers["set-cookie"].find(c => c.startsWith("access_token"))')
+        .stores('customer2RefreshToken',
+          'res.headers["set-cookie"].find(c => c.startsWith("refresh_token"))')
     })
   })
 
@@ -145,7 +150,7 @@ describe('App e2e', () => {
       return spec()
         .post('/cart-item')
         .withBody({ productId: '$S{productId1}', quantity: 1 })
-        .withBearerToken('$S{customer1AccessToken}')
+        .withCookies('$S{customer1AccessToken}')
         .withCookies('$S{customer1RefreshToken}')
         .expectStatus(201)
     })
@@ -153,14 +158,14 @@ describe('App e2e', () => {
       return spec()
         .post('/cart-item')
         .withBody({ productId: '$S{productId2}', quantity: 1 })
-        .withBearerToken('$S{customer1AccessToken}')
+        .withCookies('$S{customer1AccessToken}')
         .withCookies('$S{customer1RefreshToken}')
         .expectStatus(201)
     })
     it('should get all cart item', () => {
       return spec()
         .get('/cart-item')
-        .withBearerToken('$S{customer1AccessToken}')
+        .withCookies('$S{customer1AccessToken}')
         .withCookies('$S{customer1RefreshToken}')
         .expectStatus(200)
         .stores('cartItemId1', '[0].id')
@@ -170,7 +175,7 @@ describe('App e2e', () => {
       return spec()
         .post('/payment')
         .withBody({ cartItemIdArray: ['$S{cartItemId1}', '$S{cartItemId2}'], addressState: customerAddress })
-        .withBearerToken('$S{customer1AccessToken}')
+        .withCookies('$S{customer1AccessToken}')
         .withCookies('$S{customer1RefreshToken}')
         .expectStatus(200)
         .inspect()
@@ -187,7 +192,7 @@ describe('App e2e', () => {
       return spec()
         .post('/cart-item')
         .withBody({ productId: '$S{productId2}', quantity: 1 })
-        .withBearerToken('$S{customer2AccessToken}')
+        .withCookies('$S{customer2AccessToken}')
         .withCookies('$S{customer2RefreshToken}')
         .expectStatus(400)
     })
