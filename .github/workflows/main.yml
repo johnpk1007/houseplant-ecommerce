@@ -46,6 +46,10 @@ jobs:
           STRIPE_ENDPOINT: ${{ secrets.STRIPE_ENDPOINT }}
           ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
           ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          BACKEND_CALLBACK_URL: ${{ secrets.BACKEND_CALLBACK_URL }}
+          FRONTEND_CALLBACK_URL: ${{ secrets.FRONTEND_CALLBACK_URL }}
 
   build-and-push:
     runs-on: ubuntu-latest
