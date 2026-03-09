@@ -94,7 +94,6 @@ export default function CartItemList({ page, setPage, setUrl, stage, setStage }:
                             <div className="font-roboto font-bold  750px:text-[16px] text-[12px] ml-[8px] text-nowrap">PROCEED TO CHECKOUT</div>
                             <span ref={spanRef} className="w-[20px] h-[20px] absolute" style={{ left, top }}></span>
                         </button>
-
                     </div>}
             </div>
         </div>

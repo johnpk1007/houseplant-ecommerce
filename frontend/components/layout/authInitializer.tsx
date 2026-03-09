@@ -5,14 +5,12 @@ import { useCartItemStore } from "@/services/stores/cartItemStore"
 import { useEffect } from "react"
 import { CartItem } from "@/types/cartItem"
 
-export default function AuthInitializer({ accessToken, cartItemsArray }: { accessToken: string | null, cartItemsArray: CartItem[] | null }) {
-    const setAccessToken = useAccessTokenStore((state) => state.setAccessToken)
+export default function AuthInitializer({ cartItemsArray }: { cartItemsArray: CartItem[] | null }) {
     const setCartItemsArray = useCartItemStore((state) => state.setCartItemsArray)
     useEffect(() => {
-        if (!!accessToken && !!cartItemsArray) {
-            setAccessToken(accessToken)
+        if (!!cartItemsArray) {
             setCartItemsArray(cartItemsArray)
         }
-    }, [accessToken, setAccessToken, cartItemsArray, setCartItemsArray])
+    }, [cartItemsArray, setCartItemsArray])
     return null
 }

@@ -2,7 +2,7 @@
 
 import Minus from "@/public/icons/minus.svg"
 import Plus from "@/public/icons/plus.svg"
-import { editCartItem, deleteCartItem } from "@/services/cart"
+import { editCartItem, deleteCartItem } from "@/services/clientSide/cart"
 import { useCartItemStore } from "@/services/stores/cartItemStore"
 import { useState } from "react"
 

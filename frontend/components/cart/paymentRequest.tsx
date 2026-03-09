@@ -3,7 +3,7 @@
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-import { createPaymentIntent } from "@/services/cart";
+import { createPaymentIntent } from "@/services/clientSide/cart";
 import { useCartItemStore } from "@/services/stores/cartItemStore"
 import PaymentForm from "./paymentForm";
 import { useClientSecretStore } from "@/services/stores/clientSecretStore";
@@ -15,21 +15,13 @@ export default function PaymentRequest({ stage, setStage, address, setAddress }:
     const cartItemsArray = useCartItemStore((state) => state.cartItemsArray)
     const clientSecret = useClientSecretStore((state) => state.clientSecret)
     const setClientSecret = useClientSecretStore((state => state.setClientSecret))
-    // const [clientSecret, setClientSecret] = useState("");
 
     useEffect(() => {
-        console.log('check 1')
         if (clientSecret || !address) return;
-        console.log('check 2')
         const creatPaymentWrapper = async (cartItemIdArray: number[]) => {
             try {
-                console.log('check 3')
-                console.log('address:', address)
                 const data = await createPaymentIntent({ cartItemIdArray, addressState: address });
-                console.log('check 4')
                 setClientSecret(data.clientSecret);
-                console.log('client secret:', data.clientSecret)
-                console.log('check 5')
             } catch (error) {
                 console.error("Failed to create payment intent:", error);
             }

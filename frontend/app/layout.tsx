@@ -3,14 +3,12 @@ import { Playfair_Display, Bebas_Neue, Roboto } from "next/font/google";
 import localFont from 'next/font/local'
 import "./globals.css";
 import Header from "@/components/header/header";
-import { initialRefresh } from "@/services/layout";
 import AuthInitializer from "@/components/layout/authInitializer";
 import { Toaster } from 'react-hot-toast';
-import { getAllCartItem } from "@/services/layout";
-import { CartItem } from "@/types/cartItem"
+import { getAllCartItem } from "@/services/serverSide/layout";
 
 export const metadata: Metadata = {
-  title: "Houseplant ecommerce"
+  title: "Houseplant E-commerce"
 };
 
 const playfairDisplay = Playfair_Display({
@@ -43,15 +41,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const accessToken: string | null = await initialRefresh().catch(() => null);
-  let cartItemsArray: CartItem[] | null = null
-  if (accessToken) {
-    cartItemsArray = await getAllCartItem({ accessToken: accessToken })
-  }
+  const cartItemsArray = await getAllCartItem()
+  console.log('cartItemsArray:', cartItemsArray)
+
   return (
     <html lang="en" className={`${playfairDisplay.variable} ${vogueFont.variable} ${bebasNeue.variable} ${roboto.variable}`}>
       <body className="min-h-screen flex flex-col relative">
-        <AuthInitializer accessToken={accessToken} cartItemsArray={cartItemsArray} />
+        <AuthInitializer cartItemsArray={cartItemsArray} />
         <Toaster
           toastOptions={{
             success: {
@@ -77,7 +73,6 @@ export default async function RootLayout({
           }}
         />
         <Header
-          initialAccessToken={accessToken}
           initialCartItemsArray={cartItemsArray}
         />
         <main className="flex-1 w-full max-w-[1923px] mx-auto">

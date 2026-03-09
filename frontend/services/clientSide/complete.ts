@@ -1,7 +1,7 @@
-import { requestWithAccessToken } from "./api/api";
+import { apiWrapper } from "./apiWrapper";
 
 export async function getOrder({ paymentIntentId }: { paymentIntentId: string }) {
-    return await requestWithAccessToken(`${process.env.NEXT_PUBLIC_NEST_API_URL}/order`,
+    return await apiWrapper(`${process.env.NEXT_PUBLIC_NEST_API_URL}/order`,
         {
             method: 'POST',
             headers: {

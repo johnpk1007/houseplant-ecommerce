@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState } from "react";
-import { createCartItem } from "@/services/cart";
+import { createCartItem } from "@/services/clientSide/cart";
 import { useRouter } from "next/navigation";
 import Cart from "@/public/icons/cart.svg"
 import { Product } from "@/types/product";

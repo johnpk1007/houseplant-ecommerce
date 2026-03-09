@@ -1,8 +1,8 @@
 import { AddressState } from "@/types/addressState";
-import { requestWithAccessToken } from "./api/api";
+import { apiWrapper } from "./apiWrapper";
 
 export async function createCartItem({ productId, quantity }: { productId: number, quantity: number }) {
-    return await requestWithAccessToken(`${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
+    return await apiWrapper(`${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
         {
             method: 'POST',
             headers: {
@@ -13,19 +13,18 @@ export async function createCartItem({ productId, quantity }: { productId: numbe
         });
 }
 
-export async function getAllCartItem({ accessToken }: { accessToken?: string }) {
-    return await requestWithAccessToken(
+export async function getAllCartItem() {
+    return await apiWrapper(
         `${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
         {
             method: 'GET',
             credentials: 'include'
         },
-        accessToken
     );
 }
 
 export async function editCartItem({ cartItemId, quantity }: { cartItemId: number, quantity: number }) {
-    return await requestWithAccessToken(`${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
+    return await apiWrapper(`${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
         {
             method: 'PATCH',
             headers: {
@@ -37,7 +36,7 @@ export async function editCartItem({ cartItemId, quantity }: { cartItemId: numbe
 }
 
 export async function deleteCartItem({ cartItemId }: { cartItemId: number }) {
-    return await requestWithAccessToken(`${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
+    return await apiWrapper(`${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
         {
             method: 'DELETE',
             headers: {
@@ -49,7 +48,7 @@ export async function deleteCartItem({ cartItemId }: { cartItemId: number }) {
 }
 
 export async function createPaymentIntent({ cartItemIdArray, addressState }: { cartItemIdArray: number[], addressState: AddressState }) {
-    return await requestWithAccessToken(`${process.env.NEXT_PUBLIC_NEST_API_URL}/payment`,
+    return await apiWrapper(`${process.env.NEXT_PUBLIC_NEST_API_URL}/payment`,
         {
             method: 'POST',
             headers: {

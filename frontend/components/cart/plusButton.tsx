@@ -1,7 +1,7 @@
 'use client'
 
 import Plus from "@/public/icons/plus.svg"
-import { editCartItem } from "@/services/cart"
+import { editCartItem } from "@/services/clientSide/cart"
 import { useCartItemStore } from "@/services/stores/cartItemStore"
 import { useState } from "react"
 import { errorToast } from "@/services/toast/toast";

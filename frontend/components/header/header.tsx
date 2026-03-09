@@ -5,36 +5,28 @@ import Logout from "@/public/icons/logout.svg"
 import Cart from "@/public/icons/cart.svg"
 import FullCart from "@/public/icons/fullcart.svg"
 import { useRouter } from 'next/navigation';
-import { useAccessTokenStore } from "@/services/stores/accessTokenStore";
 import { useCartItemStore } from "@/services/stores/cartItemStore"
-import { signOut } from "@/services/auth";
+import { signOut } from "@/services/clientSide/auth";
 import { CartItem } from "@/types/cartItem"
+import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies"
 
 export default function Header(
-    { initialAccessToken, initialCartItemsArray }: { initialAccessToken: string | null, initialCartItemsArray: CartItem[] | null }
+    { initialCartItemsArray }: { initialCartItemsArray: CartItem[] | null }
 ) {
-    const accessToken = useAccessTokenStore((state => state.accessToken))
-    const setAccessToken = useAccessTokenStore((state) => state.setAccessToken)
     const cartItemsArray = useCartItemStore((state) => state.cartItemsArray)
     const setCartItemsArray = useCartItemStore((state) => state.setCartItemsArray)
     const router = useRouter()
-    const loggedIn =
-        accessToken !== undefined
-            ? !!accessToken
-            : !!initialAccessToken
     const cartItems =
         cartItemsArray !== undefined
             ? cartItemsArray
             : initialCartItemsArray
-
     return (
         <header className="fixed top-0 right-0 w-[50px] z-3 flex flex-row justify-center">
             {
-                loggedIn
+                cartItems !== null
                     ?
                     <div className="w-full flex flex-col items-center justify-start">
                         <button type="button" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[10px] mb-[10px]" onClick={async () => {
-                            setAccessToken(null)
                             setCartItemsArray(null)
                             await signOut()
                         }}>
@@ -55,7 +47,7 @@ export default function Header(
                         </button>
                     </div>
                     :
-                    <button type="button" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[10px]" onClick={() => router.push('/signin')}>
+                    <button type="button" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[10px]" onClick={() => router.push('/auth')}>
                         <Login />
                     </button>
             }

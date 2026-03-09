@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Complete from '@/public/images/Complete.webp'
-import { getOrder } from "@/services/complete";
+import { getOrder } from "@/services/clientSide/complete";
 import { useSearchParams } from "next/navigation";
 import Right from "@/public/icons/right.svg"
 import Left from "@/public/icons/left.svg"

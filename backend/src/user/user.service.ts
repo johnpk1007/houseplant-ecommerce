@@ -7,17 +7,32 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 export class UserService {
     constructor(private prismaService: PrismaService) { }
 
-    async createUser({ email, password, hashedRefreshToken }: { email: string, password: string, hashedRefreshToken: string }) {
+    async localCreateUser({ email, password, hashedRefreshToken }: { email: string, password: string, hashedRefreshToken: string }) {
         const hash = await bcrypt.hash(password, 10);
         return await this.prismaService.user.create({
             data: {
                 email,
                 hash,
-                hashedRefreshToken
+                hashedRefreshToken,
+                provider: 'LOCAL'
+            }
+        })
+    }
+    async googleCreateUser({ email, hashedRefreshToken }: { email: string, hashedRefreshToken: string }) {
+        return await this.prismaService.user.create({
+            data: {
+                email,
+                hashedRefreshToken,
+                provider: 'GOOGLE'
             }
         })
     }
     async findUser({ email }: { email: string }) {
+        return await this.prismaService.user.findUnique({
+            where: { email }
+        })
+    }
+    async findUserOrThrow({ email }: { email: string }) {
         try {
             return await this.prismaService.user.findUniqueOrThrow({
                 where: { email }
@@ -30,7 +45,6 @@ export class UserService {
             }
             throw new InternalServerErrorException()
         }
-
     }
     async updateUser({ email, dto }: { email: string, dto: { hashedRefreshToken: string | null } }) {
         try {

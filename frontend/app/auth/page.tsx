@@ -3,37 +3,40 @@
 import Login from "@/public/icons/login.svg"
 import Google from "@/public/icons/Google__G__logo.svg"
 import { useState } from "react"
-import { signIn, signUp } from "@/services/auth"
-import { useAccessTokenStore } from "@/services/stores/accessTokenStore"
+import { localSignIn, localSignUp } from "@/services/clientSide/auth"
 import { useCartItemStore } from "@/services/stores/cartItemStore"
 import { useRouter } from 'next/navigation'
-import { getAllCartItem } from "@/services/cart"
-import { CartItem } from "@/types/cartItem"
+import { getAllCartItem } from "@/services/clientSide/cart"
+import { redirect } from "next/navigation"
 
 export default function SignIn() {
     const [isSignUp, setIsSignUp] = useState(false)
     const router = useRouter()
-    const setAccessToken = useAccessTokenStore((state) => state.setAccessToken)
     const setCartItemsArray = useCartItemStore((state) => state.setCartItemsArray)
+
     const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault()
         if (isSignUp) {
             const formData = new FormData(event.currentTarget);
             const email = formData.get("email") as string
             const password = formData.get("password") as string
-            const accessToken = await signUp({ email, password })
-            setAccessToken(accessToken)
+            await localSignUp({ email, password })
+            const cartItems = await getAllCartItem()
+            setCartItemsArray(cartItems)
             router.replace('/')
         } else {
             const formData = new FormData(event.currentTarget);
             const email = formData.get("email") as string
             const password = formData.get("password") as string
-            const accessToken = await signIn({ email, password })
-            const cartItems = await getAllCartItem({ accessToken: accessToken })
-            setAccessToken(accessToken)
+            await localSignIn({ email, password })
+            const cartItems = await getAllCartItem()
             setCartItemsArray(cartItems)
             router.replace('/')
         }
+    }
+
+    const handleClick = () => {
+        window.location.href = `${process.env.NEXT_PUBLIC_NEST_API_URL}/auth/google/signin`;
     }
 
     return (
@@ -52,7 +55,7 @@ export default function SignIn() {
                                 </div>
                                 <div className="text-white font-roboto text-[16px] font-bold text-nowrap">Sign in</div>
                             </button>
-                            <button type="button" className="border-solid border-[#ADADAD] border-2 rounded-full flex justify-start items-center w-full h-[40px]">
+                            <button type="button" onClick={handleClick} className="border-solid border-[#ADADAD] border-2 rounded-full flex justify-start items-center w-full h-[40px]">
                                 <div className="h-[22px] w-[22px] text-white ml-[12px] mr-[12px]">
                                     <Google />
                                 </div>
@@ -72,7 +75,7 @@ export default function SignIn() {
                                 </div>
                                 <div className="text-white font-roboto text-[16px] font-bold text-nowrap">Sign up</div>
                             </button>
-                            <button type="button" className="border-solid border-[#ADADAD] border-2 rounded-full flex justify-start items-center w-full h-[40px]">
+                            <button type="button" onClick={handleClick} className="border-solid border-[#ADADAD] border-2 rounded-full flex justify-start items-center w-full h-[40px]">
                                 <div className="h-[22px] w-[22px] text-white ml-[12px] mr-[12px]">
                                     <Google />
                                 </div>

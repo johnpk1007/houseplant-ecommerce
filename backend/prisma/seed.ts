@@ -17,7 +17,8 @@ async function main() {
         create: {
             email: process.env.ADMIN_EMAIL as string,
             hash,
-            role: 'ADMIN'
+            role: 'ADMIN',
+            provider: 'LOCAL'
         },
     })
 }

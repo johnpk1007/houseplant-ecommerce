@@ -21,7 +21,6 @@ export class PaymentService {
         const cartItems = await this.cartItemService.getCartItems({ userId, cartItemIdArray })
         try {
             const totalOrderAmount = cartItems.reduce((sum: number, item) => { return sum + (item.quantity * item.product.price) }, 0);
-            console.log('check 1')
             const paymentIntent = await this.stripeService.createPayment({
                 totalOrderAmount: totalOrderAmount * 100
             })

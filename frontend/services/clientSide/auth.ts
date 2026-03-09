@@ -1,5 +1,5 @@
-export async function signUp({ email, password }: { email: string, password: string }) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_API_URL}/auth/signup`, {
+export async function localSignUp({ email, password }: { email: string, password: string }) {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_API_URL}/auth/local/signup`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -10,12 +10,11 @@ export async function signUp({ email, password }: { email: string, password: str
     if (!response.ok) {
         throw new Error('SIGN UP FAILED')
     }
-    const { access_token } = await response.json()
-    return access_token
+    return
 }
 
-export async function signIn({ email, password }: { email: string, password: string }) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_API_URL}/auth/signin`, {
+export async function localSignIn({ email, password }: { email: string, password: string }) {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_API_URL}/auth/local/signIn`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -26,8 +25,7 @@ export async function signIn({ email, password }: { email: string, password: str
     if (!response.ok) {
         throw new Error('SIGN IN FAILED')
     }
-    const { access_token } = await response.json()
-    return access_token
+    return
 }
 
 export async function refresh() {
@@ -38,8 +36,7 @@ export async function refresh() {
     if (!response.ok) {
         throw new Error('REFRESH TOKEN FAILED')
     }
-    const data = await response.json()
-    return data.access_token
+    return
 }
 
 export async function signOut() {

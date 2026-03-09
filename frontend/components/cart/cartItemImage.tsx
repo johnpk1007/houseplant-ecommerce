@@ -1,7 +1,6 @@
 'use client'
 
 import Image from "next/image"
-import { CartItem } from "@/types/cartItem"
 import { useCartItemStore } from "@/services/stores/cartItemStore"
 
 export default function CartItemImage({ page }: { page: number }) {
