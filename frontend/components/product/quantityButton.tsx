@@ -28,7 +28,7 @@ export default function QuantityButton({ cartQuantity, setCartQuantity }: { cart
         setCartQuantity(state => Math.min(state + 1, 99))
     }
     return (
-        <div className="relative border-solid border-black border-2 rounded-full flex justify-between items-center text-black hover:bg-black/10 hover:border-black/10 hover:text-white 750px:w-[170px] 750px:h-[40px] w-[125px] h-[30px] mb-[14px] duration-300 ease-in-out text-inherit overflow-hidden">
+        <div className="relative box-border border-solid border-black border-2 rounded-full flex justify-between items-center text-black hover:bg-black/10 hover:border-black/10 hover:text-white 750px:w-[170px] 750px:h-[40px] w-[125px] h-[30px] mb-[14px] duration-300 ease-in-out text-inherit overflow-hidden">
             <button onClick={minusClick} type="button" className="750px:w-[20px] 750px:h-[20px] w-[16px] h-[16px] flex-shrink-0 flex justify-center items-center ml-[10px] cursor-pointer rounded-full relative">
                 <Minus />
                 <span ref={minusRef} className="w-[20px] h-[20px] absolute" style={{ left: minusLeft, top: minusTop }}></span>

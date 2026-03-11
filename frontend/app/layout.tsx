@@ -42,7 +42,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const cartItemsArray = await getAllCartItem()
-  console.log('cartItemsArray:', cartItemsArray)
 
   return (
     <html lang="en" className={`${playfairDisplay.variable} ${vogueFont.variable} ${bebasNeue.variable} ${roboto.variable}`}>

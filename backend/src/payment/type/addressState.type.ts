@@ -2,9 +2,8 @@ export type AddressState = {
     firstName: string;
     lastName: string;
     phoneNumber: string;
-    extendedAddress: string;
-    streetNumber: string;
-    route: string;
+    streetAddress: string;
+    extendedAddress?: string;
     locality: string;
     administrativeAreaLevel1: string;
     postalCode: string;

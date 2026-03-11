@@ -78,7 +78,6 @@ export default function SignUp({ setIsSignUp }: { setIsSignUp: Dispatch<SetState
         try {
             await localSignUp({ email: signUpField.email, password: signUpField.password })
         } catch (error) {
-            console.log('error:', error)
             if (error instanceof Error) {
                 if (error.message === 'EMAIL ALREADY EXITS') {
                     errorToast(`This email is already registered.\n Please sign in instead.`)
@@ -129,7 +128,7 @@ export default function SignUp({ setIsSignUp }: { setIsSignUp: Dispatch<SetState
     return (
         <div className="w-[312px] h-[455px] flex flex-col items-center flex-shrink-0">
             <div className="font-playfairDisplay text-[40px]">Sign Up</div>
-            <button type="button" className="font-playfairDisplay text-[16px] text-[#ADADAD] mb-[50px] cursor-pointer" onClick={() => setIsSignUp(false)}>Or sign in with your account</button>
+            <button type="button" className="font-playfairDisplay text-[16px] text-[#ADADAD] mb-[50px] cursor-pointer hover:text-black duration-300 ease-in-out" onClick={() => setIsSignUp(false)}>Or sign in with your account</button>
             <form className="flex-1 flex flex-col justify-between items-center w-full" onSubmit={handleSubmit}>
                 <div className="flex flex-col w-full">
                     <AuthInput name="email" type="email" placeholder="Email" onChange={handleChange} value={signUpField.email} error={error.email} touched={touched.email} onBlur={handleBlur} />
@@ -137,7 +136,7 @@ export default function SignUp({ setIsSignUp }: { setIsSignUp: Dispatch<SetState
                     <AuthInput name="confirmPassword" type="password" placeholder="Confirm password" onChange={handleChange} value={signUpField.confirmPassword} error={error.confirmPassword} touched={touched.confirmPassword} onBlur={handleBlur} />
                 </div>
                 <div className="flex flex-col w-full">
-                    <button type="submit" className="relative bg-black border-solid border-black border-2 rounded-full flex justify-start items-center w-full h-[40px] mb-[18px] cursor-pointer" onClick={localHandleClick}>
+                    <button type="submit" disabled={isRequestLoading} className="relative bg-black rounded-full flex justify-start items-center w-full h-[40px] mb-[18px] cursor-pointer hover:bg-black/40 duration-300 ease-in-out" onClick={localHandleClick}>
                         {
                             isRequestLoading ?
                                 <div className="h-full w-full flex flex-row justify-center">
@@ -157,11 +156,11 @@ export default function SignUp({ setIsSignUp }: { setIsSignUp: Dispatch<SetState
                         }
                         <span ref={spanRef} className="w-[20px] h-[20px] absolute" style={{ left, top }}></span>
                     </button>
-                    <button type="button" onClick={googleHandleClick} className="border-solid border-[#ADADAD] border-2 rounded-full flex justify-start items-center w-full h-[40px] cursor-pointer">
+                    <button type="button" onClick={googleHandleClick} className="box-border border-solid border-[#ADADAD] border-2 rounded-full flex justify-start items-center w-full h-[40px] cursor-pointer text-[#ADADAD] hover:border-black/60 hover:text-black/60 duration-300 ease-in-out">
                         <div className="h-[22px] w-[22px] text-white ml-[12px] mr-[12px]">
                             <Google />
                         </div>
-                        <div className="text-[#ADADAD] font-roboto text-[16px] font-bold text-nowrap">Sign up with Google</div>
+                        <div className="font-roboto text-[16px] font-bold text-nowrap">Sign up with Google</div>
                     </button>
                 </div>
             </form>

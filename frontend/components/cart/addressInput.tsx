@@ -3,7 +3,7 @@ import { ChangeEvent, FocusEvent } from "react";
 export default function AddressInput(
     { name, placeholder, onChange, value, error, touched = true, onBlur }
         :
-        { name: string, placeholder: string, onChange: (e: ChangeEvent<HTMLInputElement, Element>) => void, value?: string, error: string, touched?: boolean, onBlur?: (e: FocusEvent<HTMLInputElement, Element>) => void }) {
+        { name: string, placeholder: string, onChange: (e: ChangeEvent<HTMLInputElement, Element>) => void, value?: string, error?: string, touched?: boolean, onBlur?: (e: FocusEvent<HTMLInputElement, Element>) => void }) {
 
     return (
         <div className="relative flex-1  mb-[20px]">

@@ -17,6 +17,9 @@ export async function getAllCartItem() {
             'Cookie': cookiesHeader,
         },
     })
+    if (!response.ok) {
+        return null
+    }
     const data = await response.json()
     return data
 }

@@ -13,9 +13,7 @@ export default function CartItemList({ page, setPage, setUrl, stage, setStage }:
     const cartItemsArray = useCartItemStore((state) => state.cartItemsArray)
     const itemsPerPage = 4
     const maxPage: number = cartItemsArray ? Math.ceil(cartItemsArray.length / itemsPerPage) - 1 : 0
-    // if (!!cartItemsArray) {
-    //     maxPage = Math.ceil(cartItemsArray.length / itemsPerPage) - 1
-    // }
+
     const handleNext = () => {
         if (page < maxPage) {
             setUrl(null)
@@ -87,11 +85,11 @@ export default function CartItemList({ page, setPage, setUrl, stage, setStage }:
                             <div className="font-roboto 1300px:text-[20px] 750px:text-[18px]">Total</div>
                             <div className="font-roboto 1300px:text-[20px] 750px:text-[18px]"> ${cartItemsArray.reduce((sum: number, item: CartItem) => sum + item.product.price * item.quantity, 0)}</div>
                         </div>
-                        <button type="button" onClick={handleClick} className="self-end rounded-full bg-black text-white h-[40px] 750px:w-[240px] w-[190px]  flex flex-row items-center relative overflow-hidden hover:bg-black/40 hover:border-black/10  duration-300 ease-in-out cursor-pointer border-black border-2 ">
+                        <button type="button" onClick={handleClick} className={`${stage === 0 ? 'bg-black hover:bg-black/40' : 'bg-black/40 hover:bg-black'} self-end rounded-full text-white h-[40px] 750px:w-[240px] w-[190px] flex flex-row items-center relative overflow-hidden duration-300 ease-in-out cursor-pointer`}>
                             <div className="750px:w-[24px] 750px:h-[24px] w-[18px] h-[18px] 750px:ml-[8px] ml-[10px] flex-shrink-0">
                                 <Map />
                             </div>
-                            <div className="font-roboto font-bold  750px:text-[16px] text-[12px] ml-[8px] text-nowrap">PROCEED TO CHECKOUT</div>
+                            <div className="font-roboto font-bold  750px:text-[16px] text-[12px] ml-[8px] text-nowrap">PROVIDE SHIPPING INFO</div>
                             <span ref={spanRef} className="w-[20px] h-[20px] absolute" style={{ left, top }}></span>
                         </button>
                     </div>}

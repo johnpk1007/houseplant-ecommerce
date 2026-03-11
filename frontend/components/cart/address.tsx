@@ -11,9 +11,7 @@ export default function Address({ stage, setStage, address, setAddress }: { stag
         firstName: "",
         lastName: "",
         phoneNumber: "",
-        extendedAddress: "",
-        streetNumber: "",
-        route: "",
+        streetAddress: "",
         locality: "",
         administrativeAreaLevel1: "",
         postalCode: ""
@@ -21,34 +19,46 @@ export default function Address({ stage, setStage, address, setAddress }: { stag
 
     const [touched, setTouched] = useState({ phoneNumber: false });
 
-    const validateField = (name: string, value: string) => {
+    const validateField = (name: string, value: string | undefined) => {
         switch (name) {
             case "firstName":
+                if (!value) return "Please enter your first name.";
                 if (!value.trim()) return "Please enter your first name.";
                 if (!/^[A-Za-z]+$/.test(value)) return "Please enter letters only.";
                 return "";
 
             case "lastName":
+                if (!value) return "Please enter your last name.";
                 if (!value.trim()) return "Please enter your last name.";
                 if (!/^[A-Za-z]+$/.test(value)) return "Please enter letters only.";
                 return "";
 
             case "phoneNumber":
+                if (!value) return "Please enter your phone number.";
                 if (value.length < 14) return "Please enter your full phone number.";
                 if (!/^[0-9()\-\s]+$/.test(value)) return "Please enter numbers only.";
                 return "";
 
+            case "streetAddress":
+                if (!value) return "Please enter your street address.";
+                if (!value.trim()) return "Please enter your street address.";
+                if (!/^[A-Za-z0-9 ]+$/.test(value)) return "Please enter letters and numbers only.";
+                return "";
+
             case "locality":
+                if (!value) return "Please enter your city.";
                 if (!value.trim()) return "Please enter your city.";
                 if (!/^[A-Za-z]+$/.test(value)) return "Please enter letters only.";
                 return "";
 
             case "administrativeAreaLevel1":
+                if (!value) return "Please enter your state.";
                 if (!value.trim()) return "Please enter your state.";
                 if (!/^[A-Za-z]+$/.test(value)) return "Please enter letters only.";
                 return "";
 
             case "postalCode":
+                if (!value) return "Please enter your full zipcode";
                 if (value.length !== 5) return "Please enter your full zipcode";
                 if (!/^[0-9]+$/.test(value)) return "Please enter numbers only.";
                 return "";
@@ -104,6 +114,12 @@ export default function Address({ stage, setStage, address, setAddress }: { stag
     const [left, setLeft] = useState(0);
     const [top, setTop] = useState(0);
 
+    const emptyFields = Object.entries(address)
+        .filter(([key, value]) => value === "" && key !== "extendedAddress")
+        .map(([key]) => key as keyof typeof address);
+
+    const allConfirmed = Object.values(error).every(value => value === "");
+
 
     const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
         if (!spanRef.current) return
@@ -111,10 +127,23 @@ export default function Address({ stage, setStage, address, setAddress }: { stag
         setLeft(event.clientX - event.currentTarget.getBoundingClientRect().left)
         setTop(event.clientY - event.currentTarget.getBoundingClientRect().top)
         spanRef.current.classList.add("ripple");
+
+        if (emptyFields.length !== 0) {
+            emptyFields.map((item) => {
+                setTouched((prev) => ({ ...prev, [item]: true }))
+                const errorMessage = validateField(item, address[item]);
+                setError((prev) => ({ ...prev, [item]: errorMessage }))
+            })
+            console.log('problem1')
+            return
+        }
+        if (!allConfirmed) {
+            console.log('problem2')
+            return
+        }
+
         setStage(2)
     }
-
-    const allFilled = Object.values(address).every(value => value !== "");
 
     return (
         <div className="970px:w-[50%] w-full h-full flex flex-row 970px:justify-start justify-center shrink-0">
@@ -156,13 +185,12 @@ export default function Address({ stage, setStage, address, setAddress }: { stag
                     </div>
                     <div className="mb-[5px]">
                         <div className="font-roboto font-light text-[24px] mb-[10px]">Contact information</div>
-                        <GoogleAutocomplete setAddress={setAddress} />
+                        <GoogleAutocomplete streetAddress={address.streetAddress} setAddress={setAddress} error={error.streetAddress} setError={setError} />
                         <AddressInput
                             name="extendedAddress"
                             placeholder="Apt, suite, unit, building, floor, etc"
                             onChange={handleChange}
                             value={address.extendedAddress}
-                            error={error.extendedAddress}
                         />
                         <AddressInput
                             name="locality"
@@ -178,7 +206,8 @@ export default function Address({ stage, setStage, address, setAddress }: { stag
                                 onChange={handleChange}
                                 value={address.administrativeAreaLevel1}
                                 error={error.administrativeAreaLevel1}
-                            /> <AddressInput
+                            />
+                            <AddressInput
                                 name="postalCode"
                                 placeholder="Zipcode"
                                 onChange={handleChange}
@@ -188,7 +217,7 @@ export default function Address({ stage, setStage, address, setAddress }: { stag
                         </div>
                     </div>
                     <div className="flex justify-end">
-                        <button type="button" onClick={handleClick} className={`${allFilled ? 'bg-black border-black' : 'bg-black/40 border-black/10'} self-end rounded-full text-white h-[40px] 750px:w-[240px] w-[190px]  flex flex-row items-center relative overflow-hidden hover:bg-black/40 hover:border-black/10  duration-300 ease-in-out cursor-pointer border-2`}>
+                        <button type="button" onClick={handleClick} className={`bg-black border-box self-end rounded-full text-white h-[40px] 750px:w-[240px] w-[190px]  flex flex-row items-center relative overflow-hidden hover:bg-black/40 duration-300 ease-in-out cursor-pointer border-2`}>
                             <div className="750px:w-[24px] 750px:h-[24px] w-[18px] h-[18px] 750px:ml-[16px] ml-[10px] mr-[8px] flex-shrink-0">
                                 <Card />
                             </div>

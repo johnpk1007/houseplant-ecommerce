@@ -104,9 +104,8 @@ model Order {
   firstName                String
   lastName                 String
   phoneNumber              String
+  streetAddress            String
   extendedAddress          String
-  streetNumber             String
-  route                    String
   locality                 String
   administrativeAreaLevel1 String
   postalCode               String

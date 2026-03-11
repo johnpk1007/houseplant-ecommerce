@@ -16,7 +16,7 @@ export default function CartItemImage({ page }: { page: number }) {
         cartItemsArray.length % 4 === 1
 
     return (
-        <div className="w-[40%] ml-[10%] h-full overflow-hidden relative 1300px:block hidden shrink-0">
+        <div className="w-[40%] ml-[10%] 1700px:h-full h-[80%] overflow-hidden relative 1300px:block hidden shrink-0">
             <div className="h-full w-full flex flex-row-reverse justify-start items-start transition-transform duration-300" style={{
                 transform: `translateX(${page * 100}%)`
             }}>

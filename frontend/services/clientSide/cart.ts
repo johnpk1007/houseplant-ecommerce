@@ -1,8 +1,7 @@
 import { AddressState } from "@/types/addressState";
-import { apiWrapper } from "./apiWrapper";
 
 export async function createCartItem({ productId, quantity }: { productId: number, quantity: number }) {
-    return await apiWrapper(`${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
+    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
         {
             method: 'POST',
             headers: {
@@ -11,20 +10,30 @@ export async function createCartItem({ productId, quantity }: { productId: numbe
             body: JSON.stringify({ productId, quantity }),
             credentials: 'include'
         });
+    const data = await response.json()
+    if (!response.ok) {
+        throw new Error(data.message)
+    }
+    return data
 }
 
 export async function getAllCartItem() {
-    return await apiWrapper(
+    const response = await fetch(
         `${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
         {
             method: 'GET',
             credentials: 'include'
         },
     );
+    const data = await response.json()
+    if (!response.ok) {
+        throw new Error(data.message)
+    }
+    return data
 }
 
 export async function editCartItem({ cartItemId, quantity }: { cartItemId: number, quantity: number }) {
-    return await apiWrapper(`${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
+    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
         {
             method: 'PATCH',
             headers: {
@@ -33,10 +42,15 @@ export async function editCartItem({ cartItemId, quantity }: { cartItemId: numbe
             body: JSON.stringify({ cartItemId, quantity }),
             credentials: 'include'
         });
+    const data = await response.json()
+    if (!response.ok) {
+        throw new Error(data.message)
+    }
+    return data
 }
 
 export async function deleteCartItem({ cartItemId }: { cartItemId: number }) {
-    return await apiWrapper(`${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
+    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
         {
             method: 'DELETE',
             headers: {
@@ -45,10 +59,15 @@ export async function deleteCartItem({ cartItemId }: { cartItemId: number }) {
             body: JSON.stringify({ cartItemId }),
             credentials: 'include'
         });
+    const data = await response.json()
+    if (!response.ok) {
+        throw new Error(data.message)
+    }
+    return
 }
 
 export async function createPaymentIntent({ cartItemIdArray, addressState }: { cartItemIdArray: number[], addressState: AddressState }) {
-    return await apiWrapper(`${process.env.NEXT_PUBLIC_NEST_API_URL}/payment`,
+    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_API_URL}/payment`,
         {
             method: 'POST',
             headers: {
@@ -57,4 +76,9 @@ export async function createPaymentIntent({ cartItemIdArray, addressState }: { c
             body: JSON.stringify({ cartItemIdArray, addressState }),
             credentials: 'include'
         });
+    const data = await response.json()
+    if (!response.ok) {
+        throw new Error(data.message)
+    }
+    return data
 }

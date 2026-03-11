@@ -48,9 +48,8 @@ export class OrderService {
                     firstName: addressState.firstName,
                     lastName: addressState.lastName,
                     phoneNumber: addressState.phoneNumber,
-                    extendedAddress: addressState.extendedAddress,
-                    streetNumber: addressState.streetNumber,
-                    route: addressState.route,
+                    streetAddress: addressState.streetAddress,
+                    extendedAddress: addressState.extendedAddress || "",
                     locality: addressState.locality,
                     administrativeAreaLevel1: addressState.administrativeAreaLevel1,
                     postalCode: addressState.postalCode

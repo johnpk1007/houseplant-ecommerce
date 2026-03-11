@@ -16,16 +16,15 @@ export default function Cart() {
         firstName: "",
         lastName: "",
         phoneNumber: "",
+        streetAddress: "",
         extendedAddress: "",
-        streetNumber: "",
-        route: "",
         locality: "",
         administrativeAreaLevel1: "",
         postalCode: ""
     });
 
     return (
-        <div className="w-full 1700px:h-[950px] h-[700px] flex flex-row justify-center items-start">
+        <div className="w-full 1700px:h-[800px] h-[700px] flex flex-row justify-center items-start">
             <div className="w-full h-[97%] pt-[3%] relative overflow-hidden">
                 <div className=" w-full h-full flex flex-row justify-start items-start transition duration-500 ease-in-out"
                     style={{
