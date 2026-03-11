@@ -94,10 +94,10 @@ export default function PaymenForm({ address }: { address: AddressState }) {
                     <button disabled={isRequestLoading || !stripe || !elements} onClick={handleClick} className="rounded-full bg-black text-white h-[40px] 750px:w-[240px] w-[190px] mt-[30px]  flex flex-row items-center relative overflow-hidden hover:bg-black/40 hover:border-black/10  duration-300 ease-in-out cursor-pointer border-black border-2">
                         {isRequestLoading ?
                             <div className="h-full w-full flex flex-row justify-center">
-                                <div className="h-full w-[40%] flex flex-row justify-around items-center">
-                                    <span className="h-[10px] w-[10px] rounded-full animate-pulse [animation-duration:900ms] bg-white" />
-                                    <span className="h-[10px] w-[10px] rounded-full animate-pulse [animation-duration:900ms] [animation-delay:300ms] bg-white" />
-                                    <span className="h-[10px] w-[10px] rounded-full animate-pulse [animation-duration:900ms] [animation-delay:600ms] bg-white" />
+                                <div className="h-full w-[35%] flex flex-row justify-around items-center">
+                                    <span className="h-[8px] w-[8px] rounded-full animate-pulse [animation-duration:900ms] bg-white/70" />
+                                    <span className="h-[8px] w-[8px] rounded-full animate-pulse [animation-duration:900ms] [animation-delay:300ms] bg-white/70" />
+                                    <span className="h-[8px] w-[8px] rounded-full animate-pulse [animation-duration:900ms] [animation-delay:600ms] bg-white/70" />
                                 </div>
                             </div>
                             :

@@ -40,7 +40,7 @@ export class UserService {
         } catch (error) {
             if (error instanceof PrismaClientKnownRequestError) {
                 if (error.code === 'P2025') {
-                    throw new NotFoundException({ message: 'USER NOT FOUND' })
+                    throw new NotFoundException('USER NOT FOUND')
                 }
             }
             throw new InternalServerErrorException()

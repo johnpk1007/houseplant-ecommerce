@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useCartItemStore } from "@/services/stores/cartItemStore"
 import { signOut } from "@/services/clientSide/auth";
 import { CartItem } from "@/types/cartItem"
-import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies"
+import { usePathname } from "next/navigation"
 
 export default function Header(
     { initialCartItemsArray }: { initialCartItemsArray: CartItem[] | null }
@@ -20,6 +20,9 @@ export default function Header(
         cartItemsArray !== undefined
             ? cartItemsArray
             : initialCartItemsArray
+
+    const pathName = usePathname()
+
     return (
         <header className="fixed top-0 right-0 w-[50px] z-3 flex flex-row justify-center">
             {
@@ -47,7 +50,7 @@ export default function Header(
                         </button>
                     </div>
                     :
-                    <button type="button" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[10px]" onClick={() => router.push('/auth')}>
+                    <button type="button" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[10px]" onClick={() => router.push(`/auth/?returnUrl=${encodeURIComponent(pathName)}`)}>
                         <Login />
                     </button>
             }

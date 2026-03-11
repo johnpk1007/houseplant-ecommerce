@@ -13,6 +13,7 @@ export default function CartButton({ product, cartQuantity }: { product: Pick<Pr
     const [left, setLeft] = useState(0);
     const [top, setTop] = useState(0);
     const router = useRouter()
+    const cartItemsArray = useCartItemStore((state) => state.cartItemsArray)
     const upsertCartItem = useCartItemStore((state) => state.upsertCartItem)
     const [isLoading, setIsLoading] = useState(false)
 
@@ -22,12 +23,16 @@ export default function CartButton({ product, cartQuantity }: { product: Pick<Pr
         setLeft(event.clientX - event.currentTarget.getBoundingClientRect().left)
         setTop(event.clientY - event.currentTarget.getBoundingClientRect().top)
         spanRef.current.classList.add("ripple");
+        if (cartItemsArray === null || cartItemsArray === undefined) {
+            errorToast('Sign in required to add items to cart.')
+            return
+        }
         try {
             setIsLoading(true)
             const cartItem = await createCartItem({ productId: product.id, quantity: cartQuantity })
             upsertCartItem(cartItem)
             setIsLoading(false)
-            successToast('Added to cart')
+            successToast('The item has been added to your cart.')
         } catch (error) {
             setIsLoading(false)
             if (error instanceof Error) {
@@ -36,9 +41,6 @@ export default function CartButton({ product, cartQuantity }: { product: Pick<Pr
                 }
                 if (error.message === 'NOT ENOUGH STOCK') {
                     errorToast(`Only ${product.stock} items available.`)
-                }
-                if (error.message === 'NO ACCESS TOKEN') {
-                    errorToast('Sign in required to add items to cart.')
                 }
             }
         }

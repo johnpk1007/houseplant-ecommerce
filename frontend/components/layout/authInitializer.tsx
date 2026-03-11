@@ -1,6 +1,5 @@
 'use client'
 
-import { useAccessTokenStore } from "@/services/stores/accessTokenStore"
 import { useCartItemStore } from "@/services/stores/cartItemStore"
 import { useEffect } from "react"
 import { CartItem } from "@/types/cartItem"

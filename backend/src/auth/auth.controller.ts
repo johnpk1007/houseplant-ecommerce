@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { LocalAuthDto, GooglelAuthDto } from "./dto";
 import { LocalGuard } from "./guard";
@@ -53,13 +53,20 @@ export class AuthController {
     }
 
     @Get('google/signin')
+    async googleSignIn(@Query('returnUrl') returnUrl: string, @Res({ passthrough: true }) res: Response) {
+        if (!returnUrl.startsWith('/')) returnUrl = '/';
+        res.cookie('redirect_url', returnUrl, { httpOnly: true, sameSite: 'strict' });
+        res.redirect('/auth/google/redirect');
+    }
+
+    @Get('google/redirect')
     @UseGuards(GoogleGuard)
-    async googleSignIn() { }
+    async googleAuth() { }
 
     @Get('google/callback')
     @UseGuards(GoogleGuard)
     @HttpCode(HttpStatus.OK)
-    async googleCallback(@User() user: GoogleAuthUser | PreGoogleAuthUser, @Res({ passthrough: true }) res: Response) {
+    async googleCallback(@User() user: GoogleAuthUser | PreGoogleAuthUser, @Req() req: Request, @Res({ passthrough: true }) res: Response) {
         let access_token: string = '';
         let refresh_token: string = '';
         if (user.kind === 'PRE_AUTH') {
@@ -84,7 +91,9 @@ export class AuthController {
             sameSite: 'strict',
             maxAge: 7 * 24 * 60 * 60 * 1000,
         })
-        res.redirect(this.configService.getOrThrow<string>('FRONTEND_CALLBACK_URL'))
+        const redirectUrl = req.cookies.redirect_url || '/';
+        res.clearCookie('redirect_url'); // optional
+        res.redirect(`${this.configService.getOrThrow<string>('FRONTEND_CALLBACK_URL')}${redirectUrl}`)
         return
     }
 

@@ -1,6 +1,5 @@
 'use client'
 
-import { useCartItemStore } from "@/services/stores/cartItemStore"
 import { useState } from "react"
 import CartItemImage from "@/components/cart/cartItemImage"
 import SmallScreenCartItemImage from "@/components/cart/smallScreenCartItemImage"

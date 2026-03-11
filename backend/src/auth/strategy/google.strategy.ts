@@ -16,10 +16,11 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
             clientID: configService.getOrThrow('GOOGLE_CLIENT_ID'),
             clientSecret: configService.getOrThrow('GOOGLE_CLIENT_SECRET'),
             callbackURL: configService.getOrThrow('BACKEND_CALLBACK_URL'),
-            scope: ['email', 'profile']
+            scope: ['email', 'profile'],
+            passReqToCallback: true,
         });
     }
-    async validate(profile: Profile) {
+    async validate(request: Request, accessToken: string, refreshToken: string, profile: Profile) {
         if (!profile.emails?.[0]?.value) {
             throw new Error('NO EMAIL IN GOOGLE PROFILE');
         }

@@ -1,20 +1,26 @@
 import { refresh, signOut } from "./auth"
 
 export async function apiWrapper(input: string, init: RequestInit = {}) {
-    const response = await fetch(input, { ...init })
+    let response = await fetch(input, { ...init })
     let data = await response.json()
-    if (response.status === 401) {
-        try {
+    if (!response.ok) {
+        if (response.status === 401) {
             await refresh()
-            const response = await fetch(input, { ...init })
+            response = await fetch(input, { ...init })
             data = await response.json()
-        } catch (error) {
-            if (error instanceof Error && error.message === 'Unauthorized') {
-                await signOut()
-                throw new Error('REFRESH TOKEN EXPIRED')
+            if (!response.ok) {
+                if (response.status === 401) {
+                    await signOut()
+                    throw new Error('REFRSEH TOKEN EXPIRED')
+                } else {
+                    throw new Error(data.message)
+                }
             }
-            throw new Error('REQUEST FAILED')
+        } else {
+            throw new Error(data.message)
         }
     }
+
     return data
 }
+

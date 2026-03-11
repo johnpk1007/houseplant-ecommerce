@@ -53,11 +53,11 @@ export default async function RootLayout({
             success: {
               iconTheme: {
                 primary: 'white',
-                secondary: '#4CB051',
+                secondary: 'black',
               },
               style: {
-                background: '#4CB051',
-                color: 'white'
+                background: 'black',
+                color: 'white',
               },
             },
             error: {

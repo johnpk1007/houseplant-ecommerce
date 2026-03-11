@@ -45,7 +45,7 @@ export class CartItemService {
             }
             cartItemQuantity += quantity
             if (product.stock < cartItemQuantity) {
-                throw new BadRequestException({ message: 'NOT ENOUGH STOCK' })
+                throw new BadRequestException('NOT ENOUGH STOCK')
             }
             const cartItem = await tx.cartItem.upsert({
                 where: {

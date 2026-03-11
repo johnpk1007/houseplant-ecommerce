@@ -8,13 +8,14 @@ export async function localSignUp({ email, password }: { email: string, password
         credentials: 'include'
     })
     if (!response.ok) {
-        throw new Error('SIGN UP FAILED')
+        const data = await response.json()
+        throw new Error(data.message)
     }
     return
 }
 
 export async function localSignIn({ email, password }: { email: string, password: string }) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_API_URL}/auth/local/signIn`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_API_URL}/auth/local/signin`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -23,7 +24,8 @@ export async function localSignIn({ email, password }: { email: string, password
         credentials: 'include'
     })
     if (!response.ok) {
-        throw new Error('SIGN IN FAILED')
+        const data = await response.json()
+        throw new Error(data.message)
     }
     return
 }
