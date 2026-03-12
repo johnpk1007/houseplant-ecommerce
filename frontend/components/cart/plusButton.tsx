@@ -7,7 +7,7 @@ import { useState } from "react"
 import { errorToast } from "@/services/toast/toast";
 import { CartItem } from "@/types/cartItem"
 
-export default function PlusButton({ cartItemId, quantity }: { cartItemId: number, quantity: number }) {
+export default function PlusButton({ cartItemId, quantity, stage }: { cartItemId: number, quantity: number, stage: number }) {
     const upsertCartItem = useCartItemStore((state) => state.upsertCartItem)
     const [isLoading, setIsLoading] = useState(false)
     const handlePlus = async ({ cartItemId, quantity }: { cartItemId: number, quantity: number }) => {
@@ -36,7 +36,8 @@ export default function PlusButton({ cartItemId, quantity }: { cartItemId: numbe
                     handlePlus({ cartItemId, quantity })
                 }
             }}
-            className={`border-1 border-[#ADADAD] rounded-full h-[12px] w-[11px] text-[8px] text-[#ADADAD] flex justify-center items-center mr-[5px] duration-300 ease-in-out hover:text-white hover:bg-gray-200 hover:border-gray-200 cursor-pointer ${isLoading && 'animate-pulse bg-gray-200 border-gray-200 text-white cursor-default'}`}>
+            disabled={stage !== 0}
+            className={`border-1 border-[#ADADAD] rounded-full h-[12px] w-[11px] text-[8px] text-[#ADADAD] flex justify-center items-center mr-[5px] duration-300 ease-in-out ${stage === 0 && 'cursor-pointer hover:text-white hover:bg-gray-200 hover:border-gray-200'} ${isLoading && 'animate-pulse bg-gray-200 border-gray-200 text-white cursor-default'}`}>
             <Plus />
         </button>)
 }

@@ -25,11 +25,13 @@ async function refreshAccessToken(refreshToken: string, request: NextRequest) {
         if (refreshToken) {
             newResponse.cookies.set('refresh_token', refreshToken, { httpOnly: true, path: '/' });
         }
+        console.log('refreshed!')
         return newResponse;
     }
 }
 
 export async function proxy(request: NextRequest) {
+    console.log('this is proxy!')
     const accessToken = request.cookies.get('access_token')?.value;
     const refreshToken = request.cookies.get('refresh_token')?.value;
 

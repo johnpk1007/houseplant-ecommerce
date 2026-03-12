@@ -1,7 +1,8 @@
 import { AddressState } from "@/types/addressState";
+import { apiWrapper } from "./apiWrapper";
 
 export async function createCartItem({ productId, quantity }: { productId: number, quantity: number }) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
+    const response = await apiWrapper(`${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
         {
             method: 'POST',
             headers: {
@@ -18,7 +19,7 @@ export async function createCartItem({ productId, quantity }: { productId: numbe
 }
 
 export async function getAllCartItem() {
-    const response = await fetch(
+    const response = await apiWrapper(
         `${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
         {
             method: 'GET',
@@ -33,7 +34,7 @@ export async function getAllCartItem() {
 }
 
 export async function editCartItem({ cartItemId, quantity }: { cartItemId: number, quantity: number }) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
+    const response = await apiWrapper(`${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
         {
             method: 'PATCH',
             headers: {
@@ -50,7 +51,7 @@ export async function editCartItem({ cartItemId, quantity }: { cartItemId: numbe
 }
 
 export async function deleteCartItem({ cartItemId }: { cartItemId: number }) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
+    const response = await apiWrapper(`${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`,
         {
             method: 'DELETE',
             headers: {
@@ -67,7 +68,7 @@ export async function deleteCartItem({ cartItemId }: { cartItemId: number }) {
 }
 
 export async function createPaymentIntent({ cartItemIdArray, addressState }: { cartItemIdArray: number[], addressState: AddressState }) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_API_URL}/payment`,
+    const response = await apiWrapper(`${process.env.NEXT_PUBLIC_NEST_API_URL}/payment`,
         {
             method: 'POST',
             headers: {
