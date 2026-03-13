@@ -1,14 +1,17 @@
 'use client'
 
+import Home from "@/public/icons/home.svg"
 import Login from "@/public/icons/login.svg"
 import Logout from "@/public/icons/logout.svg"
 import Cart from "@/public/icons/cart.svg"
 import FullCart from "@/public/icons/fullcart.svg"
+import Buy from "@/public/icons/buy.svg"
 import { useRouter } from 'next/navigation';
 import { useCartItemStore } from "@/services/stores/cartItemStore"
 import { signOut } from "@/services/clientSide/auth";
 import { CartItem } from "@/types/cartItem"
 import { usePathname } from "next/navigation"
+
 
 export default function Header(
     { initialCartItemsArray }: { initialCartItemsArray: CartItem[] | null }
@@ -29,13 +32,10 @@ export default function Header(
                 cartItems !== null
                     ?
                     <div className="w-full flex flex-col items-center justify-start">
-                        <button type="button" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[10px] mb-[10px]" onClick={async () => {
-                            setCartItemsArray(null)
-                            await signOut()
-                        }}>
-                            <Logout />
-                        </button>
-                        <button type="button" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer relative" onClick={() => router.push('/cart')}>
+                        {pathName !== '/' && <button type="button" className="h-[25px] w-[25px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={() => router.push('/')}>
+                            <Home />
+                        </button>}
+                        {pathName !== '/cart' && <button type="button" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer relative mt-[15px]" onClick={() => router.push('/cart')}>
                             {cartItems !== null ? <FullCart /> : <Cart />}
                             {cartItems !== null && <span className="absolute -top-[7px] -right-[8px]">
                                 <span className="relative flex justify-center items-center h-[20px] w-[20px] ">
@@ -47,10 +47,19 @@ export default function Header(
                                     </span>
                                 </span>
                             </span>}
+                        </button>}
+                        {pathName !== '/order' && <button type="button" className="h-[35px] w-[35px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={() => router.push('/order')}>
+                            <Buy />
+                        </button>}
+                        <button type="button" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={async () => {
+                            setCartItemsArray(null)
+                            await signOut()
+                        }}>
+                            <Logout />
                         </button>
                     </div>
                     :
-                    <button type="button" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[10px]" onClick={() => router.push(`/auth/?returnUrl=${encodeURIComponent(pathName)}`)}>
+                    <button type="button" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={() => router.push(`/auth/?returnUrl=${encodeURIComponent(pathName)}`)}>
                         <Login />
                     </button>
             }

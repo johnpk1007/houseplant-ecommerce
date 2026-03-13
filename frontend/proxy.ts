@@ -8,39 +8,39 @@ async function refreshAccessToken(refreshToken: string, request: NextRequest) {
         method: 'POST',
         headers: { 'Cookie': `refresh_token=${refreshToken}` }
     });
-
-    if (!response.ok) return NextResponse.redirect(new URL('/login', request.url));
-
+    if (!response.ok) {
+        return NextResponse.redirect(new URL('/auth', request.url));
+    }
     const setCookieHeader = response.headers.get('set-cookie');
     if (setCookieHeader) {
         const parsed = cookie.parse(setCookieHeader);
         const accessToken = parsed.access_token;
         const refreshToken = parsed.refresh_token;
-
         const newResponse = NextResponse.next();
         if (accessToken) {
             newResponse.cookies.set('access_token', accessToken, { httpOnly: true, path: '/' });
         }
-
         if (refreshToken) {
             newResponse.cookies.set('refresh_token', refreshToken, { httpOnly: true, path: '/' });
         }
-        console.log('refreshed!')
         return newResponse;
     }
 }
 
 export async function proxy(request: NextRequest) {
-    console.log('this is proxy!')
+    console.log('proxy request url:', request.nextUrl.pathname)
     const accessToken = request.cookies.get('access_token')?.value;
     const refreshToken = request.cookies.get('refresh_token')?.value;
-
-    if (!refreshToken) return
-
+    if (!refreshToken) {
+        const protectedPaths = ['/cart', '/complete', '/order']
+        if (protectedPaths.includes(request.nextUrl.pathname)) {
+            return NextResponse.redirect(new URL('/auth', request.url))
+        }
+        return
+    }
     if (!accessToken || decodeJwt(accessToken).exp! <= Math.floor(Date.now() / 1000)) {
         return refreshAccessToken(refreshToken, request);
     }
-
     return NextResponse.next();
 }
 

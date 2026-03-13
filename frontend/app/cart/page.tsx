@@ -11,6 +11,8 @@ import Empty_cart from "@/public/images/Empty_cart.webp"
 import Empty_cart_mobile from "@/public/images/Empty_cart_mobile.webp"
 import Image from "next/image"
 import { useCartItemStore } from "@/services/stores/cartItemStore"
+import { useSignedInStore } from "@/services/stores/signedInStore"
+import { useRouter } from 'next/navigation';
 
 export default function Cart() {
     const [page, setPage] = useState(0)
@@ -28,6 +30,7 @@ export default function Cart() {
     });
     const cartItemsArray = useCartItemStore((state) => state.cartItemsArray)
     const imageAppear = Boolean(cartItemsArray && cartItemsArray.length === 0)
+
 
     return (
         <div className="w-full 1700px:h-[800px] h-[700px] flex flex-row justify-center items-start relative">
@@ -54,9 +57,8 @@ export default function Cart() {
                     <PaymentRequest stage={stage} setStage={setStage} address={address} setAddress={setAddress} />
                 </div>
             </div>
-            <Image src={Empty_cart} alt="Empty_cart" className={`970px:block hidden absolute top-0 left-0 h-full w-1/2 object-cover -z-1 ${imageAppear ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ease-in-out`} />
-            <Image src={Empty_cart_mobile} alt="Empty_cart_mobile" className={`970px:hidden block absolute top-0 left-0 h-full w-full object-top object-cover -z-1 ${imageAppear ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ease-in-out`} />
-            <div className={`absolute 970px:top-[50%] 500px:top-[40%] 970px:left-[50%] 500px:left-[20%] 970px:-translate-1/2 500px:-translate-0 font-vogue 970px:text-[120px] 500px:text-[80px]  970px:text-[#ECECEC] text-white/80 970px:text-nowrap ${imageAppear ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ease-in-out leading-none`}>CART IS EMPTY</div>
+            <Image src={Empty_cart} alt="Empty_cart" className={`absolute top-0 left-0 h-full 970px:w-1/2 w-full object-cover -z-1 ${imageAppear ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ease-in-out`} />
+            <div className={`absolute 970px:top-[50%] 500px:top-[40%] 970px:left-[50%] 500px:left-[20%] 970px:-translate-1/2 500px:-translate-0 font-vogue 970px:text-[120px] 500px:text-[80px]  970px:text-[#ECECEC] text-white/90 970px:text-nowrap ${imageAppear ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ease-in-out leading-none`}>CART IS EMPTY</div>
         </div >
     )
 }

@@ -1,6 +1,5 @@
 import { apiWrapper } from "./apiWrapper";
 
-
 export async function getOrder({ paymentIntentId }: { paymentIntentId: string }) {
     const response = await apiWrapper(`${process.env.NEXT_PUBLIC_NEST_API_URL}/order`,
         {

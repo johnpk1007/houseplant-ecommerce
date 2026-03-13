@@ -51,8 +51,8 @@ export default function CartItemList({ page, setPage, setUrl, stage, setStage }:
         <div className="970px:w-[50%] w-full h-full flex flex-row 970px:justify-start justify-center shrink-0">
             <div className="w-[5%] h-full 970px:block hidden" style={{ width: `${stage !== 0 ? '15%' : '5%'}` }} />
             <div className="970px:w-[80%] 500px:w-[60%] w-[80%] h-full flex flex-col justify-start relative">
-                <div className="w-full h-[75px] border-b-[2px] border-[#E2E2E2] flex flex-row justify-between items-center">
-                    <div className={`font-playfairDisplay 1300px:text-[32px] text-[24px] ${cartItemsArray && cartItemsArray.length > 0 ? 'text-black' : 'text-[#E7E7E7]'}`}>
+                <div className={`w-full h-[75px] border-b-[1px] ${cartItemsArray && cartItemsArray.length > 0 ? 'border-[#E2E2E2]' : 'border-white/90'} flex flex-row justify-between items-center`}>
+                    <div className={`font-playfairDisplay 1300px:text-[32px] text-[24px] ${cartItemsArray && cartItemsArray.length > 0 ? 'text-black' : '970px:text-[#E7E7E7] text-white/90'}`}>
                         Shopping Cart
                     </div>
                     <div className={`${maxPage === 0 && 'hidden'}`}>
@@ -91,7 +91,7 @@ export default function CartItemList({ page, setPage, setUrl, stage, setStage }:
                     <div className={`font-playfairDisplay h-[110px] w-full flex flex-col justify-between absolute transition-all duration-300 ease-in-out`}
                         style={{ top: topPosition, left: 0 }}
                     >
-                        <div className={`flex flex-row w-full justify-between items-center mt-[20px] ${stage === 0 ? cartItemsArray.length > 0 ? 'text-black' : 'text-[#E7E7E7]' : 'text-[#ADADAD]'}`}>
+                        <div className={`flex flex-row w-full justify-between items-center mt-[20px] ${stage === 0 ? cartItemsArray.length > 0 ? 'text-black' : '970px:text-[#E7E7E7] text-white/90' : 'text-[#ADADAD]'}`}>
                             <div className="font-roboto 1300px:text-[20px] 750px:text-[18px]">Total</div>
                             <div className="font-roboto 1300px:text-[20px] 750px:text-[18px]"> ${cartItemsArray.reduce((sum: number, item: CartItem) => sum + item.product.price * item.quantity, 0)}</div>
                         </div>

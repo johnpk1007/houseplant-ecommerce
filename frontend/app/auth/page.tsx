@@ -1,6 +1,5 @@
 'use client'
 
-
 import { useState } from "react"
 import SignIn from "@/components/auth/signIn"
 import SignUp from "@/components/auth/signUp"
