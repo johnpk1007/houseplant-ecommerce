@@ -4,7 +4,7 @@ import OrderList from "./orderList"
 import OrderImage from "./orderImage"
 import { useState } from "react"
 import Empty_order from "@/public/images/Empty_order.webp"
-import Image from "next/image";
+import LoadingImageWithImageData from "../common/loadingImageWithImageData"
 
 export default function Container({ order }: { order: { orderItems: { product: { name: string, description: string, url: string }, }[], updatedAt: string } }) {
     const [page, setPage] = useState(0)
@@ -18,7 +18,7 @@ export default function Container({ order }: { order: { orderItems: { product: {
                 <OrderList updatedAt={order.updatedAt} orderItems={order.orderItems} page={page} setPage={setPage} setIndex={setIndex} />
             </div>
             {!!order.orderItems && order.orderItems.length === 0 && <div className={`absolute z-2 970px:top-[55%] top-[35%] left-[50%] -translate-1/2 font-vogue 1100px:text-[120px] 970px:text-[100px] text-[60px] text-[#ECECEC] 970px:text-nowrap leading-none`}>NO ORDER HISTORY</div>}
-            {!!order.orderItems && order.orderItems.length === 0 && <Image src={Empty_order} alt="Empty_order" width={0} height={0} className="970px:w-1/2 w-full h-full object-cover absolute top-0 right-0 z-0 970px:block hidden" />}
+            {!!order.orderItems && order.orderItems.length === 0 && <div className="970px:w-1/2 w-full h-full absolute top-0 right-0 z-0 970px:block hidden"><LoadingImageWithImageData imageData={Empty_order} /></div>}
         </div>
     )
 }

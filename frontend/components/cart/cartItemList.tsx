@@ -8,13 +8,11 @@ import MinusButton from "@/components/cart/minusButton"
 import PlusButton from "@/components/cart/plusButton"
 import Map from '@/public/icons/filledMap.svg'
 import Cart from '@/public/icons/cart.svg'
-import { useCartItemStore } from "@/services/stores/cartItemStore"
 
-export default function CartItemList({ page, setPage, setUrl, stage, setStage }: { page: number, setPage: React.Dispatch<SetStateAction<number>>, setUrl: React.Dispatch<SetStateAction<string | null>>, stage: number, setStage: React.Dispatch<SetStateAction<number>> }) {
-    const cartItemsArray = useCartItemStore((state) => state.cartItemsArray)
+export default function CartItemList({ page, setPage, setUrl, stage, setStage, cartItems }: { page: number, setPage: React.Dispatch<SetStateAction<number>>, setUrl: React.Dispatch<SetStateAction<string | null>>, stage: number, setStage: React.Dispatch<SetStateAction<number>>, cartItems: CartItem[] | null }) {
     const itemsPerPage = 4
-    const maxPage: number = cartItemsArray ? Math.floor(cartItemsArray.length / itemsPerPage) : 0
-    const lastIndex: number = cartItemsArray && cartItemsArray.length > 0 ? cartItemsArray.length % itemsPerPage : 1
+    const maxPage: number = cartItems ? Math.floor(cartItems.length / itemsPerPage) : 0
+    const lastIndex: number = cartItems && cartItems.length > 0 ? cartItems.length % itemsPerPage : 1
     const topPosition = page === maxPage ? `calc((50% * ${lastIndex} / 4) + 75px)` : 'calc(50% + 75px)'
 
     const handleNext = () => {
@@ -51,8 +49,8 @@ export default function CartItemList({ page, setPage, setUrl, stage, setStage }:
         <div className="970px:w-[50%] w-full h-full flex flex-row 970px:justify-start justify-center shrink-0">
             <div className="w-[5%] h-full 970px:block hidden" style={{ width: `${stage !== 0 ? '15%' : '5%'}` }} />
             <div className="970px:w-[80%] 500px:w-[60%] w-[80%] h-full flex flex-col justify-start relative">
-                <div className={`w-full h-[75px] border-b-[1px] ${cartItemsArray && cartItemsArray.length > 0 ? 'border-[#E2E2E2]' : 'border-white/90'} flex flex-row justify-between items-center`}>
-                    <div className={`font-playfairDisplay 1300px:text-[32px] text-[24px] ${cartItemsArray && cartItemsArray.length > 0 ? 'text-black' : '970px:text-[#E7E7E7] text-white/90'}`}>
+                <div className={`w-full h-[75px] border-b-[1px] ${cartItems && cartItems.length > 0 ? 'border-[#E2E2E2]' : 'border-white/90'} flex flex-row justify-between items-center`}>
+                    <div className={`font-playfairDisplay 1300px:text-[32px] text-[24px] ${cartItems && cartItems.length > 0 ? 'text-black' : '970px:text-[#E7E7E7] text-white/90'}`}>
                         Shopping Cart
                     </div>
                     <div className={`${maxPage === 0 && 'hidden'}`}>
@@ -66,10 +64,10 @@ export default function CartItemList({ page, setPage, setUrl, stage, setStage }:
                             transform: `translateY(-${page * 100}%)`
                         }}>
                         {
-                            !!cartItemsArray &&
-                            Array.from({ length: Math.ceil(cartItemsArray.length / 4) }).map((_, pageIndex) => (
+                            !!cartItems &&
+                            Array.from({ length: Math.ceil(cartItems.length / 4) }).map((_, pageIndex) => (
                                 <div key={pageIndex} className="flex flex-col w-full h-full flex-shrink-0">
-                                    {cartItemsArray
+                                    {cartItems
                                         .slice(pageIndex * 4, pageIndex * 4 + 4)
                                         .map(cartItem => (
                                             <div key={cartItem.id} className={`w-full h-1/4 flex flex-row justify-between items-center ${stage === 0 ? 'text-black' : 'text-[#ADADAD]'}`}>
@@ -87,15 +85,15 @@ export default function CartItemList({ page, setPage, setUrl, stage, setStage }:
                         }
                     </div>
                 </div>
-                {!!cartItemsArray &&
+                {!!cartItems &&
                     <div className={`font-playfairDisplay h-[110px] w-full flex flex-col justify-between absolute transition-all duration-300 ease-in-out`}
                         style={{ top: topPosition, left: 0 }}
                     >
-                        <div className={`flex flex-row w-full justify-between items-center mt-[20px] ${stage === 0 ? cartItemsArray.length > 0 ? 'text-black' : '970px:text-[#E7E7E7] text-white/90' : 'text-[#ADADAD]'}`}>
+                        <div className={`flex flex-row w-full justify-between items-center mt-[20px] ${stage === 0 ? cartItems.length > 0 ? 'text-black' : '970px:text-[#E7E7E7] text-white/90' : 'text-[#ADADAD]'}`}>
                             <div className="font-roboto 1300px:text-[20px] 750px:text-[18px]">Total</div>
-                            <div className="font-roboto 1300px:text-[20px] 750px:text-[18px]"> ${cartItemsArray.reduce((sum: number, item: CartItem) => sum + item.product.price * item.quantity, 0)}</div>
+                            <div className="font-roboto 1300px:text-[20px] 750px:text-[18px]"> ${cartItems.reduce((sum: number, item: CartItem) => sum + item.product.price * item.quantity, 0)}</div>
                         </div>
-                        {cartItemsArray.length > 0 && <button type="button" onClick={handleClick} className={`${stage === 0 ? 'bg-black hover:bg-black/40' : 'bg-black/40 hover:bg-black'} self-end rounded-full text-white h-[40px] flex flex-row items-center relative overflow-hidden duration-300 ease-in-out cursor-pointer`}>
+                        {cartItems.length > 0 && <button type="button" onClick={handleClick} className={`${stage === 0 ? 'bg-black hover:bg-black/40' : 'bg-black/40 hover:bg-black'} self-end rounded-full text-white h-[40px] flex flex-row items-center relative overflow-hidden duration-300 ease-in-out cursor-pointer`}>
                             <div className="750px:w-[24px] 750px:h-[24px] w-[18px] h-[18px] 750px:ml-[10px] ml-[12px] flex-shrink-0">
                                 {stage === 0 ? <Map /> : <Cart />}
                             </div>

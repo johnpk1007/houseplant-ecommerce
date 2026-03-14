@@ -5,14 +5,14 @@ import { useSignedInStore } from "@/services/stores/signedInStore"
 import { useEffect } from "react"
 import { CartItem } from "@/types/cartItem"
 
-export default function AuthInitializer({ cartItemsArray }: { cartItemsArray: CartItem[] | null }) {
+export default function AuthInitializer({ initialCart }: { initialCart: CartItem[] | null }) {
     const setCartItemsArray = useCartItemStore((state) => state.setCartItemsArray)
     const setSigneIn = useSignedInStore((state) => state.setIsSignedIn)
     useEffect(() => {
-        if (!!cartItemsArray) {
-            setCartItemsArray(cartItemsArray)
+        if (!!initialCart) {
+            setCartItemsArray(initialCart)
             setSigneIn(true)
         }
-    }, [cartItemsArray, setCartItemsArray, setSigneIn])
+    }, [initialCart, setCartItemsArray, setSigneIn])
     return null
 }

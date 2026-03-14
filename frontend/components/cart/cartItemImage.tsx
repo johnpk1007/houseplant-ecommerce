@@ -1,33 +1,33 @@
 'use client'
 
-import Image from "next/image"
-import { useCartItemStore } from "@/services/stores/cartItemStore"
+import { CartItem } from "@/types/cartItem"
+import LoadingImageWithURL from "../common/loadingImageWithURL"
 
-export default function CartItemImage({ page }: { page: number }) {
-    const cartItemsArray = useCartItemStore((state) => state.cartItemsArray)
+export default function CartItemImage({ page, cartItems }: { page: number, cartItems: CartItem[] | null }) {
+
     const itemsPerPage = 4
-    let maxPage: number = cartItemsArray ? Math.ceil(cartItemsArray.length / itemsPerPage) - 1 : 0
-    if (!!cartItemsArray) {
-        maxPage = Math.ceil(cartItemsArray.length / itemsPerPage) - 1
+    let maxPage: number = cartItems ? Math.ceil(cartItems.length / itemsPerPage) - 1 : 0
+    if (!!cartItems) {
+        maxPage = Math.ceil(cartItems.length / itemsPerPage) - 1
     }
     const show =
-        cartItemsArray &&
+        cartItems &&
         page === maxPage &&
-        cartItemsArray.length % 4 === 1
+        cartItems.length % 4 === 1
 
     return (
         <div className="w-[40%] ml-[10%] 1700px:h-full h-[80%] overflow-hidden relative 1300px:block hidden shrink-0">
             <div className="h-full w-full flex flex-row-reverse justify-start items-start transition-transform duration-300" style={{
                 transform: `translateX(${page * 100}%)`
             }}>
-                {!!cartItemsArray &&
-                    Array.from({ length: Math.ceil(cartItemsArray.length / 4) }).map((_, pageIndex) => (
+                {!!cartItems &&
+                    Array.from({ length: Math.ceil(cartItems.length / 4) }).map((_, pageIndex) => (
                         <div key={pageIndex} className="flex flex-row-reverse w-full h-full gap-[20px] flex-shrink-0 border-2 border-white">
-                            {cartItemsArray
+                            {cartItems
                                 .slice(pageIndex * 4, pageIndex * 4 + 4)
                                 .map(cartItem => (
                                     <div key={cartItem.id} className="w-[calc((100%-60px)/4)] h-full flex-shrink-0">
-                                        <Image src={cartItem.product.url} alt="Product" width={0} height={0} className={`w-full h-full object-cover "}`} />
+                                        <LoadingImageWithURL url={cartItem.product.url} />
                                     </div>
                                 ))}
                         </div>

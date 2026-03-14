@@ -14,7 +14,7 @@ import { usePathname } from "next/navigation"
 
 
 export default function Header(
-    { initialCartItemsArray }: { initialCartItemsArray: CartItem[] | null }
+    { initialCart }: { initialCart: CartItem[] | null }
 ) {
     const cartItemsArray = useCartItemStore((state) => state.cartItemsArray)
     const setCartItemsArray = useCartItemStore((state) => state.setCartItemsArray)
@@ -22,7 +22,7 @@ export default function Header(
     const cartItems =
         cartItemsArray !== undefined
             ? cartItemsArray
-            : initialCartItemsArray
+            : initialCart
 
     const pathName = usePathname()
 

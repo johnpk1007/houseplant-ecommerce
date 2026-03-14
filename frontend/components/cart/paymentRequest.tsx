@@ -1,18 +1,17 @@
 'use client'
 
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { useEffect, Dispatch, SetStateAction } from "react";
 import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { createPaymentIntent } from "@/services/clientSide/cart";
-import { useCartItemStore } from "@/services/stores/cartItemStore"
 import PaymentForm from "./paymentForm";
 import { useClientSecretStore } from "@/services/stores/clientSecretStore";
 import { AddressState } from "@/types/addressState";
+import { CartItem } from "@/types/cartItem";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_PUBLISHABLE_KEY as string)
 
-export default function PaymentRequest({ stage, setStage, address, setAddress }: { stage: number, setStage: Dispatch<SetStateAction<number>>, address: AddressState, setAddress: Dispatch<SetStateAction<AddressState>> }) {
-    const cartItemsArray = useCartItemStore((state) => state.cartItemsArray)
+export default function PaymentRequest({ stage, address, cartItems }: { stage: number, setStage: Dispatch<SetStateAction<number>>, address: AddressState, setAddress: Dispatch<SetStateAction<AddressState>>, cartItems: CartItem[] | null }) {
     const clientSecret = useClientSecretStore((state) => state.clientSecret)
     const setClientSecret = useClientSecretStore((state => state.setClientSecret))
 
@@ -26,11 +25,11 @@ export default function PaymentRequest({ stage, setStage, address, setAddress }:
                 console.error("Failed to create payment intent:", error);
             }
         }
-        if (cartItemsArray && stage === 2) {
-            const cartItemIdArray = cartItemsArray.map((item) => item.id)
+        if (cartItems && stage === 2) {
+            const cartItemIdArray = cartItems.map((item) => item.id)
             creatPaymentWrapper(cartItemIdArray)
         }
-    }, [cartItemsArray, stage, clientSecret, address]);
+    }, [cartItems, stage, clientSecret, address]);
 
     const options: StripeElementsOptions = {
         clientSecret,

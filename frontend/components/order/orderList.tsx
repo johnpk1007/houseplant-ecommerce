@@ -1,10 +1,8 @@
 'use client'
 
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction } from "react"
 import Right from "@/public/icons/right.svg"
 import Left from "@/public/icons/left.svg"
-import Empty_order from "@/public/images/Empty_order.webp"
-import Image from "next/image";
 
 export default function OrderList({ updatedAt, orderItems, page, setPage, setIndex }: { updatedAt: string, orderItems: any[], page: number, setPage: Dispatch<SetStateAction<number>>, setIndex: Dispatch<SetStateAction<number | undefined>> }) {
     const date = new Date(updatedAt)

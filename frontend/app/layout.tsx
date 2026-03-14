@@ -5,7 +5,7 @@ import "./globals.css";
 import Header from "@/components/header/header";
 import AuthInitializer from "@/components/layout/authInitializer";
 import { Toaster } from 'react-hot-toast';
-import { getAllCartItem } from "@/services/serverSide/layout";
+import { getAllCartItem } from "@/services/serverSide/common";
 
 export const metadata: Metadata = {
   title: "Houseplant E-commerce"
@@ -41,12 +41,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cartItemsArray = await getAllCartItem()
+  const initialCart = await getAllCartItem()
 
   return (
     <html lang="en" className={`${playfairDisplay.variable} ${vogueFont.variable} ${bebasNeue.variable} ${roboto.variable}`}>
       <body className="min-h-screen flex flex-col relative">
-        <AuthInitializer cartItemsArray={cartItemsArray} />
+        <AuthInitializer initialCart={initialCart} />
         <Toaster
           toastOptions={{
             success: {
@@ -72,7 +72,7 @@ export default async function RootLayout({
           }}
         />
         <Header
-          initialCartItemsArray={cartItemsArray}
+          initialCart={initialCart}
         />
         <main className="flex-1 w-full max-w-[1923px] mx-auto">
           {children}

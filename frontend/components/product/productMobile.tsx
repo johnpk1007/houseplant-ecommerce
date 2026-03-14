@@ -3,15 +3,11 @@
 import Light from "@/public/icons/light.svg"
 import Water from "@/public/icons/water.svg"
 import Temperature from "@/public/icons/temperature.svg"
-import Cart from "@/public/icons/cart.svg"
-import Buy from "@/public/icons/buy.svg"
-import LoadingImage from "@/components/product/loadingImage";
-import CartButton from "@/components/product/cartButton";
+import LoadingImageWithURL from "../common/loadingImageWithURL";
 import Left from "@/public/icons/left.svg"
 import Right from "@/public/icons/right.svg"
 import { useRef } from "react"
 import { Product } from "@/types/product"
-import QuantityButton from "./quantityButton"
 import ButtonFrame from "./buttonFrame"
 
 
@@ -27,7 +23,7 @@ export default function ProductMobile({ productData }: { productData: Product })
     }
     return (
         <div className="w-screen h-screen 500px:hidden relative">
-            <LoadingImage url={productData.url} />
+            <LoadingImageWithURL url={productData.url} />
             <div className="w-full h-full absolute top-0 left-0">
                 <div ref={scrollRef} className={`w-full h-full flex flex-row justify-start snap-x snap-mandatory overflow-x-auto`}>
                     <div className="w-screen h-full flex-shrink-0 flex flex-col justify-between p-[30px] relative snap-start">
