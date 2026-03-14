@@ -1,5 +1,5 @@
 import { Product } from "@/types/product"
-import LoadingImage from "./loadingImage"
+import LoadingImage from "./productLoadingImage"
 
 export default function Products({ productsArray }: { productsArray: Product[] }) {
     const productsWithStockArray = productsArray.filter(product => product.stock > 0)

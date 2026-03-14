@@ -4,7 +4,7 @@ import { AddressState } from "@/types/addressState";
 import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
 import { useRef, useEffect, useState, Dispatch, SetStateAction, ChangeEvent } from "react";
 
-export default function GoogleAutocomplete({ streetAddress, setAddress, error, setError }: {
+export default function GoogleAutocomplete({ streetAddress, setAddress, error, setError, stage }: {
     streetAddress: string | undefined,
     setAddress: Dispatch<SetStateAction<AddressState>>,
     error: string, setError: Dispatch<SetStateAction<{
@@ -16,15 +16,16 @@ export default function GoogleAutocomplete({ streetAddress, setAddress, error, s
         locality: string;
         administrativeAreaLevel1: string;
         postalCode: string;
-    }>>
+    }>>,
+    stage: number
 }) {
     const serviceRef = useRef<any>(null);
-    const placesServiceRef = useRef<any>(null);
+    const tokenRef = useRef<any>(null);
     const tokenClassRef = useRef<any>(null);
-    const sessionTokenRef = useRef<any>(null);
     const isSelectingRef = useRef<boolean>(false);
     const [predictions, setPredictions] = useState<any[]>([]);
     const [clicked, setClicked] = useState(false)
+    const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 
     useEffect(() => {
         const init = async () => {
@@ -33,46 +34,54 @@ export default function GoogleAutocomplete({ streetAddress, setAddress, error, s
                 language: "en",
                 region: "US"
             });
-            const { AutocompleteService, PlacesService, AutocompleteSessionToken } =
-                await importLibrary("places");
-            serviceRef.current = new AutocompleteService();
+            const { Place, AutocompleteSessionToken, AutocompleteSuggestion } =
+                (await importLibrary(
+                    'places'
+                )) as google.maps.PlacesLibrary;
+            serviceRef.current = AutocompleteSuggestion;
             tokenClassRef.current = AutocompleteSessionToken;
-            const div = document.createElement("div");
-            placesServiceRef.current = new PlacesService(div);
         };
         init();
     }, []);
+
+    const fetchSuggestion = async (input: string) => {
+        try {
+            const { suggestions } = await serviceRef.current.fetchAutocompleteSuggestions({
+                input,
+                sessionToken: tokenRef.current,
+                includedPrimaryTypes: ["geocode"],
+                includedRegionCodes: ["us"]
+            });
+            return suggestions
+        } catch (error) {
+            return [];
+        }
+
+    }
 
     useEffect(() => {
         if (isSelectingRef.current) {
             isSelectingRef.current = false;
             return;
         }
-
-        if (!serviceRef.current || streetAddress === undefined || streetAddress.length < 2) {
+        if (!serviceRef.current || streetAddress === undefined || streetAddress.length < 3) {
             setPredictions([]);
             return;
         }
-        const timer = setTimeout(() => {
-            if (!sessionTokenRef.current && tokenClassRef.current) {
-                sessionTokenRef.current = new tokenClassRef.current();
-            }
-            serviceRef.current.getPlacePredictions(
-                {
-                    input: streetAddress,
-                    sessionToken: sessionTokenRef.current,
-                    types: ["address"]
-                },
-                (results: any) => {
-                    setPredictions(results || []);
-                }
-            );
+        if (!tokenRef.current && tokenClassRef.current) {
+            tokenRef.current = new tokenClassRef.current();
+        }
+        const timer = setTimeout(async () => {
+            const suggestions = await fetchSuggestion(streetAddress)
+            const placePredictions = suggestions.map((suggestion: any) => ({
+                description: suggestion.placePrediction.text.text,
+                placeId: suggestion.placePrediction.placeId,
+                original: suggestion
+            }))
+            setPredictions(placePredictions)
         }, 300)
-
         return () => clearTimeout(timer);
     }, [streetAddress]);
-
-    const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 
     useEffect(() => {
         setSelectedIndex(-1);
@@ -92,10 +101,8 @@ export default function GoogleAutocomplete({ streetAddress, setAddress, error, s
         if (predictions.length === 0) return;
         switch (e.key) {
             case "ArrowDown":
-                console.log('key down')
                 e.preventDefault();
                 setSelectedIndex((prev) => (prev < predictions.length - 1 ? prev + 1 : 0));
-                console.log(selectedIndex)
                 break;
             case "ArrowUp":
                 e.preventDefault();
@@ -104,7 +111,7 @@ export default function GoogleAutocomplete({ streetAddress, setAddress, error, s
             case "Enter":
                 if (selectedIndex >= 0) {
                     e.preventDefault();
-                    handleSelect(predictions[selectedIndex].place_id);
+                    handleSelect(predictions[selectedIndex].original);
                 }
                 break;
         }
@@ -125,55 +132,50 @@ export default function GoogleAutocomplete({ streetAddress, setAddress, error, s
         }))
     }
 
-    const handleSelect = (placeId: string) => {
-        if (!placesServiceRef.current || !sessionTokenRef.current || isSelectingRef.current) return;
-        placesServiceRef.current.getDetails(
-            {
-                placeId,
-                fields: ["address_components"],
-                sessionToken: sessionTokenRef.current
-            },
-            (place: any) => {
-                const components = place.address_components
-                const componentMap: Record<string, string> = {
-                    street_number: "",
-                    route: "",
-                    locality: "",
-                    administrative_area_level_1: "",
-                    postal_code: "",
-                };
+    const handleSelect = async (suggestion: any) => {
+        const place = suggestion.placePrediction.toPlace()
+        await place.fetchFields({
+            fields: ['addressComponents'],
+        });
+        const components = place.addressComponents
+        const componentMap: Record<string, string> = {
+            street_number: "",
+            route: "",
+            locality: "",
+            administrative_area_level_1: "",
+            postal_code: "",
+        };
 
-                components.forEach((component: any) => {
-                    const type = component.types[0];
-                    if (componentMap.hasOwnProperty(type)) {
-                        componentMap[type] = component.long_name;
-                    }
-                });
-
-                const formatted = [componentMap.street_number, componentMap.route]
-                    .filter(Boolean)
-                    .join(" ");
-
-                setAddress((prev) => ({
-                    ...prev,
-                    streetAddress: formatted,
-                    locality: componentMap.locality,
-                    administrativeAreaLevel1: componentMap.administrative_area_level_1,
-                    postalCode: componentMap.postal_code
-                }));
-                setError((prev) => ({
-                    ...prev,
-                    streetAddress: "",
-                    locality: "",
-                    administrativeAreaLevel1: "",
-                    postalCode: ""
-                }))
-
-                isSelectingRef.current = true
-                setPredictions([]);
-                sessionTokenRef.current = null;
+        components.forEach((component: any) => {
+            const type = component.types[0];
+            if (componentMap.hasOwnProperty(type)) {
+                componentMap[type] = component.longText;
             }
-        );
+        });
+
+        const formatted = [componentMap.street_number, componentMap.route]
+            .filter(Boolean)
+            .join(" ");
+
+        setAddress((prev) => ({
+            ...prev,
+            streetAddress: formatted,
+            locality: componentMap.locality,
+            administrativeAreaLevel1: componentMap.administrative_area_level_1,
+            postalCode: componentMap.postal_code
+        }));
+        setError((prev) => ({
+            ...prev,
+            streetAddress: "",
+            locality: "",
+            administrativeAreaLevel1: "",
+            postalCode: ""
+        }))
+
+        isSelectingRef.current = true
+        setClicked(false)
+        setPredictions([]);
+        tokenRef.current = null
     };
 
     return (
@@ -191,18 +193,21 @@ export default function GoogleAutocomplete({ streetAddress, setAddress, error, s
                         ? 'border-red-500 focus:border-red-500 border-2'
                         : 'border-[#ADADAD] focus:border-2 focus:border-black'
                     }
+                      ${stage > 1 && 'text-[#7F7F7F]'}
                     `}
+                disabled={stage !== 1}
             />
             {(error) && <div className="absolute top-full left-0 text-[12px] text-red-500 font-medium ">{error}</div>}
             {(predictions.length > 0 && clicked) && (
                 <ul className="absolute w-full top-full left-0 z-1 border-2 border-[#E2E2E2]">
-                    {predictions.map((p, index) => (
+                    {predictions.map((prediction, index) => (
                         <li
-                            key={p.place_id}
-                            onClick={() => handleSelect(p.place_id)}
+                            key={prediction.placeId}
+                            onMouseDown={(e) => e.preventDefault()}
+                            onClick={() => handleSelect(prediction.original)}
                             className={`pl-3 cursor-pointer border-b-1 border-[#E2E2E2] hover:bg-gray-100 ${selectedIndex === index ? 'bg-gray-100' : 'bg-white hover:bg-gray-100'}`}
                         >
-                            {p.description}
+                            {prediction.description}
                         </li>
                     ))}
                 </ul>

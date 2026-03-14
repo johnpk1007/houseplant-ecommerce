@@ -5,6 +5,7 @@ import GoogleAutocomplete from "./googleAutoComplete";
 import { AddressState } from "@/types/addressState";
 import AddressInput from "./addressInput";
 import Card from "@/public/icons/card.svg"
+import Map from '@/public/icons/filledMap.svg'
 
 export default function Address({ stage, setStage, address, setAddress }: { stage: number, setStage: Dispatch<SetStateAction<number>>, address: AddressState, setAddress: Dispatch<SetStateAction<AddressState>> }) {
     const [error, setError] = useState({
@@ -127,21 +128,21 @@ export default function Address({ stage, setStage, address, setAddress }: { stag
         setLeft(event.clientX - event.currentTarget.getBoundingClientRect().left)
         setTop(event.clientY - event.currentTarget.getBoundingClientRect().top)
         spanRef.current.classList.add("ripple");
-
+        if (stage === 2) {
+            setStage(1)
+            return
+        }
         if (emptyFields.length !== 0) {
             emptyFields.map((item) => {
                 setTouched((prev) => ({ ...prev, [item]: true }))
                 const errorMessage = validateField(item, address[item]);
                 setError((prev) => ({ ...prev, [item]: errorMessage }))
             })
-            console.log('problem1')
             return
         }
         if (!allConfirmed) {
-            console.log('problem2')
             return
         }
-
         setStage(2)
     }
 
@@ -164,6 +165,7 @@ export default function Address({ stage, setStage, address, setAddress }: { stag
                                 onChange={handleChange}
                                 value={address.firstName}
                                 error={error.firstName}
+                                stage={stage}
                             />
                             <AddressInput
                                 name="lastName"
@@ -171,6 +173,7 @@ export default function Address({ stage, setStage, address, setAddress }: { stag
                                 onChange={handleChange}
                                 value={address.lastName}
                                 error={error.lastName}
+                                stage={stage}
                             />
                         </div>
                         <AddressInput
@@ -181,16 +184,18 @@ export default function Address({ stage, setStage, address, setAddress }: { stag
                             error={error.phoneNumber}
                             touched={touched.phoneNumber}
                             onBlur={handleBlur}
+                            stage={stage}
                         />
                     </div>
                     <div className="mb-[5px]">
                         <div className="font-roboto font-light text-[24px] mb-[10px]">Contact information</div>
-                        <GoogleAutocomplete streetAddress={address.streetAddress} setAddress={setAddress} error={error.streetAddress} setError={setError} />
+                        <GoogleAutocomplete streetAddress={address.streetAddress} setAddress={setAddress} error={error.streetAddress} setError={setError} stage={stage} />
                         <AddressInput
                             name="extendedAddress"
                             placeholder="Apt, suite, unit, building, floor, etc"
                             onChange={handleChange}
                             value={address.extendedAddress}
+                            stage={stage}
                         />
                         <AddressInput
                             name="locality"
@@ -198,6 +203,7 @@ export default function Address({ stage, setStage, address, setAddress }: { stag
                             onChange={handleChange}
                             value={address.locality}
                             error={error.locality}
+                            stage={stage}
                         />
                         <div className="flex flex-row w-full gap-[18px]">
                             <AddressInput
@@ -206,6 +212,7 @@ export default function Address({ stage, setStage, address, setAddress }: { stag
                                 onChange={handleChange}
                                 value={address.administrativeAreaLevel1}
                                 error={error.administrativeAreaLevel1}
+                                stage={stage}
                             />
                             <AddressInput
                                 name="postalCode"
@@ -213,15 +220,16 @@ export default function Address({ stage, setStage, address, setAddress }: { stag
                                 onChange={handleChange}
                                 value={address.postalCode}
                                 error={error.postalCode}
+                                stage={stage}
                             />
                         </div>
                     </div>
                     <div className="flex justify-end">
-                        <button type="button" onClick={handleClick} className={`bg-black border-box self-end rounded-full text-white h-[40px] 750px:w-[240px] w-[190px]  flex flex-row items-center relative overflow-hidden hover:bg-black/40 duration-300 ease-in-out cursor-pointer border-2`}>
-                            <div className="750px:w-[24px] 750px:h-[24px] w-[18px] h-[18px] 750px:ml-[16px] ml-[10px] mr-[8px] flex-shrink-0">
-                                <Card />
+                        <button type="button" onClick={handleClick} className={`${stage === 1 ? 'bg-black hover:bg-black/40' : 'bg-black/40 hover:bg-black'} self-end rounded-full text-white h-[40px] flex flex-row items-center relative overflow-hidden duration-300 ease-in-out cursor-pointer`}>
+                            <div className="750px:w-[24px] 750px:h-[24px] w-[18px] h-[18px] 750px:ml-[10px] ml-[12px] flex-shrink-0">
+                                {stage === 1 ? <Card /> : <Map />}
                             </div>
-                            <div className="font-roboto font-bold  750px:text-[16px] text-[12px] ml-[8px] text-nowrap">PROCEED TO PAYMENT</div>
+                            <div className="font-roboto font-bold  750px:text-[16px] text-[12px] 750px:ml-[8px] ml-[10px] 750px:mr-[16px] mr-[20px] text-nowrap">{stage === 1 ? 'PROCEED TO PAYMENT' : 'REVIEW SHIPPING INFO'}</div>
                             <span ref={spanRef} className="w-[20px] h-[20px] absolute" style={{ left, top }}></span>
                         </button>
                     </div>

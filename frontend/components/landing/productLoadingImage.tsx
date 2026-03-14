@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
 
-export default function LoadingImage({ id, url, name, height, width }: { id: number, url: string, name: string, height: number, width: number }) {
+export default function ProductLoadingImage({ id, url, name, height, width }: { id: number, url: string, name: string, height: number, width: number }) {
     const [isLoaded, setIsLoaded] = useState(false)
     return <div className="break-inside-avoid relative">
         <Link href={`/product/${id}`}>

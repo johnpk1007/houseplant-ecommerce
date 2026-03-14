@@ -28,7 +28,6 @@ async function refreshAccessToken(refreshToken: string, request: NextRequest) {
 }
 
 export async function proxy(request: NextRequest) {
-    console.log('proxy request url:', request.nextUrl.pathname)
     const accessToken = request.cookies.get('access_token')?.value;
     const refreshToken = request.cookies.get('refresh_token')?.value;
     if (!refreshToken) {

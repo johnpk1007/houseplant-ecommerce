@@ -58,7 +58,7 @@ export default function Cart() {
                 </div>
             </div>
             <Image src={Empty_cart} alt="Empty_cart" className={`absolute top-0 left-0 h-full 970px:w-1/2 w-full object-cover -z-1 ${imageAppear ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ease-in-out`} />
-            <div className={`absolute 970px:top-[50%] 500px:top-[40%] 970px:left-[50%] 500px:left-[20%] 970px:-translate-1/2 500px:-translate-0 font-vogue 970px:text-[120px] 500px:text-[80px]  970px:text-[#ECECEC] text-white/90 970px:text-nowrap ${imageAppear ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ease-in-out leading-none`}>CART IS EMPTY</div>
+            <div className={`absolute 970px:top-[50%] 500px:top-[40%] 970px:left-[50%] 500px:left-[20%] 970px:-translate-1/2 500px:-translate-0 font-vogue 970px:text-[120px] 500px:text-[80px]  970px:text-[#ECECEC] text-white/90 970px:text-nowrap ${imageAppear ? 'opacity-100' : 'opacity-0'} transition-opacity duration-300 ease-in-out leading-none ${stage === 0 ? 'block' : 'hidden'}`}>CART IS EMPTY</div>
         </div >
     )
 }

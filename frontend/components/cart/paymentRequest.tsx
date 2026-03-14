@@ -42,9 +42,6 @@ export default function PaymentRequest({ stage, setStage, address, setAddress }:
                 '.Label': {
                     opacity: '0'
                 },
-                '.Tab': {
-                    opacity: '0'
-                },
                 '.Input': {
                     boxShadow: 'none',
                     borderColor: '#ADADAD'
