@@ -27,7 +27,7 @@ export default function PaymenForm({ address }: { address: AddressState }) {
         const { error } = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                return_url: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/complete`,
+                return_url: `${process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_PRODUCTION_FRONTEND_URL : process.env.NEXT_PUBLIC_DEV_FRONTEND_URL} / complete`,
                 payment_method_data: {
                     billing_details: {
                         address: {

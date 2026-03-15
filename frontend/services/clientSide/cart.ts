@@ -2,7 +2,7 @@ import { AddressState } from "@/types/addressState";
 import { apiWrapper } from "./apiWrapper";
 
 export async function createCartItem({ productId, quantity }: { productId: number, quantity: number }) {
-    const response = await apiWrapper(`${process.env.NEXT_PUBLIC_BACKEND_URL}/cart-item`,
+    const response = await apiWrapper(`${process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_PRODUCTION_BACKEND_URL : process.env.NEXT_PUBLIC_DEV_BACKEND_URL}/cart-item`,
         {
             method: 'POST',
             headers: {
@@ -20,7 +20,7 @@ export async function createCartItem({ productId, quantity }: { productId: numbe
 
 export async function getAllCartItem() {
     const response = await apiWrapper(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/cart-item`,
+        `${process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_PRODUCTION_BACKEND_URL : process.env.NEXT_PUBLIC_DEV_BACKEND_URL}/cart-item`,
         {
             method: 'GET',
             credentials: 'include'
@@ -34,7 +34,7 @@ export async function getAllCartItem() {
 }
 
 export async function editCartItem({ cartItemId, quantity }: { cartItemId: number, quantity: number }) {
-    const response = await apiWrapper(`${process.env.NEXT_PUBLIC_BACKEND_URL}/cart-item`,
+    const response = await apiWrapper(`${process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_PRODUCTION_BACKEND_URL : process.env.NEXT_PUBLIC_DEV_BACKEND_URL}/cart-item`,
         {
             method: 'PATCH',
             headers: {
@@ -51,7 +51,7 @@ export async function editCartItem({ cartItemId, quantity }: { cartItemId: numbe
 }
 
 export async function deleteCartItem({ cartItemId }: { cartItemId: number }) {
-    const response = await apiWrapper(`${process.env.NEXT_PUBLIC_BACKEND_URL}/cart-item`,
+    const response = await apiWrapper(`${process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_PRODUCTION_BACKEND_URL : process.env.NEXT_PUBLIC_DEV_BACKEND_URL}/cart-item`,
         {
             method: 'DELETE',
             headers: {
@@ -68,7 +68,7 @@ export async function deleteCartItem({ cartItemId }: { cartItemId: number }) {
 }
 
 export async function createPaymentIntent({ cartItemIdArray, addressState }: { cartItemIdArray: number[], addressState: AddressState }) {
-    const response = await apiWrapper(`${process.env.NEXT_PUBLIC_BACKEND_URL}/payment`,
+    const response = await apiWrapper(`${process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_PRODUCTION_BACKEND_URL : process.env.NEXT_PUBLIC_DEV_BACKEND_URL}/payment`,
         {
             method: 'POST',
             headers: {

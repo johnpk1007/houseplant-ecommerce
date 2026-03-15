@@ -4,7 +4,7 @@ import { decodeJwt } from 'jose';
 import cookie from 'cookie';
 
 async function refreshAccessToken(refreshToken: string, request: NextRequest) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/refresh`, {
+    const response = await fetch(`${process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_PRODUCTION_BACKEND_URL : process.env.NEXT_PUBLIC_DEV_BACKEND_URL}/auth/refresh`, {
         method: 'POST',
         headers: { 'Cookie': `refresh_token=${refreshToken}` }
     });

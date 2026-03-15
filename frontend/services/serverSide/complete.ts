@@ -11,7 +11,7 @@ export async function getOrder({ paymentIntentId }: { paymentIntentId: string })
         accessToken ? `access_token=${accessToken}` : null,
         refreshToken ? `refresh_token=${refreshToken}` : null
     ].filter(Boolean).join('; ');
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/order`, {
+    const response = await fetch(`${process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_PRODUCTION_BACKEND_URL : process.env.NEXT_PUBLIC_DEV_BACKEND_URL}/order`, {
         method: 'POST',
         headers: {
             'Cookie': cookiesHeader,

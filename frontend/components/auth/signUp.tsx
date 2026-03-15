@@ -125,7 +125,7 @@ export default function SignUp({ setIsSignUp }: { setIsSignUp: Dispatch<SetState
     }
 
     const googleHandleClick = () => {
-        window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google/signin/?returnUrl=${encodeURIComponent(returnUrl)}`;
+        window.location.href = `${process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_PRODUCTION_BACKEND_URL : process.env.NEXT_PUBLIC_DEV_BACKEND_URL}/auth/google/signin/?returnUrl=${encodeURIComponent(returnUrl)}`;
     }
 
     return (
