@@ -18,10 +18,23 @@ async function refreshAccessToken(refreshToken: string, request: NextRequest) {
         const refreshToken = parsed.refresh_token;
         const newResponse = NextResponse.next();
         if (accessToken) {
-            newResponse.cookies.set('access_token', accessToken, { httpOnly: true, path: '/' });
+            newResponse.cookies.set('access_token', accessToken,
+                {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    sameSite: 'lax',
+                    maxAge: 15 * 60 * 1000,
+                    path: '/'
+                });
         }
         if (refreshToken) {
-            newResponse.cookies.set('refresh_token', refreshToken, { httpOnly: true, path: '/' });
+            newResponse.cookies.set('refresh_token', refreshToken,
+                {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    sameSite: 'lax',
+                    maxAge: 7 * 24 * 60 * 60 * 1000,
+                });
         }
         return newResponse;
     }

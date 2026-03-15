@@ -20,14 +20,15 @@ export class AuthController {
         const { access_token, refresh_token } = await this.authService.localSignUp({ dto })
         res.cookie('access_token', access_token, {
             httpOnly: true,
-            secure: false,
-            sameSite: 'strict',
+            secure: this.configService.get<string>('NODE_ENV') === 'production',
+            sameSite: 'lax',
             maxAge: 15 * 60 * 1000,
+            path: '/'
         })
         res.cookie('refresh_token', refresh_token, {
             httpOnly: true,
-            secure: false,
-            sameSite: 'strict',
+            secure: this.configService.get<string>('NODE_ENV') === 'production',
+            sameSite: 'lax',
             maxAge: 7 * 24 * 60 * 60 * 1000,
         })
     }
@@ -39,15 +40,15 @@ export class AuthController {
         const { access_token, refresh_token } = await this.authService.signIn({ user })
         res.cookie('access_token', access_token, {
             httpOnly: true,
-            secure: false,
-            sameSite: 'strict',
+            secure: this.configService.get<string>('NODE_ENV') === 'production',
+            sameSite: 'lax',
             maxAge: 15 * 60 * 1000,
             path: '/'
         })
         res.cookie('refresh_token', refresh_token, {
             httpOnly: true,
-            secure: false,
-            sameSite: 'strict',
+            secure: this.configService.get<string>('NODE_ENV') === 'production',
+            sameSite: 'lax',
             maxAge: 7 * 24 * 60 * 60 * 1000,
         })
     }
@@ -55,7 +56,7 @@ export class AuthController {
     @Get('google/signin')
     async googleSignIn(@Query('returnUrl') returnUrl: string, @Res({ passthrough: true }) res: Response) {
         if (!returnUrl.startsWith('/')) returnUrl = '/';
-        res.cookie('redirect_url', returnUrl, { httpOnly: true, sameSite: 'strict' });
+        res.cookie('redirect_url', returnUrl, { httpOnly: true, sameSite: 'lax' });
         res.redirect('/auth/google/redirect');
     }
 
@@ -80,19 +81,19 @@ export class AuthController {
         }
         res.cookie('access_token', access_token, {
             httpOnly: true,
-            secure: false,
-            sameSite: 'strict',
+            secure: this.configService.get<string>('NODE_ENV') === 'production',
+            sameSite: 'lax',
             maxAge: 15 * 60 * 1000,
             path: '/'
         })
         res.cookie('refresh_token', refresh_token, {
             httpOnly: true,
-            secure: false,
-            sameSite: 'strict',
+            secure: this.configService.get<string>('NODE_ENV') === 'production',
+            sameSite: 'lax',
             maxAge: 7 * 24 * 60 * 60 * 1000,
         })
         const redirectUrl = req.cookies.redirect_url || '/';
-        res.clearCookie('redirect_url'); // optional
+        res.clearCookie('redirect_url');
         res.redirect(`${this.configService.getOrThrow<string>('FRONTEND_CALLBACK_URL')}${redirectUrl}`)
         return
     }
@@ -108,15 +109,15 @@ export class AuthController {
         const { access_token, refresh_token } = await this.authService.signIn({ user })
         res.cookie('access_token', access_token, {
             httpOnly: true,
-            secure: false,
-            sameSite: 'strict',
+            secure: this.configService.get<string>('NODE_ENV') === 'production',
+            sameSite: 'lax',
             maxAge: 15 * 60 * 1000,
             path: '/'
         })
         res.cookie('refresh_token', refresh_token, {
             httpOnly: true,
-            secure: false,
-            sameSite: 'strict',
+            secure: this.configService.get<string>('NODE_ENV') === 'production',
+            sameSite: 'lax',
             maxAge: 7 * 24 * 60 * 60 * 1000,
         })
         return
@@ -132,14 +133,14 @@ export class AuthController {
         await this.authService.invalidateRefreshToken({ refreshToken })
         res.clearCookie('access_token', {
             httpOnly: true,
-            secure: false,
-            sameSite: 'strict',
+            secure: this.configService.get<string>('NODE_ENV') === 'production',
+            sameSite: 'lax',
             path: '/'
         })
         res.clearCookie('refresh_token', {
             httpOnly: true,
-            secure: false,
-            sameSite: 'strict',
+            secure: this.configService.get<string>('NODE_ENV') === 'production',
+            sameSite: 'lax',
         })
         return
     }
