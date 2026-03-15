@@ -34,7 +34,7 @@ jobs:
           npm run prisma:start
           npm run test:e2e
         env:
-          FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
+          DEV_FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
           BACKEND_URL: ${{ secrets.BACKEND_URL }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           JWT_ACCESS_SECRET: ${{ secrets.JWT_ACCESS_SECRET }}

@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser'
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { rawBody: true });
   app.enableCors({
-    origin: process.env.FRONTEND_URL,
+    origin: process.env.NODE_ENV === "product" ? process.env.PRODUCT_FRONTEND_URL : process.env.DEV_FRONTEND_URL,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
