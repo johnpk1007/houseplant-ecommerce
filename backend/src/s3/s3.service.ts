@@ -30,22 +30,6 @@ export class S3Service implements OnModuleInit {
                 Bucket: this.bucketName,
             }),)
         }
-
-        const readOnlyUserPolicy = {
-            Bucket: this.bucketName,
-            Policy: `{"Version": "2012-10-17", 
-            "Statement": 
-            [{ "Sid": "ReadOnly",
-             "Effect": "Allow",
-             "Principal": "*", 
-             "Action": [ "s3:GetObject"], 
-             "Resource": ["arn:aws:s3:::${this.bucketName}/*" ] 
-             }]
-             }`
-        };;
-
-        const command = new PutBucketPolicyCommand(readOnlyUserPolicy)
-        await this.s3Client.send(command);
     }
     async putObject({ file }: { file: Express.Multer.File }): Promise<string> {
         const originalName = file.originalname
