@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from "react";
-import Image from "next/image";
 import Complete from '@/public/images/Complete.webp'
 import Unclompete from "@/public/images/Uncompleted.webp"
 import Right from "@/public/icons/right.svg"
@@ -16,14 +15,16 @@ type OrderItem = {
 }
 
 export default function CompleteClient({ order }: { order: Order | null }) {
-    const [orderItemsArray, setOrderItemsArry] = useState<OrderItem[]>([])
     const [page, setPage] = useState(0)
-    if (order) {
-        const orderItems = order.orderItems.map((item: any) => { return { name: item.product.name, price: item.price, quantity: item.quantity } })
-        setOrderItemsArry(orderItems)
-    }
+    const orderItemsArray: OrderItem[] = order
+        ? order.orderItems.map((item: any) => ({
+            name: item.product.name,
+            price: item.price,
+            quantity: item.quantity
+        }))
+        : []
     const itemsPerPage = 4
-    const maxPage: number = orderItemsArray ? Math.ceil(orderItemsArray.length / itemsPerPage) - 1 : 0
+    const maxPage: number = Math.ceil(orderItemsArray.length / itemsPerPage) - 1
 
     const handleNext = () => {
         if (page < maxPage) {
@@ -81,10 +82,13 @@ export default function CompleteClient({ order }: { order: Order | null }) {
                 <div className="w-full h-full absolute top-0 left-0 bg-black/40 items-end 500px:hidden flex">
                     <div className="w-full h-3/7 flex flex-col justify-start items-end pt-[30px] px-[20px]">
                         <div className="font-playfairDisplay text-[30px] text-right text-balance w-full text-white/70 mb-[30px]">
-                            Your Order is Confirmed and Processing.
+                            {order ? 'Your Order is Confirmed and Processing.' : 'Your order was not Completed.'}
                         </div>
                         <div className="font-playfairDisplay text-[14px] text-right text-balance w-full text-white/70">
-                            We are so grateful to welcome you to our community. Your new plants are now being prepared by our expert growers and will be shipped with the utmost care. We encourage you to begin preparing your space and gathering inspiration to truly embrace your slow living journey.
+                            {order ?
+                                'We are so grateful to welcome you to our community. Your new plants are now being prepared by our expert growers and will be shipped with the utmost care. We encourage you to begin preparing your space and gathering inspiration to truly embrace your slow living journey.'
+                                :
+                                'Unfortunately, we were unable to process your order. Please review your payment details or try again. If the issue persists, feel free to contact our support team for assistance.'}
                         </div>
                     </div>
                 </div>
@@ -101,8 +105,8 @@ export default function CompleteClient({ order }: { order: Order | null }) {
                             'Unfortunately, we were unable to process your order. Please review your payment details or try again. If the issue persists, feel free to contact our support team for assistance.'}
                     </div>
                 </div>
-
             </div>
         </div>
-    </div>)
+    </div>
+    )
 }

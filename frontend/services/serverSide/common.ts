@@ -11,7 +11,7 @@ export async function getAllCartItem() {
         accessToken ? `access_token=${accessToken}` : null,
         refreshToken ? `refresh_token=${refreshToken}` : null
     ].filter(Boolean).join('; ');
-    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_API_URL}/cart-item`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/cart-item`, {
         method: 'GET',
         headers: {
             'Cookie': cookiesHeader,

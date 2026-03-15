@@ -9,7 +9,7 @@ import { useClientSecretStore } from "@/services/stores/clientSecretStore";
 import { AddressState } from "@/types/addressState";
 import { CartItem } from "@/types/cartItem";
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_PUBLISHABLE_KEY as string)
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string)
 
 export default function PaymentRequest({ stage, address, cartItems }: { stage: number, setStage: Dispatch<SetStateAction<number>>, address: AddressState, setAddress: Dispatch<SetStateAction<AddressState>>, cartItems: CartItem[] | null }) {
     const clientSecret = useClientSecretStore((state) => state.clientSecret)
@@ -65,8 +65,12 @@ export default function PaymentRequest({ stage, address, cartItems }: { stage: n
         },
     }
 
+    const show =
+        cartItems &&
+        cartItems.length % 4 === 1
+
     return (
-        <div className="970px:w-[50%] w-full h-full flex flex-row 970px:justify-start justify-center shrink-0" >
+        <div className="970px:w-[50%] w-full h-full flex flex-row 970px:justify-start justify-center shrink-0 relative" >
             <div className="h-full 970px:block hidden" style={{ width: '5%' }} />
             <div className="970px:w-[80%] 500px:w-[70%] w-full h-full flex flex-col items-center">
                 <div className="w-full h-[75px] border-b-[2px] border-[#E2E2E2] flex flex-row items-center shrink-0 mb-[4px]">
@@ -79,6 +83,10 @@ export default function PaymentRequest({ stage, address, cartItems }: { stage: n
                         <PaymentForm address={address} />
                     </Elements>
                 )}
+            </div>
+            <div className={`flex flex-col w-[80%] pl-[5%] items-between absolute bottom-0 left-0 ${show ? "-translate-y-full opacity-100" : "translate-y-full opacity-0"}`}>
+                <div className="font-bebasNeue text-[64px]">03</div>
+                <div className="font-roboto text-[15px] text-[#ADADAD] font-light">Enter your payment details to complete your order. Please double-check your card number, expiration date, and security code for a smooth checkout.</div>
             </div>
         </div >
     )

@@ -188,7 +188,7 @@ export default function Address({ stage, setStage, address, setAddress }: { stag
                         />
                     </div>
                     <div className="mb-[5px]">
-                        <div className="font-roboto font-light text-[24px] mb-[10px]">Contact information</div>
+                        <div className="font-roboto font-light text-[24px] mb-[10px]">Shipping address</div>
                         <GoogleAutocomplete streetAddress={address.streetAddress} setAddress={setAddress} error={error.streetAddress} setError={setError} stage={stage} />
                         <AddressInput
                             name="extendedAddress"

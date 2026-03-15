@@ -7,12 +7,11 @@ import {
 import { StripePaymentElementOptions } from "@stripe/stripe-js";
 import Buy from "@/public/icons/buy.svg"
 import { AddressState } from "@/types/addressState";
+import { errorToast } from "@/services/toast/toast";
 
 export default function PaymenForm({ address }: { address: AddressState }) {
     const stripe = useStripe();
     const elements = useElements();
-
-    const [message, setMessage] = useState<string | null>(null);
     const [isInitialLoading, setIsInitialLoading] = useState(false);
     const [isRequestLoading, setIsRequestLoading] = useState(false);
 
@@ -28,7 +27,7 @@ export default function PaymenForm({ address }: { address: AddressState }) {
         const { error } = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                return_url: "http://localhost:3000/complete",
+                return_url: `${process.env.NEXT_PUBLIC_FRONTEND_URL}/complete`,
                 payment_method_data: {
                     billing_details: {
                         address: {
@@ -41,11 +40,10 @@ export default function PaymenForm({ address }: { address: AddressState }) {
         });
 
         if (error.type === "card_error" || error.type === "validation_error") {
-            setMessage(error.message as string);
+            errorToast(error.message as string)
         } else {
-            setMessage("An unexpected error occurred.");
+            errorToast("An unexpected error occurred.")
         }
-
         setIsRequestLoading(false);
     };
 
@@ -91,7 +89,7 @@ export default function PaymenForm({ address }: { address: AddressState }) {
             <PaymentElement id="payment-element" options={paymentElementOptions} onReady={() => setIsInitialLoading(true)} />
             {isInitialLoading &&
                 <div className="w-full flex justify-end">
-                    <button disabled={isRequestLoading || !stripe || !elements} onClick={handleClick} className="rounded-full bg-black text-white h-[40px] 750px:w-[240px] w-[190px] mt-[30px]  flex flex-row items-center relative overflow-hidden hover:bg-black/40 hover:border-black/10  duration-300 ease-in-out cursor-pointer border-black border-2">
+                    <button disabled={isRequestLoading || !stripe || !elements} onClick={handleClick} className="rounded-full bg-black text-white h-[40px] 750px:w-[240px] w-[190px] mt-[30px]  flex flex-row items-center relative overflow-hidden hover:bg-black/40 duration-300 ease-in-out cursor-pointer">
                         {isRequestLoading ?
                             <div className="h-full w-full flex flex-row justify-center">
                                 <div className="h-full w-[35%] flex flex-row justify-around items-center">

@@ -1,5 +1,5 @@
 export async function localSignUp({ email, password }: { email: string, password: string }) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_API_URL}/auth/local/signup`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/local/signup`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -15,7 +15,7 @@ export async function localSignUp({ email, password }: { email: string, password
 }
 
 export async function localSignIn({ email, password }: { email: string, password: string }) {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_API_URL}/auth/local/signin`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/local/signin`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -31,7 +31,7 @@ export async function localSignIn({ email, password }: { email: string, password
 }
 
 export async function refresh() {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_API_URL}/auth/refresh`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/refresh`, {
         method: 'POST',
         credentials: 'include'
     })
@@ -42,7 +42,7 @@ export async function refresh() {
 }
 
 export async function signOut() {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_NEST_API_URL}/auth/signout`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/signout`, {
         method: 'POST',
         credentials: 'include'
     })

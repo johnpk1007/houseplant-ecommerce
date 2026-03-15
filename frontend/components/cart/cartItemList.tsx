@@ -42,12 +42,17 @@ export default function CartItemList({ page, setPage, setUrl, stage, setStage, c
         } else if (stage === 1) {
             setStage(0)
         }
-
     }
 
+    const show =
+        stage >= 1 &&
+        cartItems &&
+        page === maxPage &&
+        cartItems.length % 4 === 1
+
     return (
-        <div className="970px:w-[50%] w-full h-full flex flex-row 970px:justify-start justify-center shrink-0">
-            <div className="w-[5%] h-full 970px:block hidden" style={{ width: `${stage !== 0 ? '15%' : '5%'}` }} />
+        <div className="970px:w-[50%] w-full h-full flex flex-row 970px:justify-start justify-center shrink-0 relative">
+            <div className="h-full 970px:block hidden" style={{ width: `${stage !== 0 ? '15%' : '5%'}` }} />
             <div className="970px:w-[80%] 500px:w-[60%] w-[80%] h-full flex flex-col justify-start relative">
                 <div className={`w-full h-[75px] border-b-[1px] ${cartItems && cartItems.length > 0 ? 'border-[#E2E2E2]' : 'border-white/90'} flex flex-row justify-between items-center`}>
                     <div className={`font-playfairDisplay 1300px:text-[32px] text-[24px] ${cartItems && cartItems.length > 0 ? 'text-black' : '970px:text-[#E7E7E7] text-white/90'}`}>
@@ -101,6 +106,10 @@ export default function CartItemList({ page, setPage, setUrl, stage, setStage, c
                             <span ref={spanRef} className="w-[20px] h-[20px] absolute" style={{ left, top }}></span>
                         </button>}
                     </div>}
+            </div>
+            <div className={`flex flex-col w-full pl-[15%] items-between absolute bottom-0 right-0 duration-300 ${show ? "-translate-y-full opacity-100" : "translate-y-full opacity-0"}`}>
+                <div className="font-bebasNeue text-[64px]">02</div>
+                <div className="font-roboto text-[15px] text-[#ADADAD] font-light">Review your shipping details. Please double-check your address, contact information, and any delivery instructions to ensure a smooth and timely delivery.</div>
             </div>
         </div>
 

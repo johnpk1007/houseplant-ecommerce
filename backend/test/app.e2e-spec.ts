@@ -45,7 +45,7 @@ describe('App e2e', () => {
     s3Service = app.get(S3Service)
     await cleanS3Db(s3Service)
     configService = app.get(ConfigService)
-    request.setBaseUrl('http://localhost:4000')
+    request.setBaseUrl(configService.getOrThrow('BACKEND_URL'))
 
     adminDto = {
       email: configService.get('ADMIN_EMAIL') as string,
