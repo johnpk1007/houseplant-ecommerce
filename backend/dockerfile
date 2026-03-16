@@ -42,8 +42,10 @@ COPY --from=builder /usr/src/app/generated/prisma ./generated/prisma
 
 COPY us-east-2-bundle.pem ./us-east-2-bundle.pem
 
+RUN npm install --omit=dev tsx
+
 # Expose the application port
 EXPOSE 4000
 
 # npx prisma generate && Command to run the application
-CMD ["sh", "-c", "npx prisma migrate deploy && node prisma/seed.js && node ./dist/src/main.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npx tsx prisma/seed.ts && node ./dist/src/main.js"]
