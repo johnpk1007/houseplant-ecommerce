@@ -23,6 +23,9 @@ RUN npx prisma generate
 # Build the NestJS application
 RUN npm run build
 
+# Compile seed.ts to JS
+RUN npx tsc prisma/seed.ts --outDir prisma
+
 # Delete devDependencies
 RUN npm prune --omit=dev
 
@@ -45,4 +48,4 @@ COPY us-east-2-bundle.pem ./us-east-2-bundle.pem
 EXPOSE 4000
 
 # npx prisma generate && Command to run the application
-CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed && node ./dist/src/main.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node prisma/seed.js && node ./dist/src/main.js"]
