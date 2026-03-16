@@ -18,7 +18,7 @@ COPY . .
 
 # Prisma migrate deploy
 ARG DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy?schema=public"
-RUN npx prisma generate
+RUN npx prisma generate && ls -la /usr/src/app/generated/prisma
 
 # Build the NestJS application
 RUN npm run build
