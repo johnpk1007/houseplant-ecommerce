@@ -106,7 +106,7 @@ export class OrderService {
             const { orderItems, ...rest } = order
             const editedOrderItems = orderItems.map((orderItem) => {
                 const { keyName, ...rest } = orderItem.product
-                const url = `${this.endpoint}/${this.bucket}/${keyName}`
+                const url = `${this.endpoint}/${keyName}`
                 return {
                     ...orderItem,
                     product: {

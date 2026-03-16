@@ -25,7 +25,7 @@ export class ProductService {
         let s3KeyName: string | null = null
         try {
             s3KeyName = await this.s3Service.putObject({ file })
-            const url = `${this.endpoint}/${this.bucket}/${s3KeyName}`
+            const url = `${this.endpoint}/${s3KeyName}`
             const { height, width } = imageSize(file.buffer)
             const { keyName, ...rest } = await this.prismaService.product.create({
                 data: {
@@ -45,7 +45,7 @@ export class ProductService {
     async getProduct({ id, tx }: { id: number, tx?: Prisma.TransactionClient }): Promise<AfterUploadProduct> {
         const prismaService = tx ?? this.prismaService
         const { keyName, ...rest } = await prismaService.product.findUniqueOrThrow({ where: { id } })
-        const url = `${this.endpoint}/${this.bucket}/${keyName}`
+        const url = `${this.endpoint}/${keyName}`
         return { ...rest, url }
     }
 
@@ -63,7 +63,7 @@ export class ProductService {
         })
         return products.map((product) => {
             const { keyName, ...rest } = product
-            const url = `${this.endpoint}/${this.bucket}/${keyName}`
+            const url = `${this.endpoint}/${keyName}`
             return { ...rest, url }
         })
     }
@@ -83,7 +83,7 @@ export class ProductService {
                 newData.width = dimensions.width
             }
             const { keyName, ...rest } = await this.prismaService.product.update({ where: { id: prismaId, version: product.version }, data: { ...newData, version: { increment: 1 } } })
-            const url = `${this.endpoint}/${this.bucket}/${keyName}`
+            const url = `${this.endpoint}/${keyName}`
             if (file) {
                 await this.s3Service.deleteObject({ keyName: product.keyName }).catch((error) => { console.error(error) })
             }

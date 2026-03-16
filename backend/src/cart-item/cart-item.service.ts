@@ -60,7 +60,7 @@ export class CartItemService {
                 include: { product: true }
             })
             const { keyName, ...rest } = cartItem.product
-            const url = `${this.endpoint}/${this.bucket}/${keyName}`
+            const url = `${this.endpoint}/${keyName}`
             return {
                 ...cartItem,
                 product: {
@@ -84,7 +84,7 @@ export class CartItemService {
         }
         return cartItems.map((cartItem) => {
             const { keyName, ...rest } = cartItem.product
-            const url = `${this.endpoint}/${this.bucket}/${keyName}`
+            const url = `${this.endpoint}/${keyName}`
             return {
                 ...cartItem,
                 product: {
@@ -99,7 +99,7 @@ export class CartItemService {
         const cartItems = await this.prismaService.cartItem.findMany({ where: { cart: { userId } }, include: { product: true } })
         return cartItems.map((cartItem) => {
             const { keyName, ...rest } = cartItem.product
-            const url = `${this.endpoint}/${this.bucket}/${keyName}`
+            const url = `${this.endpoint}/${keyName}`
             return {
                 ...cartItem,
                 product: {
@@ -131,7 +131,7 @@ export class CartItemService {
                 include: { product: true }
             });
             const { keyName, ...rest } = cartItem.product
-            const url = `${this.endpoint}/${this.bucket}/${keyName}`
+            const url = `${this.endpoint}/${keyName}`
             return {
                 ...cartItem,
                 product: {
