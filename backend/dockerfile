@@ -45,4 +45,4 @@ COPY us-east-2-bundle.pem ./us-east-2-bundle.pem
 EXPOSE 4000
 
 # npx prisma generate && Command to run the application
-CMD ["sh", "-c", "npx prisma migrate deploy && node ./dist/src/main.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed && node ./dist/src/main.js"]
