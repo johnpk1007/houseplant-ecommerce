@@ -1,6 +1,8 @@
 # Use the official Node.js image as the base image
 FROM node:24-alpine AS builder
 
+RUN apk add --no-cache ca-certificates
+
 # Set the working directory
 WORKDIR /usr/src/app
 
@@ -28,6 +30,8 @@ RUN npm prune --omit=dev
 
 # Use the official Node.js image as the base image
 FROM node:24-alpine
+
+RUN apk add --no-cache ca-certificates
 
 # Set the working directory
 WORKDIR /usr/src/app
