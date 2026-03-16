@@ -23,9 +23,6 @@ RUN npx prisma generate
 # Build the NestJS application
 RUN npm run build
 
-# Compile seed.ts to JS
-RUN npx tsc prisma/seed.ts --outDir prisma
-
 # Delete devDependencies
 RUN npm prune --omit=dev
 
