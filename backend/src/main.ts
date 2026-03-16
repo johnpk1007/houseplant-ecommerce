@@ -5,6 +5,8 @@ import cookieParser from 'cookie-parser'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { rawBody: true });
+  const expressApp = app.getHttpAdapter().getInstance();
+  expressApp.set('trust proxy', 1);
   app.enableCors({
     origin: process.env.NODE_ENV === "production" ? process.env.PRODUCTION_FRONTEND_URL : process.env.DEV_FRONTEND_URL,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
@@ -12,6 +14,6 @@ async function bootstrap() {
   });
   app.use(cookieParser())
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }))
-  await app.listen(process.env.PORT ?? 4000);
+  await app.listen(process.env.PORT ?? 4000, '0.0.0.0');
 }
 bootstrap();
