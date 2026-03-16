@@ -5,7 +5,7 @@ export class AppController {
     constructor() { }
     @Get()
     healthCheck() {
-        return
+        return { status: 'ok' }
     }
 }
 
