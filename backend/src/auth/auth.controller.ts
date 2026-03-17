@@ -23,13 +23,16 @@ export class AuthController {
             secure: this.configService.get<string>('NODE_ENV') === 'production',
             sameSite: 'lax',
             maxAge: 15 * 60 * 1000,
+            domain: '.houseplant-portfolio.com',
             path: '/'
+
         })
         res.cookie('refresh_token', refresh_token, {
             httpOnly: true,
             secure: this.configService.get<string>('NODE_ENV') === 'production',
             sameSite: 'lax',
             maxAge: 7 * 24 * 60 * 60 * 1000,
+            domain: '.houseplant-portfolio.com'
         })
     }
 
@@ -43,6 +46,7 @@ export class AuthController {
             secure: this.configService.get<string>('NODE_ENV') === 'production',
             sameSite: 'lax',
             maxAge: 15 * 60 * 1000,
+            domain: '.houseplant-portfolio.com',
             path: '/'
         })
         res.cookie('refresh_token', refresh_token, {
@@ -50,13 +54,14 @@ export class AuthController {
             secure: this.configService.get<string>('NODE_ENV') === 'production',
             sameSite: 'lax',
             maxAge: 7 * 24 * 60 * 60 * 1000,
+            domain: '.houseplant-portfolio.com'
         })
     }
 
     @Get('google/signin')
     async googleSignIn(@Query('returnUrl') returnUrl: string, @Res({ passthrough: true }) res: Response) {
         if (!returnUrl.startsWith('/')) returnUrl = '/';
-        res.cookie('redirect_url', returnUrl, { httpOnly: true, sameSite: 'lax' });
+        res.cookie('redirect_url', returnUrl, { httpOnly: true, sameSite: 'lax', domain: '.houseplant-portfolio.com' });
         res.redirect('/auth/google/redirect');
     }
 
@@ -84,6 +89,7 @@ export class AuthController {
             secure: this.configService.get<string>('NODE_ENV') === 'production',
             sameSite: 'lax',
             maxAge: 15 * 60 * 1000,
+            domain: '.houseplant-portfolio.com',
             path: '/'
         })
         res.cookie('refresh_token', refresh_token, {
@@ -91,6 +97,7 @@ export class AuthController {
             secure: this.configService.get<string>('NODE_ENV') === 'production',
             sameSite: 'lax',
             maxAge: 7 * 24 * 60 * 60 * 1000,
+            domain: '.houseplant-portfolio.com'
         })
         const redirectUrl = req.cookies.redirect_url || '/';
         res.clearCookie('redirect_url');
@@ -112,6 +119,7 @@ export class AuthController {
             secure: this.configService.get<string>('NODE_ENV') === 'production',
             sameSite: 'lax',
             maxAge: 15 * 60 * 1000,
+            domain: '.houseplant-portfolio.com',
             path: '/'
         })
         res.cookie('refresh_token', refresh_token, {
@@ -119,6 +127,7 @@ export class AuthController {
             secure: this.configService.get<string>('NODE_ENV') === 'production',
             sameSite: 'lax',
             maxAge: 7 * 24 * 60 * 60 * 1000,
+            domain: '.houseplant-portfolio.com'
         })
         return
     }
@@ -135,12 +144,14 @@ export class AuthController {
             httpOnly: true,
             secure: this.configService.get<string>('NODE_ENV') === 'production',
             sameSite: 'lax',
+            domain: '.houseplant-portfolio.com',
             path: '/'
         })
         res.clearCookie('refresh_token', {
             httpOnly: true,
             secure: this.configService.get<string>('NODE_ENV') === 'production',
             sameSite: 'lax',
+            domain: '.houseplant-portfolio.com'
         })
         return
     }
