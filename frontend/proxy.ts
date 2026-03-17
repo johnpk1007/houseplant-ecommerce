@@ -25,7 +25,8 @@ async function refreshAccessToken(refreshToken: string, request: NextRequest) {
                     sameSite: 'lax',
                     maxAge: 15 * 60 * 1000,
                     domain: '.houseplant-portfolio.com',
-                    path: '/'
+                    path: '/',
+                    ...(process.env.NODE_ENV === 'production' && { domain: '.houseplant-portfolio.com' })
                 });
         }
         if (refreshToken) {
@@ -35,7 +36,7 @@ async function refreshAccessToken(refreshToken: string, request: NextRequest) {
                     secure: process.env.NODE_ENV === 'production',
                     sameSite: 'lax',
                     maxAge: 7 * 24 * 60 * 60 * 1000,
-                    domain: '.houseplant-portfolio.com'
+                    ...(process.env.NODE_ENV === 'production' && { domain: '.houseplant-portfolio.com' })
                 });
         }
         return newResponse;
