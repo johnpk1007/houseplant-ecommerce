@@ -25,11 +25,13 @@ export default function CompleteClient({ paymentIntentId }: { paymentIntentId: s
 
     useEffect(() => {
         let attempts = 0;
-        const maxAttempts = 5;
+        const maxAttempts = 10;
 
         const checkOrder = async () => {
             attempts++;
             const fetchedOrder = await getOrder({ paymentIntentId });
+            console.log('attempts:', attempts)
+            console.log('fetchedOrder:', fetchedOrder)
             if (fetchedOrder.status !== 'PENDING' || attempts >= maxAttempts) {
                 setOrder(fetchedOrder);
                 return true;
