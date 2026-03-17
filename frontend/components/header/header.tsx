@@ -55,7 +55,7 @@ export default function Header(
                             await signOut()
                             setCartItemsArray(null)
                             if (pathName === '/cart' || pathName === '/cart' || pathName === '/order' || pathName === '/complete') {
-                                router.push('/')
+                                router.replace('/')
                             }
                         }}>
                             <Logout />
