@@ -20,7 +20,7 @@ export default async function ProductScreen({ productData }: { productData: Prod
                 <div className="font-playfairDisplay 750px:text-[16px] 500px:text-[11px] text-[#ADADAD] 750px:mb-[50px] 500px:mb-[25px] 1500px:w-[70%] 1100px:w-[90%] text-balance">{productData.description}</div>
                 <div className="flex items-center mb-[15px]">
                     <div className="w-[19px] h-[19px] mr-[8px] shrink-0 flex justify-center items-center">
-                        <Light />
+                        <Light className="w-full h-full" />
                     </div>
                     <div className="font-roboto 750px:text-[16px] 500px:text-[11px] text-[#ADADAD] text-balance">
                         {productData.light}
@@ -28,7 +28,7 @@ export default async function ProductScreen({ productData }: { productData: Prod
                 </div>
                 <div className="flex items-center mb-[15px]">
                     <div className="w-[19px] h-[19px] mr-[8px] shrink-0 flex justify-center items-center">
-                        <Water />
+                        <Water className="w-full h-full" />
                     </div>
                     <div className="font-roboto 750px:text-[16px] 500px:text-[11px] text-[#ADADAD] text-balance">
                         {productData.water}
@@ -36,7 +36,7 @@ export default async function ProductScreen({ productData }: { productData: Prod
                 </div>
                 <div className="flex items-center">
                     <div className="w-[19px] h-[19px] mr-[8px] shrink-0 flex justify-center items-center">
-                        <Temperature />
+                        <Temperature className="w-full h-full" />
                     </div>
                     <div className="font-roboto 750px:text-[16px] 500px:text-[11px] text-[#ADADAD] text-balance">
                         {productData.temperature}
