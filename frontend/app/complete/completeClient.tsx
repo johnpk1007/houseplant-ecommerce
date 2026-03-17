@@ -15,8 +15,6 @@ type OrderItem = {
 }
 
 export default function CompleteClient({ order }: { order: Order | null }) {
-    console.log('order:', order)
-    console.log('Order status updated at:', Date.now());
     const [page, setPage] = useState(0)
     const orderItemsArray: OrderItem[] = order
         ? order.orderItems.map((item: any) => ({

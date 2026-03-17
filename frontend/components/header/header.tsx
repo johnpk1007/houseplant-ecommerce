@@ -35,7 +35,7 @@ export default function Header(
                         {pathName !== '/' && <button type="button" className="h-[25px] w-[25px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={() => router.push('/')}>
                             <Home />
                         </button>}
-                        {pathName !== '/cart' && <button type="button" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer relative mt-[15px]" onClick={() => router.push('/cart')}>
+                        {(pathName !== '/cart') && (pathName !== '/complete') && <button type="button" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer relative mt-[15px]" onClick={() => router.push('/cart')}>
                             {cartItems !== null ? <FullCart /> : <Cart />}
                             {cartItems !== null && <span className="absolute -top-[7px] -right-[8px]">
                                 <span className="relative flex justify-center items-center h-[20px] w-[20px] ">
