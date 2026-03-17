@@ -43,6 +43,7 @@ export default function PaymenForm({ address }: { address: AddressState }) {
             errorToast(error.message as string)
         } else {
             errorToast("An unexpected error occurred.")
+            errorToast(error.message as string)
         }
         setIsRequestLoading(false);
     };
