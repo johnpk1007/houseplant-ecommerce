@@ -7,6 +7,7 @@ import Right from "@/public/icons/right.svg"
 import Left from "@/public/icons/left.svg"
 import { getOrder } from "@/services/clientSide/complete";
 import LoadingImageWithImageData from "@/components/common/loadingImageWithImageData";
+import { useCartItemStore } from "@/services/stores/cartItemStore";
 
 type OrderItem = {
     name: string
@@ -22,6 +23,7 @@ type OrderType = {
 export default function CompleteClient({ paymentIntentId }: { paymentIntentId: string }) {
     const [page, setPage] = useState(0)
     const [order, setOrder] = useState<OrderType | null>(null);
+    const setCartItemsArray = useCartItemStore((state) => state.setCartItemsArray)
 
     useEffect(() => {
         let attempts = 0;
@@ -30,10 +32,11 @@ export default function CompleteClient({ paymentIntentId }: { paymentIntentId: s
         const checkOrder = async () => {
             attempts++;
             const fetchedOrder = await getOrder({ paymentIntentId });
-            console.log('attempts:', attempts)
-            console.log('fetchedOrder:', fetchedOrder)
             if (fetchedOrder.orderStatus !== 'PENDING' || attempts >= maxAttempts) {
                 setOrder(fetchedOrder);
+                if (fetchedOrder.orderStatus === 'PAID') {
+                    setCartItemsArray(null)
+                }
                 return true;
             }
             return false;
