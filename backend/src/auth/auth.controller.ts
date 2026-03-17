@@ -108,7 +108,9 @@ export class AuthController {
         })
         const redirectUrl = req.cookies.redirect_url || '/';
         res.clearCookie('redirect_url');
-        res.redirect(`${this.configService.getOrThrow<string>('FRONTEND_CALLBACK_URL')}${redirectUrl}`)
+        res.redirect(`${this.configService.getOrThrow<string>(this.configService.get('NODE_ENV') === 'production'
+            ? 'PRODUCTION_FRONTEND_CALLBACK_URL'
+            : 'FRONTEND_CALLBACK_URL')}${redirectUrl}`)
         return
     }
 
