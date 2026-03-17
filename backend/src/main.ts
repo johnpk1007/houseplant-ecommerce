@@ -27,7 +27,10 @@ async function bootstrap() {
     const originalSend = res.send.bind(res);
     res.send = ((body: any) => {
       console.log('--- Response ---');
+      console.log('Status:', res.statusCode);
+      console.log('Headers:', res.getHeaders());
       console.log('Set-Cookie:', res.getHeader('Set-Cookie'));
+      console.log('Body:', body);
       return originalSend(body);
     }) as typeof res.send;
 

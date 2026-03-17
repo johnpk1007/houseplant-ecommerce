@@ -18,8 +18,6 @@ export async function getAllCartItem() {
         },
     })
     if (!response.ok) {
-        const data = await response.json()
-        console.log('!response.ok data:', data)
         return null
     }
     const data = await response.json()
