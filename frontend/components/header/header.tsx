@@ -52,8 +52,11 @@ export default function Header(
                             <Buy />
                         </button>}
                         <button type="button" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={async () => {
-                            setCartItemsArray(null)
                             await signOut()
+                            setCartItemsArray(null)
+                            if (pathName === '/cart' || pathName === '/cart' || pathName === '/order' || pathName === '/complete') {
+                                router.push('/')
+                            }
                         }}>
                             <Logout />
                         </button>
