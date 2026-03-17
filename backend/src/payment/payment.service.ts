@@ -42,6 +42,7 @@ export class PaymentService {
             try {
                 await this.prismaService.$transaction(async (tx) => {
                     await this.orderService.editOrder({ orderId: order.id, dto: { orderStatus: OrderStatus.Paid }, tx })
+                    console.log('Order status updated at:', Date.now());
                     const orderArray: OrderForPayment[] = order.orderItems.map(orderItem => {
                         const productId = orderItem.productId
                         const quantity = orderItem.quantity
