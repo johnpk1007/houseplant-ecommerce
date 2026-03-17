@@ -27,8 +27,6 @@ export class StripeService {
         try {
             return this.stripe.webhooks.constructEvent(payload, signature, this.configService.getOrThrow('STRIPE_ENDPOINT'))
         } catch (err) {
-            console.log('construct event error console.log:', err)
-            console.error('construct event error console.error:', err)
             throw new InternalServerErrorException(err)
         }
     }

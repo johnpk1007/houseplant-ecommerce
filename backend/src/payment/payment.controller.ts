@@ -28,7 +28,6 @@ export class PaymentController {
     @HttpCode(HttpStatus.OK)
     async fullfillOrder(@Req() req: RawBodyRequest<Request>, @Headers('stripe-signature') signature: string) {
         const event = this.stripeService.constructEvent({ payload: req.rawBody, signature })
-        console.log('webhook event:', event)
         if (
             event.type === 'payment_intent.succeeded'
         ) {
