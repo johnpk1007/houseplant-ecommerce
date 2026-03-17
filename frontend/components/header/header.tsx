@@ -26,6 +26,8 @@ export default function Header(
 
     const pathName = usePathname()
 
+    console.log('initialCart:', initialCart)
+
     return (
         <header className="fixed top-0 right-0 w-[50px] z-3 flex flex-row justify-center">
             {

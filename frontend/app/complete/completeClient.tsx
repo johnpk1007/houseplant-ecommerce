@@ -34,9 +34,9 @@ export default function CompleteClient({ paymentIntentId }: { paymentIntentId: s
             const fetchedOrder = await getOrder({ paymentIntentId });
             if (fetchedOrder.orderStatus !== 'PENDING' || attempts >= maxAttempts) {
                 setOrder(fetchedOrder);
-                if (fetchedOrder.orderStatus === 'PAID') {
-                    setCartItemsArray(null)
-                }
+                // if (fetchedOrder.orderStatus === 'PAID') {
+                //     setCartItemsArray(null)
+                // }
                 return true;
             }
             return false;
