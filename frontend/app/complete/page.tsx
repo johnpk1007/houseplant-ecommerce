@@ -6,7 +6,6 @@ export default async function OrderClient({ searchParams }: { searchParams: Prom
     let order = null
     if (typeof payment_intent === 'string') {
         order = await getOrder({ paymentIntentId: payment_intent })
-        console.log('order:', order)
     }
     return <CompleteClient order={order} />
 }
