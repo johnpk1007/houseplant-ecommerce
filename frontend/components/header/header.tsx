@@ -32,10 +32,10 @@ export default function Header(
                 cartItems !== null
                     ?
                     <div className="w-full flex flex-col items-center justify-start">
-                        {pathName !== '/' && <button type="button" className="h-[25px] w-[25px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={() => router.push('/')}>
+                        {pathName !== '/' && <button type="button" aria-label="Home" className="h-[25px] w-[25px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={() => router.push('/')}>
                             <Home className="w-full h-full" />
                         </button>}
-                        {(pathName !== '/cart') && (pathName !== '/complete') && <button type="button" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer relative mt-[15px]" onClick={() => router.push('/cart')}>
+                        {(pathName !== '/cart') && (pathName !== '/complete') && <button type="button" aria-label="Cart" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer relative mt-[15px]" onClick={() => router.push('/cart')}>
                             {cartItems !== null ? <FullCart className="w-full h-full" /> : <Cart className="w-full h-full" />}
                             {cartItems !== null && <span className="absolute -top-[7px] -right-[8px]">
                                 <span className="relative flex justify-center items-center h-[20px] w-[20px] ">
@@ -48,10 +48,10 @@ export default function Header(
                                 </span>
                             </span>}
                         </button>}
-                        {pathName !== '/order' && <button type="button" className="h-[35px] w-[35px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={() => router.push('/order')}>
+                        {pathName !== '/order' && <button type="button" aria-label="Order history" className="h-[35px] w-[35px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={() => router.push('/order')}>
                             <Buy className="w-full h-full" />
                         </button>}
-                        <button type="button" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={async () => {
+                        <button type="button" aria-label="Sign Out" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={async () => {
                             await signOut()
                             setCartItemsArray(null)
                             if (pathName === '/cart' || pathName === '/cart' || pathName === '/order' || pathName === '/complete') {
@@ -64,10 +64,10 @@ export default function Header(
                     :
                     <div className="w-full flex flex-col items-center justify-start">
 
-                        {pathName !== '/auth' && <button type="button" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={() => router.push(`/auth/?returnUrl=${encodeURIComponent(pathName)}`)}>
+                        {pathName !== '/auth' && <button type="button" aria-label="Sign In" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={() => router.push(`/auth/?returnUrl=${encodeURIComponent(pathName)}`)}>
                             <Login className="w-full h-full" />
                         </button>}
-                        {pathName !== '/' && <button type="button" className="h-[25px] w-[25px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={() => router.push('/')}>
+                        {pathName !== '/' && <button type="button" aria-label="Home" className="h-[25px] w-[25px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={() => router.push('/')}>
                             <Home className="w-full h-full" />
                         </button>}
 

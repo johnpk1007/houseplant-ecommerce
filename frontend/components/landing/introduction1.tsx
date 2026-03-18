@@ -32,7 +32,7 @@ export default function Introduction1() {
         </div>
         <div className="flex-1 flex 1700px:justify-start 500px:justify-end">
           <div className="1700px:h-[956px] 1700px:w-[373px] 970px:w-[270px] 500px:h-[750px] 500px:w-[175px]">
-            <LoadingImageWithImageData imageData={Landing_1} />
+            <LoadingImageWithImageData imageData={Landing_1} fetchpriority='high' />
           </div>
         </div>
       </div>

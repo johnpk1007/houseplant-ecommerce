@@ -8,7 +8,8 @@ import { Toaster } from 'react-hot-toast';
 import { getAllCartItem } from "@/services/serverSide/common";
 
 export const metadata: Metadata = {
-  title: "Houseplant E-commerce"
+  title: "Houseplant E-commerce portfolio",
+  description: "Portfolio project: a houseplant e-commerce demo site demonstrating cart, checkout, and order management features."
 };
 
 const playfairDisplay = Playfair_Display({
