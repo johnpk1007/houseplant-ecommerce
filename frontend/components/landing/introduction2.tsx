@@ -11,7 +11,7 @@ export default function Introduction2() {
                     <div className="absolute font-playfairDisplay text-[20px] text-[#ADADAD] origin-top-left rotate-90 text-nowrap left-[60%]">Expertly sourced for your peace of mind.</div>
                 </div>
                 <div className="1700px:w-[85%] w-full">
-                    <div className="w-full aspect-[4/1] object-cover  500px:block hidden">
+                    <div className="w-full aspect-[4/1] object-cover  500px:block hidden relative">
                         {/* <LoadingImageWithImageData imageData={Landing_2} /> */}
                         <Image
                             src={Landing_2}
