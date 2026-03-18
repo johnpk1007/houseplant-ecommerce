@@ -58,7 +58,7 @@ export default function CartItemList({ page, setPage, setUrl, stage, setStage, c
                     <div className={`font-playfairDisplay 1300px:text-[32px] text-[24px] ${cartItems && cartItems.length > 0 ? 'text-black' : '970px:text-[#E7E7E7] text-white/90'}`}>
                         Shopping Cart
                     </div>
-                    <div className={`${maxPage === 0 && 'hidden'}`}>
+                    <div className={`${cartItems && cartItems.length <= itemsPerPage && 'hidden'}`}>
                         <button className={`text-[#ADADAD] w-[20px] h-[20px] duration-300 ease-in-out ${page === 0 ? 'text-[#E2E2E2]' : 'text-[#ADADAD] hover:text-[#ADADAD]/70 cursor-pointer'}`} onClick={handlePrev}><Left className="w-full h-full" /></button>
                         <button className={`text-[#ADADAD] w-[20px] h-[20px] duration-300 ease-in-out ${page === maxPage ? 'text-[#E2E2E2]' : 'text-[#ADADAD] hover:text-[#ADADAD]/70 cursor-pointer'} ml-[10px]`} onClick={handleNext}><Right className="w-full h-full" /></button>
                     </div>
