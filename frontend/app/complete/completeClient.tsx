@@ -78,8 +78,8 @@ export default function CompleteClient({ paymentIntentId }: { paymentIntentId: s
                     <LoadingImageWithImageData imageData={order.orderStatus === 'PAID' ? Complete : Unclompete} />
                     <div className="absolute top-0 left-0 flex flex-col w-full pt-[20px] pl-[40px]">
                         <div className={`970px:top-[15px] 500px:top-[8px] top-[50px] left-[40px] z-3 ${maxPage === 0 && 'hidden'}`}>
-                            <button className={`text-[#ADADAD] w-[20px] h-[20px] duration-300 ease-in-out ${page === 0 ? 'text-[#ADADAD]' : 'text-[#E2E2E2] hover:text-[#E2E2E2]/70 cursor-pointer'}`} onClick={handlePrev}><Left /></button>
-                            <button className={`text-[#ADADAD] w-[20px] h-[20px] duration-300 ease-in-out ${page === maxPage ? 'text-[#ADADAD]' : 'text-[#E2E2E2] hover:text-[#E2E2E2]/70 cursor-pointer'} ml-[10px]`} onClick={handleNext}><Right /></button>
+                            <button className={`text-[#ADADAD] w-[20px] h-[20px] duration-300 ease-in-out ${page === 0 ? 'text-[#ADADAD]' : 'text-[#E2E2E2] hover:text-[#E2E2E2]/70 cursor-pointer'}`} onClick={handlePrev}><Left className="w-full h-full" /></button>
+                            <button className={`text-[#ADADAD] w-[20px] h-[20px] duration-300 ease-in-out ${page === maxPage ? 'text-[#ADADAD]' : 'text-[#E2E2E2] hover:text-[#E2E2E2]/70 cursor-pointer'} ml-[10px]`} onClick={handleNext}><Right className="w-full h-full" /></button>
                         </div>
                         <div className="970px:top-[20px] 500px:top-[35px] top-[100px] 970px:left-[40px] left-[5%] 1300px:w-[25%] 970px:w-[33%] 970px:aspect-9/7 500px:w-[400px] w-[90%] 970px:aspect-5/3 500px:aspect-7/3 aspect-3/2 overflow-hidden z-2">
                             <div className="w-full h-full flex flex-col transition-transform duration-300"

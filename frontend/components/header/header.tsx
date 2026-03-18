@@ -33,10 +33,10 @@ export default function Header(
                     ?
                     <div className="w-full flex flex-col items-center justify-start">
                         {pathName !== '/' && <button type="button" className="h-[25px] w-[25px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={() => router.push('/')}>
-                            <Home />
+                            <Home className="w-full h-full" />
                         </button>}
                         {(pathName !== '/cart') && (pathName !== '/complete') && <button type="button" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer relative mt-[15px]" onClick={() => router.push('/cart')}>
-                            {cartItems !== null ? <FullCart /> : <Cart />}
+                            {cartItems !== null ? <FullCart className="w-full h-full" /> : <Cart className="w-full h-full" />}
                             {cartItems !== null && <span className="absolute -top-[7px] -right-[8px]">
                                 <span className="relative flex justify-center items-center h-[20px] w-[20px] ">
                                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-current text-inherent opacity-75"></span>
@@ -49,7 +49,7 @@ export default function Header(
                             </span>}
                         </button>}
                         {pathName !== '/order' && <button type="button" className="h-[35px] w-[35px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={() => router.push('/order')}>
-                            <Buy />
+                            <Buy className="w-full h-full" />
                         </button>}
                         <button type="button" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={async () => {
                             await signOut()
@@ -58,17 +58,17 @@ export default function Header(
                                 router.replace('/')
                             }
                         }}>
-                            <Logout />
+                            <Logout className="w-full h-full" />
                         </button>
                     </div>
                     :
                     <div className="w-full flex flex-col items-center justify-start">
 
                         {pathName !== '/auth' && <button type="button" className="h-[30px] w-[30px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={() => router.push(`/auth/?returnUrl=${encodeURIComponent(pathName)}`)}>
-                            <Login />
+                            <Login className="w-full h-full" />
                         </button>}
                         {pathName !== '/' && <button type="button" className="h-[25px] w-[25px] duration-300 ease-in-out text-gray-300 hover:text-gray-400 cursor-pointer mt-[15px]" onClick={() => router.push('/')}>
-                            <Home />
+                            <Home className="w-full h-full" />
                         </button>}
 
                     </div>

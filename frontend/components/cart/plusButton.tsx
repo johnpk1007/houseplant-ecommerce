@@ -38,6 +38,6 @@ export default function PlusButton({ cartItemId, quantity, stage }: { cartItemId
             }}
             disabled={stage !== 0}
             className={`border-1 border-[#ADADAD] rounded-full h-[12px] w-[11px] text-[8px] text-[#ADADAD] flex justify-center items-center mr-[5px] duration-300 ease-in-out ${stage === 0 && 'cursor-pointer hover:text-white hover:bg-gray-200 hover:border-gray-200'} ${isLoading && 'animate-pulse bg-gray-200 border-gray-200 text-white cursor-default'}`}>
-            <Plus />
+            <Plus className="w-full h-full" />
         </button>)
 }

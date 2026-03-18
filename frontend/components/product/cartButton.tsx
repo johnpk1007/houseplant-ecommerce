@@ -58,7 +58,7 @@ export default function CartButton({ product, cartQuantity }: { product: Pick<Pr
                 :
                 <div className="h-full w-full flex justify-start items-center ">
                     <div className="750px:w-[24px] 750px:h-[24px] w-[18px] h-[18px] 750px:ml-[16px] ml-[10px] mr-[8px] flex-shrink-0">
-                        <Cart />
+                        <Cart className="w-full h-full" />
                     </div>
                     <div className="font-roboto 750px:text-[16px] text-[12px] font-bold text-nowrap text-inherit">ADD TO CART</div>
                 </div>

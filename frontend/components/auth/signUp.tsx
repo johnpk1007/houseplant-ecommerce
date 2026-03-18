@@ -152,7 +152,7 @@ export default function SignUp({ setIsSignUp }: { setIsSignUp: Dispatch<SetState
                                 :
                                 <div className="h-full w-full flex flex-row items-center">
                                     <div className="h-[22px] w-[22px] text-white ml-[12px] mr-[12px]">
-                                        <Login />
+                                        <Login className="w-full h-full" />
                                     </div>
                                     <div className="text-white font-roboto text-[16px] font-bold text-nowrap">Sign in</div>
                                 </div>
@@ -161,7 +161,7 @@ export default function SignUp({ setIsSignUp }: { setIsSignUp: Dispatch<SetState
                     </button>
                     <button type="button" onClick={googleHandleClick} className="box-border border-solid border-[#ADADAD] border-2 rounded-full flex justify-start items-center w-full h-[40px] cursor-pointer text-[#ADADAD] hover:border-black/60 hover:text-black/60 duration-300 ease-in-out">
                         <div className="h-[22px] w-[22px] text-white ml-[12px] mr-[12px]">
-                            <Google />
+                            <Google className="w-full h-full" />
                         </div>
                         <div className="font-roboto text-[16px] font-bold text-nowrap">Sign up with Google</div>
                     </button>

@@ -36,8 +36,8 @@ export default function OrderList({ updatedAt, orderItems, page, setPage, setInd
                 </div>
                 <div className="970px:h-1/4 h-full flex items-center">
                     <div className={`flex flex-row items-center ${maxPage === 0 && 'hidden'}`}>
-                        <button className={`text-[#ADADAD] 1700px:w-[20px] w-[16px] 1700px:h-[20px] h-[16px] duration-300 ease-in-out ${page === 0 ? 'text-[#E2E2E2]' : 'text-[#ADADAD] hover:text-[#ADADAD]/70 cursor-pointer'}`} onClick={handlePrev}><Left /></button>
-                        <button className={`text-[#ADADAD] 1700px:w-[20px] w-[16px] 1700px:h-[20px] h-[16px] duration-300 ease-in-out ${page === maxPage ? 'text-[#E2E2E2]' : 'text-[#ADADAD] hover:text-[#ADADAD]/70 cursor-pointer'} ml-[10px]`} onClick={handleNext}><Right /></button>
+                        <button className={`text-[#ADADAD] 1700px:w-[20px] w-[16px] 1700px:h-[20px] h-[16px] duration-300 ease-in-out ${page === 0 ? 'text-[#E2E2E2]' : 'text-[#ADADAD] hover:text-[#ADADAD]/70 cursor-pointer'}`} onClick={handlePrev}><Left className="w-full h-full" /></button>
+                        <button className={`text-[#ADADAD] 1700px:w-[20px] w-[16px] 1700px:h-[20px] h-[16px] duration-300 ease-in-out ${page === maxPage ? 'text-[#E2E2E2]' : 'text-[#ADADAD] hover:text-[#ADADAD]/70 cursor-pointer'} ml-[10px]`} onClick={handleNext}><Right className="w-full h-full" /></button>
                     </div>
                 </div>
             </div>

@@ -102,7 +102,7 @@ export default function PaymenForm({ address }: { address: AddressState }) {
                             :
                             <div className="h-full w-full flex justify-start items-center ">
                                 <div className="750px:w-[24px] 750px:h-[24px] w-[18px] h-[18px] 750px:ml-[16px] ml-[10px] mr-[8px] flex-shrink-0">
-                                    <Buy />
+                                    <Buy className="w-full h-full" />
                                 </div>
                                 <div className="font-roboto 750px:text-[16px] text-[12px] font-bold text-nowrap text-inherit">ORDER NOW</div>
                             </div>

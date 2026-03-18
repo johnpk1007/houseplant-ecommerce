@@ -28,7 +28,7 @@ export default function ProductMobile({ productData }: { productData: Product })
                 <div ref={scrollRef} className={`w-full h-full flex flex-row justify-start snap-x snap-mandatory overflow-x-auto`}>
                     <div className="w-screen h-full flex-shrink-0 flex flex-col justify-between p-[30px] relative snap-start">
                         <button type="button" onClick={() => scrollTo('right')} className="w-[18px] h-[18px] shrink-0 text-gray-300 animate-pulse absolute top-[50%] right-[30px] flex justify-center items-center">
-                            <Right />
+                            <Right className="w-full h-full" />
                         </button>
                         <div className="font-playfairDisplay text-[32px]">{productData.name}</div>
                         <ButtonFrame productData={productData} />
@@ -36,12 +36,12 @@ export default function ProductMobile({ productData }: { productData: Product })
                     </div>
                     <div className="w-screen h-full flex-shrink-0 flex flex-col justify-end items-start p-[30px] bg-black/20 relative snap-start">
                         <button type="button" onClick={() => scrollTo('left')} className="w-[18px] h-[18px] shrink-0 text-white animate-pulse absolute top-[50%] left-[30px] flex justify-center items-center">
-                            <Left />
+                            <Left className="w-full h-full" />
                         </button>
                         <div className="font-playfairDisplay 750px:text-[16px] 500px:text-[11px] text-white mb-[25px] text-balance">{productData.description}</div>
                         <div className="flex items-center mb-[15px] text-white">
                             <div className="w-[19px] h-[19px] mr-[8px] shrink-0 flex justify-center items-center">
-                                <Light />
+                                <Light className="w-full h-full" />
                             </div>
                             <div className="font-roboto 750px:text-[16px] 500px:text-[11px] text-balance">
                                 {productData.light}
@@ -49,7 +49,7 @@ export default function ProductMobile({ productData }: { productData: Product })
                         </div>
                         <div className="flex items-center mb-[15px] text-white">
                             <div className="w-[19px] h-[19px] mr-[8px] shrink-0 flex justify-center items-center">
-                                <Water />
+                                <Water className="w-full h-full" />
                             </div>
                             <div className="font-roboto 750px:text-[16px] 500px:text-[11px] text-balance">
                                 {productData.water}
@@ -57,7 +57,7 @@ export default function ProductMobile({ productData }: { productData: Product })
                         </div>
                         <div className="flex items-center text-white">
                             <div className="w-[19px] h-[19px] mr-[8px] shrink-0 flex justify-center items-center">
-                                <Temperature />
+                                <Temperature className="w-full h-full" />
                             </div>
                             <div className="font-roboto 750px:text-[16px] 500px:text-[11px] text-balance">
                                 {productData.temperature}

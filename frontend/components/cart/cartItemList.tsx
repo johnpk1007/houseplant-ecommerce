@@ -59,8 +59,8 @@ export default function CartItemList({ page, setPage, setUrl, stage, setStage, c
                         Shopping Cart
                     </div>
                     <div className={`${maxPage === 0 && 'hidden'}`}>
-                        <button className={`text-[#ADADAD] w-[20px] h-[20px] duration-300 ease-in-out ${page === 0 ? 'text-[#E2E2E2]' : 'text-[#ADADAD] hover:text-[#ADADAD]/70 cursor-pointer'}`} onClick={handlePrev}><Left /></button>
-                        <button className={`text-[#ADADAD] w-[20px] h-[20px] duration-300 ease-in-out ${page === maxPage ? 'text-[#E2E2E2]' : 'text-[#ADADAD] hover:text-[#ADADAD]/70 cursor-pointer'} ml-[10px]`} onClick={handleNext}><Right /></button>
+                        <button className={`text-[#ADADAD] w-[20px] h-[20px] duration-300 ease-in-out ${page === 0 ? 'text-[#E2E2E2]' : 'text-[#ADADAD] hover:text-[#ADADAD]/70 cursor-pointer'}`} onClick={handlePrev}><Left className="w-full h-full" /></button>
+                        <button className={`text-[#ADADAD] w-[20px] h-[20px] duration-300 ease-in-out ${page === maxPage ? 'text-[#E2E2E2]' : 'text-[#ADADAD] hover:text-[#ADADAD]/70 cursor-pointer'} ml-[10px]`} onClick={handleNext}><Right className="w-full h-full" /></button>
                     </div>
                 </div>
                 <div className="w-full h-[50%] overflow-hidden">
@@ -100,7 +100,7 @@ export default function CartItemList({ page, setPage, setUrl, stage, setStage, c
                         </div>
                         {cartItems.length > 0 && <button type="button" onClick={handleClick} className={`${stage === 0 ? 'bg-black hover:bg-black/40' : 'bg-black/40 hover:bg-black'} self-end rounded-full text-white h-[40px] flex flex-row items-center relative overflow-hidden duration-300 ease-in-out cursor-pointer`}>
                             <div className="750px:w-[24px] 750px:h-[24px] w-[18px] h-[18px] 750px:ml-[10px] ml-[12px] flex-shrink-0">
-                                {stage === 0 ? <Map /> : <Cart />}
+                                {stage === 0 ? <Map className="w-full h-full" /> : <Cart className="w-full h-full" />}
                             </div>
                             <div className="font-roboto font-bold  750px:text-[16px] text-[12px] 750px:ml-[8px] ml-[10px] 750px:mr-[16px] mr-[20px] text-nowrap">{stage === 0 ? 'PROVIDE SHIPPING INFO' : 'REVIEW YOUR CART'}</div>
                             <span ref={spanRef} className="w-[20px] h-[20px] absolute" style={{ left, top }}></span>
