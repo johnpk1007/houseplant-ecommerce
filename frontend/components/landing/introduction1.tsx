@@ -1,6 +1,7 @@
 import Landing_1 from '@/public/images/Landing_1.webp'
 import Landing_1_mobile from '@/public/images/Landing_1_mobile.webp'
 import LoadingImageWithImageData from '../common/loadingImageWithImageData';
+import Image from 'next/image';
 
 export default function Introduction1() {
   return (
@@ -84,6 +85,14 @@ export default function Introduction1() {
       <div className="500px:hidden flex w-full h-full flex flex-col relative">
         <div className="w-full h-full absolute top-0 left-0 -z-1">
           <LoadingImageWithImageData imageData={Landing_1_mobile} fetchpriority='high' />
+          <Image
+            src={Landing_1_mobile}
+            alt="product"
+            fill
+            className="object-cover"
+            priority={true}
+            fetchPriority='high'
+          />
         </div>
         <div className="flex flex-col w-full border-x-20 border-transparent mt-auto mb-auto">
           <div className="font-vogue text-[70px] text-white leading-none self-start border-l-10 border-transparent">
