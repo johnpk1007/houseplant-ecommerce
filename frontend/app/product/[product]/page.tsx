@@ -6,7 +6,7 @@ export default async function Product({ params }: { params: Promise<{ product: s
     const { product } = await params
     const productData = await getProductData({ product })
     return (
-        <div className="w-full 1100px:h-[700px] 750px:h-[560px] 500px:h-[380px]">
+        <div className="w-full 1100px:h-[700px] 750px:h-[560px] 500px:h-[380px] h-screen">
             <ProductScreen productData={productData} />
             <ProductMobile productData={productData} />
         </div>
