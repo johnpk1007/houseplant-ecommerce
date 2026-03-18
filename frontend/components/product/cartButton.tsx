@@ -46,7 +46,7 @@ export default function CartButton({ product, cartQuantity }: { product: Pick<Pr
         }
     };
     return (
-        <button aria-label="Cart" onClick={handleClick} className="relative rounded-full bg-black text-white hover:bg-black/40 750px:w-[170px] 750px:h-[40px] w-[125px] h-[30px] duration-300 ease-in-out cursor-pointer overflow-hidden">
+        <button aria-label="Cart" onClick={handleClick} className="relative rounded-full bg-black text-white hover:bg-black/40 750px:w-[170px] 750px:h-[40px] 500px:w-[125px] 500px:h-[30px] w-[170px] h-[40px] duration-300 ease-in-out cursor-pointer overflow-hidden">
             {isLoading ?
                 <div className="h-full w-full flex flex-row justify-center">
                     <div className="h-full w-[40%] flex flex-row justify-around items-center">
@@ -57,10 +57,10 @@ export default function CartButton({ product, cartQuantity }: { product: Pick<Pr
                 </div>
                 :
                 <div className="h-full w-full flex justify-start items-center ">
-                    <div className="750px:w-[24px] 750px:h-[24px] w-[18px] h-[18px] 750px:ml-[16px] ml-[10px] mr-[8px] flex-shrink-0">
+                    <div className="750px:w-[24px] 750px:h-[24px] 500px:w-[18px] 500px:h-[18px] w-[24px] h-[24px] 750px:ml-[16px] 500px:ml-[10px] ml-[16px] mr-[8px] flex-shrink-0">
                         <Cart className="w-full h-full" />
                     </div>
-                    <div className="font-roboto 750px:text-[16px] text-[12px] font-bold text-nowrap text-inherit">ADD TO CART</div>
+                    <div className="font-roboto 750px:text-[16px] 500px:text-[12px] text-[16px] font-bold text-nowrap text-inherit">ADD TO CART</div>
                 </div>
             }
             <span ref={spanRef} className="w-[20px] h-[20px]" style={{ left, top }}></span>

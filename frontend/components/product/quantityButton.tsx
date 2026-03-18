@@ -28,13 +28,13 @@ export default function QuantityButton({ cartQuantity, setCartQuantity }: { cart
         setCartQuantity(state => Math.min(state + 1, 99))
     }
     return (
-        <div className="relative box-border border-solid border-black border-2 rounded-full flex justify-between items-center text-black hover:bg-black/10 hover:border-black/10 hover:text-white 750px:w-[170px] 750px:h-[40px] w-[125px] h-[30px] mb-[14px] duration-300 ease-in-out text-inherit overflow-hidden">
-            <button aria-label="Minus" onClick={minusClick} type="button" className="750px:w-[20px] 750px:h-[20px] w-[16px] h-[16px] flex-shrink-0 flex justify-center items-center ml-[10px] cursor-pointer rounded-full relative">
+        <div className="relative box-border border-solid border-black border-2 rounded-full flex justify-between items-center text-black hover:bg-black/10 hover:border-black/10 hover:text-white 750px:w-[170px] 750px:h-[40px] 500px:w-[125px] 500px:h-[30px] w-[170px] h-[40px] mb-[14px] duration-300 ease-in-out text-inherit overflow-hidden">
+            <button aria-label="Minus" onClick={minusClick} type="button" className="750px:w-[20px] 750px:h-[20px] 500px:w-[16px] 500px:h-[16px] w-[20px] h-[20px] flex-shrink-0 flex justify-center items-center ml-[10px] cursor-pointer rounded-full relative">
                 <Minus className="w-full h-full" />
                 <span ref={minusRef} className="w-[20px] h-[20px] absolute" style={{ left: minusLeft, top: minusTop }}></span>
             </button>
-            <div className="font-roboto 750px:text-[20px] text-[12px] font-bold text-nowrap text-inherit">{cartQuantity}</div>
-            <button aria-label="Plus" onClick={plusClick} type="button" className="750px:w-[20px] 750px:h-[20px] w-[16px] h-[16px] flex-shrink-0 flex justify-center items-center mr-[10px] cursor-pointer rounded-full relative">
+            <div className="font-roboto 750px:text-[20px] 500px:text-[12px] text-[20px] font-bold text-nowrap text-inherit">{cartQuantity}</div>
+            <button aria-label="Plus" onClick={plusClick} type="button" className="750px:w-[20px] 750px:h-[20px] 500px:w-[16px] 500px:h-[16px] w-[20px] h-[20px] flex-shrink-0 flex justify-center items-center mr-[10px] cursor-pointer rounded-full relative">
                 <Plus className="w-full h-full" />
                 <span ref={plusRef} className="w-[20px] h-[20px] absolute" style={{ left: plusLeft, top: plusTop }}></span>
             </button>

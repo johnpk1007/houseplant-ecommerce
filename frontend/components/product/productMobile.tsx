@@ -32,7 +32,7 @@ export default function ProductMobile({ productData }: { productData: Product })
                         </button>
                         <div className="font-playfairDisplay text-[32px]">{productData.name}</div>
                         <ButtonFrame productData={productData} />
-                        <div className="text-[24px] font-roboto text font-bold z-2 absolute right-5 bottom-5">${productData.price}</div>
+                        <div className="text-[24px] font-roboto text font-bold z-2 absolute right-5 500px:bottom-5 bottom-10">${productData.price}</div>
                     </div>
                     <div className="w-screen h-full flex-shrink-0 flex flex-col justify-end items-start p-[30px] bg-black/20 relative snap-start">
                         <button type="button" onClick={() => scrollTo('left')} className="w-[18px] h-[18px] shrink-0 text-white animate-pulse absolute top-[50%] left-[30px] flex justify-center items-center">
