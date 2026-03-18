@@ -91,7 +91,6 @@ export default function Introduction1() {
             className="object-cover"
             priority={true}
             fetchPriority='high'
-            placeholder='blur'
           />
         </div>
         <div className="flex flex-col w-full border-x-20 border-transparent mt-auto mb-auto">
