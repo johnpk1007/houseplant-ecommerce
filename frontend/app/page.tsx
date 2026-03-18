@@ -8,7 +8,7 @@ export default async function Landing() {
   return (
     <div className="flex flex-col">
       <Introduction1 />
-      {/* <Introduction2 /> */}
+      <Introduction2 />
       <Products productsArray={productsArray} />
     </div>
   );
