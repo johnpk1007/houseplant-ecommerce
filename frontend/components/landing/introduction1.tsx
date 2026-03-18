@@ -80,7 +80,10 @@ export default function Introduction1() {
           </div>
         </div>
       </div>
-      <div className="500px:hidden flex bg-[url(/images/Landing_1.webp)] w-full h-full bg-cover bg-center flex flex-col">
+      <div className="500px:hidden flex w-full h-full flex flex-col">
+        <div className="w-full h-full absolute top-0 left-0 z-0">
+          <LoadingImageWithImageData imageData={Landing_1} fetchpriority='high' />
+        </div>
         <div className="flex flex-col w-full border-x-20 border-transparent mt-auto mb-auto">
           <div className="font-vogue text-[70px] text-white leading-none self-start border-l-10 border-transparent">
             BRING
