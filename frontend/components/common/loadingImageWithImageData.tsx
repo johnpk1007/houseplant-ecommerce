@@ -5,6 +5,7 @@ import { useState } from "react"
 
 export default function LoadingImageWithImageData({ imageData, fetchpriority }: { imageData: StaticImageData, fetchpriority?: "high" }) {
     const [isLoaded, setIsLoaded] = useState(false)
+    const isLCP = fetchpriority === "high";
     return (
         <div
             className={`-z-1 relative w-full h-full`}
@@ -14,17 +15,20 @@ export default function LoadingImageWithImageData({ imageData, fetchpriority }: 
                 src={imageData}
                 alt="product"
                 fill
+                priority={isLCP}
+                fetchPriority={fetchpriority}
                 className={`object-cover 
-                    ${fetchpriority === "high"
+                    ${isLCP
                         ? ""
                         : isLoaded
                             ? "opacity-100"
                             : "opacity-0"
                     } 
-                    transition-opacity duration-300 ease-in-out`}
+                    ${isLCP ?
+                        ""
+                        :
+                        "transition-opacity duration-300 ease-in-out"}`}
                 onLoad={() => setIsLoaded(true)}
-                priority={fetchpriority === "high"}
-                {...(fetchpriority ? { fetchPriority: fetchpriority } : {})}
             />
         </div>)
 }
