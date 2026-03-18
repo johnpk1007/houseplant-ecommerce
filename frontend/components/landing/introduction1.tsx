@@ -91,6 +91,7 @@ export default function Introduction1() {
             className="object-cover"
             priority={true}
             fetchPriority='high'
+            sizes="100vw"
           />
         </div>
         <div className="flex flex-col w-full border-x-20 border-transparent mt-auto mb-auto">
