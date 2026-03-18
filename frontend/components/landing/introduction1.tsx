@@ -6,7 +6,7 @@ import Image from 'next/image';
 export default function Introduction1() {
   return (
     <div className="w-full 1700px:h-[956px] h-[750px] flex flex-row">
-      {/* <div className="flex-1 500px:flex flex-row hidden">
+      <div className="flex-1 500px:flex flex-row hidden">
         <div className="flex-1 relative items-center ml-10 970px:flex hidden">
           <div className="absolute h-full flex flex-col justify-center">
             <div className="flex flex-col 1700px:h-fit 970px:h-full justify-evenly 1700px:ml-0 1500px:ml-[50%]">
@@ -37,8 +37,8 @@ export default function Introduction1() {
             <LoadingImageWithImageData imageData={Landing_1} />
           </div>
         </div>
-      </div> */}
-      {/* <div className="flex-1 500px:flex items-center hidden">
+      </div>
+      <div className="flex-1 500px:flex items-center hidden">
         <div className="970px:w-[500px] 970px:h-[530px] 500px:h-full flex flex-col 1500px:ml-[20%] 970px:ml-[10%]">
           <div className="flex-col items-center mb-[10%] 970px:flex hidden">
             <div className="font-playfairDisplay 1700px:text-[40px] 970px:text-[32px] text-nowrap">The Art of Slow Living,</div>
@@ -81,8 +81,8 @@ export default function Introduction1() {
             </div>
           </div>
         </div>
-      </div> */}
-      <div className="flex w-full h-full flex flex-col relative">
+      </div>
+      <div className="500px:hidden flex w-full h-full flex flex-col relative">
         <div className="w-full h-full absolute top-0 left-0 -z-1">
           <Image
             src={Landing_1_mobile}
