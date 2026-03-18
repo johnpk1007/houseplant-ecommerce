@@ -9,7 +9,7 @@
 
 | Live Site | Project Duration | Status |
 | :--- | :--- | :--- |
-| [houseplant-portfolio.com/](https://www.houseplant-portfolio.com) | Oct 2025 – Mar 2026 | Deployed and Maintained |
+| [houseplant-portfolio.com](https://www.houseplant-portfolio.com) | Oct 2025 – Mar 2026 | Deployed and Maintained |
 
 ---
 
