@@ -52,8 +52,8 @@ export default async function RootLayout({
     // className={`${playfairDisplay.variable} ${vogueFont.variable} ${bebasNeue.variable} ${roboto.variable}`}
     >
       <body className="min-h-screen flex flex-col relative">
-        <AuthInitializer initialCart={initialCart} />
-        <Toaster
+        {/* <AuthInitializer initialCart={initialCart} /> */}
+        {/* <Toaster
           toastOptions={{
             success: {
               iconTheme: {
@@ -76,10 +76,10 @@ export default async function RootLayout({
               },
             },
           }}
-        />
-        <Header
+        /> */}
+        {/* <Header
           initialCart={initialCart}
-        />
+        /> */}
         <main className="flex-1 w-full max-w-[1923px] mx-auto">
           {children}
         </main>
