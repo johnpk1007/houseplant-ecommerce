@@ -15,41 +15,42 @@ export const metadata: Metadata = {
   },
 };
 
-const playfairDisplay = Playfair_Display({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-playfairDisplay',
-})
+// const playfairDisplay = Playfair_Display({
+//   subsets: ['latin'],
+//   display: 'swap',
+//   variable: '--font-playfairDisplay',
+// })
 
-const bebasNeue = Bebas_Neue({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-bebasNeue',
-  weight: "400"
-})
+// const bebasNeue = Bebas_Neue({
+//   subsets: ['latin'],
+//   display: 'swap',
+//   variable: '--font-bebasNeue',
+//   weight: "400"
+// })
 
-const roboto = Roboto({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-roboto',
-})
+// const roboto = Roboto({
+//   subsets: ['latin'],
+//   display: 'swap',
+//   variable: '--font-roboto',
+// })
 
-const vogueFont = localFont({
-  src: '../public/fonts/Vogue.ttf',
-  display: 'swap',
-  variable: '--font-vogue',
-})
+// const vogueFont = localFont({
+//   src: '../public/fonts/Vogue.ttf',
+//   display: 'swap',
+//   variable: '--font-vogue',
+// })
 
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const initialCart = await getAllCartItem()
-  const initialCart = null
+  const initialCart = await getAllCartItem()
 
   return (
-    <html lang="en" className={`${playfairDisplay.variable} ${vogueFont.variable} ${bebasNeue.variable} ${roboto.variable}`}>
+    <html lang="en"
+    // className={`${playfairDisplay.variable} ${vogueFont.variable} ${bebasNeue.variable} ${roboto.variable}`}
+    >
       <body className="min-h-screen flex flex-col relative">
         <AuthInitializer initialCart={initialCart} />
         <Toaster
