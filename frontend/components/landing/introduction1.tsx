@@ -80,7 +80,7 @@ export default function Introduction1() {
           </div>
         </div>
       </div>
-      <div className="500px:hidden flex w-full h-full flex flex-col">
+      <div className="500px:hidden flex w-full h-full flex flex-col relative">
         <div className="w-full h-full absolute top-0 left-0 z-0">
           <LoadingImageWithImageData imageData={Landing_1} fetchpriority='high' />
         </div>
