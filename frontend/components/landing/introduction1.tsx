@@ -46,7 +46,7 @@ export default function Introduction1() {
           </div>
           <div className="flex 970px:flex-row 500px:flex-col h-full">
             <div className="970px:flex-1 flex flex-col 970px:h-auto 500px:h-3/5">
-              <div className="500px:mx-5 500px:mb-6 970px:text-[16px] 500px:text-[13px] text-[#ADADAD] 970px:h-auto 500px:h-1/3 970px:block 500px:flex 500px:items-center 970px:w-auto 750px:w-1/2 500px:w-auto">
+              <div className="font-playfairDisplay 500px:mx-5 500px:mb-6 970px:text-[16px] 500px:text-[13px] text-[#ADADAD] 970px:h-auto 500px:h-1/3 970px:block 500px:flex 500px:items-center 970px:w-auto 750px:w-1/2 500px:w-auto">
                 Slow living begins within the spaces we return to each day. By welcoming houseplants indoors, the home becomes calmer and more intentional, grounded in the quiet presence of nature.
               </div>
               <div className="970px:hidden relative 500px:h-1/3">
@@ -59,7 +59,7 @@ export default function Introduction1() {
                   </div>
                 </div>
               </div>
-              <div className="500px:mx-5 970px:text-[16px] 500px:text-[13px] text-[#ADADAD] 970px:h-auto 500px:h-1/3 970px:block 500px:flex 500px:items-center 970px:w-auto 750px:w-1/2 500px:w-auto">
+              <div className="font-playfairDisplay 500px:mx-5 970px:text-[16px] 500px:text-[13px] text-[#ADADAD] 970px:h-auto 500px:h-1/3 970px:block 500px:flex 500px:items-center 970px:w-auto 750px:w-1/2 500px:w-auto">
                 As plants take root, so do slower rhythms. The simple acts of watering, adjusting light, and observing new growth invite moments of care and attention, turning routine into ritual.
               </div>
             </div>
@@ -70,11 +70,11 @@ export default function Introduction1() {
               </div>
             </div>
             <div className="970px:flex-1 flex 970px:flex-col 500px:flex-row 970px:h-auto 500px:h-1/5 relative">
-              <div className="500px:mx-3 500px:mx-5 500px:mb-6 970px:text-[16px] 500px:text-[13px] text-[#ADADAD] 500px:absolute 970px:relative 970px:left-0 500px:-left-[83%] 970px:top-0 500px:-top-[35%] 970px:w-auto 750px:w-1/2 500px:w-2/3 bg-white border-10 border-white">
+              <div className="font-playfairDisplay 500px:mx-3 500px:mx-5 500px:mb-6 970px:text-[16px] 500px:text-[13px] text-[#ADADAD] 500px:absolute 970px:relative 970px:left-0 500px:-left-[83%] 970px:top-0 500px:-top-[35%] 970px:w-auto 750px:w-1/2 500px:w-2/3 bg-white border-10 border-white">
                 Gradually, these rituals shape the atmosphere. Greenery softens light, enriches texture, and brings a sense of balance that flows naturally from room to room.
               </div>
               <div className="970px:block 500px:flex justify-end 500px:border-r-50 970px:border-r-0 500px:border-t-50 970px:border-t-0 border-white">
-                <div className="970px:mx-5 970px:text-[16px] 500px:text-[13px] text-[#ADADAD] 970px:h-auto 500px:h-1/2 970px:w-auto 750px:w-1/3 500px:w-3/4">
+                <div className="font-playfairDisplay 970px:mx-5 970px:text-[16px] 500px:text-[13px] text-[#ADADAD] 970px:h-auto 500px:h-1/2 970px:w-auto 750px:w-1/3 500px:w-3/4">
                   With time, plants and people grow together, making slow living a natural part of home.
                 </div>
               </div>
