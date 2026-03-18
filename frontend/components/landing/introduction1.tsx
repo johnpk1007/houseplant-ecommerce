@@ -38,7 +38,7 @@ export default function Introduction1() {
           </div>
         </div>
       </div>
-      <div className="flex-1 500px:flex items-center hidden">
+      {/* <div className="flex-1 500px:flex items-center hidden">
         <div className="970px:w-[500px] 970px:h-[530px] 500px:h-full flex flex-col 1500px:ml-[20%] 970px:ml-[10%]">
           <div className="flex-col items-center mb-[10%] 970px:flex hidden">
             <div className="font-playfairDisplay 1700px:text-[40px] 970px:text-[32px] text-nowrap">The Art of Slow Living,</div>
@@ -81,8 +81,8 @@ export default function Introduction1() {
             </div>
           </div>
         </div>
-      </div>
-      <div className="500px:hidden flex w-full h-full flex flex-col relative">
+      </div> */}
+      <div className="flex w-full h-full flex flex-col relative">
         <div className="w-full h-full absolute top-0 left-0 -z-1">
           <Image
             src={Landing_1_mobile}
