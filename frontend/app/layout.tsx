@@ -9,7 +9,10 @@ import { getAllCartItem } from "@/services/serverSide/common";
 
 export const metadata: Metadata = {
   title: "Houseplant E-commerce portfolio",
-  description: "Portfolio project: a houseplant e-commerce demo site demonstrating cart, checkout, and order management features."
+  description: "Portfolio project: a houseplant e-commerce demo site demonstrating cart, checkout, and order management features.",
+  openGraph: {
+    images: ["/images/Landing_1_mobile.webp"]
+  },
 };
 
 const playfairDisplay = Playfair_Display({
