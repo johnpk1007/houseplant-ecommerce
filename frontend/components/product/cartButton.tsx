@@ -46,7 +46,7 @@ export default function CartButton({ product, cartQuantity }: { product: Pick<Pr
         }
     };
     return (
-        <button onClick={handleClick} className="relative rounded-full bg-black text-white hover:bg-black/40 750px:w-[170px] 750px:h-[40px] w-[125px] h-[30px] duration-300 ease-in-out cursor-pointer overflow-hidden">
+        <button aria-label="Cart" onClick={handleClick} className="relative rounded-full bg-black text-white hover:bg-black/40 750px:w-[170px] 750px:h-[40px] w-[125px] h-[30px] duration-300 ease-in-out cursor-pointer overflow-hidden">
             {isLoading ?
                 <div className="h-full w-full flex flex-row justify-center">
                     <div className="h-full w-[40%] flex flex-row justify-around items-center">
