@@ -4,7 +4,6 @@ import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from "react";
 import { localSignIn } from "@/services/clientSide/auth"
 import { getAllCartItem } from "@/services/clientSide/cart"
 import { useCartItemStore } from "@/services/stores/cartItemStore"
-import { useSignedInStore } from "@/services/stores/signedInStore"
 import { useRouter } from 'next/navigation'
 import { errorToast } from "@/services/toast/toast";
 import AuthInput from "./authInput";
@@ -25,7 +24,6 @@ export default function SignIn({ setIsSignUp }: { setIsSignUp: Dispatch<SetState
     const [left, setLeft] = useState(0);
     const [top, setTop] = useState(0);
     const setCartItemsArray = useCartItemStore((state) => state.setCartItemsArray)
-    const setSigneIn = useSignedInStore((state) => state.setIsSignedIn)
     const router = useRouter()
     const searchParams = useSearchParams()
     const returnUrl = searchParams.get('returnUrl') || '/'
@@ -104,8 +102,6 @@ export default function SignIn({ setIsSignUp }: { setIsSignUp: Dispatch<SetState
         }
         const cartItems = await getAllCartItem()
         setCartItemsArray(cartItems)
-        setSigneIn(true)
-        setIsRequestLoading(false);
         router.replace(returnUrl)
     }
 

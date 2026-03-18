@@ -3,7 +3,6 @@ import Google from "@/public/icons/Google__G__logo.svg"
 import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from "react";
 import { localSignUp } from "@/services/clientSide/auth"
 import { useCartItemStore } from "@/services/stores/cartItemStore"
-import { useSignedInStore } from "@/services/stores/signedInStore"
 import { getAllCartItem } from "@/services/clientSide/cart"
 import { useRouter, useSearchParams } from 'next/navigation'
 import AuthInput from "./authInput";
@@ -53,7 +52,6 @@ export default function SignUp({ setIsSignUp }: { setIsSignUp: Dispatch<SetState
 
 
     const setCartItemsArray = useCartItemStore((state) => state.setCartItemsArray)
-    const setSigneIn = useSignedInStore((state) => state.setIsSignedIn)
     const router = useRouter()
 
     const emptyFields = Object.entries(signUpField)
@@ -90,8 +88,6 @@ export default function SignUp({ setIsSignUp }: { setIsSignUp: Dispatch<SetState
         }
         const cartItems = await getAllCartItem()
         setCartItemsArray(cartItems)
-        setSigneIn(true)
-        setIsRequestLoading(false);
         router.replace(returnUrl)
     }
 
