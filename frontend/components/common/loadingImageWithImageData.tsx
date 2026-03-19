@@ -11,7 +11,7 @@ export default function LoadingImageWithImageData({ imageData, fetchpriority }: 
             src={imageData}
             alt="product"
             fill
-            className={`object-cover ${isLoaded ? "opacity-100" : "opacity-10"} transition-opacity duration-300 ease-in-out hidden`}
+            className={`object-cover ${isLoaded ? "opacity-100" : "opacity-10"} transition-opacity duration-300 ease-in-out`}
             onLoad={() => setIsLoaded(true)}
             {...(fetchpriority ? { fetchPriority: fetchpriority } : {})}
         />

@@ -17,7 +17,7 @@ export default async function Introduction2() {
                 </div>
                 <div className="1700px:w-[85%] w-full">
                     <div className="w-full aspect-[4/1] object-cover 500px:block hidden">
-                        <LoadingImageWithImageData imageData={Landing_2} />
+                        {/* <LoadingImageWithImageData imageData={Landing_2} /> */}
                     </div>
                     <div className="flex 750px:flex-row flex-col w-full 1300px:aspect-[7/1] 1100px:aspect-[6/1] 750px:aspect-[4/1] 500px:aspect-[3/1] justify-center">
                         <div className="1300px:w-2/5 750px:w-1/2 750px:my-0 300px:my-5 w-full text-balance flex items-center font-playfairDisplay 1300px:text-[40px] text-[32px] mr-10 text-balance">The Difference is in the Details and the Roots.</div>
