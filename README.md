@@ -82,11 +82,15 @@ I designed a relational database schema using PostgreSQL and Prisma ORM, focusin
 ### Transactional Order Processing (Cart to Order)
 The core of the e-commerce engine lies in the secure conversion of CartItem data into OrderItem records. I implemented this using Prisma Transactions to ensure atomic operations:
 
-* **Atomic State Transition:** The entire checkout process is wrapped in a single database transaction. This ensures that Order and OrderItem are created only if the payment is validated, preventing data mismatch where a cart might be cleared without a successful order record.
+* **Double-Layer Inventory Validation:**
+    * **Pre-Check (Cart Level):** Real-time stock availability is verified when a user adds an item to their cart, providing immediate feedback and preventing invalid selections.
+    * **Final-Check (Payment Level):** A second, mandatory stock verification occurs upon receiving the **Stripe Webhook** confirmation. This ensures inventory is still available even if other users purchased the same item during the checkout window.
+      
+* **High-Concurrency Inventory Control (Optimistic Locking):** To prevent race conditions during simultaneous orders, I implemented **Optimistic Locking using a version field**. The system updates the stock only if the `version` matches the one retrieved at the start of the transaction. If a conflict occurs (meaning another process updated the record), the transaction fails gracefully, preventing overselling and ensuring strict data integrity.
+
+* **Atomic State Transition:** Upon a successful payment_intent.succeeded event, the system executes a Database Transaction to update the order status to PAID and decrement product stock via Version-based Optimistic Locking. This transaction ensures that inventory is only reduced if the version matches and the quantity is available; once this atomic operation completes without error, the system subsequently clears the user's cart.
 
 * **Price Snapshotting:** Unlike CartItems which dynamically reference live product prices, OrderItems capture and store the exact price at the moment of the transaction. This safeguards historical financial records against future product price updates or deletions.
-
-* **Ownership & Integrity Validation:** Before conversion, the system performs a multi-layer check to verify that the requested CartItems belong to the authenticated userId, mitigating unauthorized order injection vulnerabilities.
 
 ---
 
