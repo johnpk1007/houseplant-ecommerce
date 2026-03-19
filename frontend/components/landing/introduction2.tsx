@@ -1,13 +1,7 @@
 import Landing_2 from '@/public/images/Landing_2.webp'
 import LoadingImageWithImageData from '../common/loadingImageWithImageData';
-// import Image from 'next/image';
-// import { headers } from 'next/headers';
 
 export default async function Introduction2() {
-    // const headerList = await headers();
-    // const userAgent = headerList.get('user-agent') || '';
-    // const isMobile = /Android|iPhone|iPad/i.test(userAgent);
-
     return (
         <div className="w-full flex flex-col items-center">
             <div className="1700px:h-[100px] h-[40px] w-full"></div>
