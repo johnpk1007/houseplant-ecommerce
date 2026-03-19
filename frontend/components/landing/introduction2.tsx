@@ -4,9 +4,9 @@ import Image from 'next/image';
 import { headers } from 'next/headers';
 
 export default async function Introduction2() {
-    // const headerList = await headers();
-    // const userAgent = headerList.get('user-agent') || '';
-    // const isMobile = /Android|iPhone|iPad/i.test(userAgent);
+    const headerList = await headers();
+    const userAgent = headerList.get('user-agent') || '';
+    const isMobile = /Android|iPhone|iPad/i.test(userAgent);
 
     return (
         <div className="w-full flex flex-col items-center">
@@ -15,7 +15,7 @@ export default async function Introduction2() {
                 <div className="relative h-[377px] w-[15%] 1700px:block hidden">
                     <div className="absolute font-playfairDisplay text-[20px] text-[#ADADAD] origin-top-left rotate-90 text-nowrap left-[60%]">Expertly sourced for your peace of mind.</div>
                 </div>
-                {/* <div className="1700px:w-[85%] w-full">
+                <div className="1700px:w-[85%] w-full">
                     {!isMobile && <div className="w-full aspect-[4/1] object-cover relative">
                         <LoadingImageWithImageData imageData={Landing_2} />
                     </div>}
@@ -23,7 +23,7 @@ export default async function Introduction2() {
                         <div className="1300px:w-2/5 750px:w-1/2 750px:my-0 300px:my-5 w-full text-balance flex items-center font-playfairDisplay 1300px:text-[40px] text-[32px] mr-10 text-balance">The Difference is in the Details and the Roots.</div>
                         <div className="1300px:w-3/5 750px:w-1/2 w-full text-balance flex items-center font-playfairDisplay 1300px:text-[16px] text-[13px] text-[#ADADAD]">We believe every space deserves a touch of life. That’s why we source only the healthiest, most vibrant plants and provide you with simple, straightforward care guidance. From low-light corners to sun-drenched windows, find the perfect companion that is ready to thrive alongside you.</div>
                     </div>
-                </div> */}
+                </div>
             </div>
         </div>
     )

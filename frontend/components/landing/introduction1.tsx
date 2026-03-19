@@ -33,8 +33,16 @@ export default function Introduction1() {
           </div>
         </div>
         <div className="flex-1 flex 1700px:justify-start 500px:justify-end">
-          <div className="1700px:h-[956px] 1700px:w-[373px] 970px:w-[270px] 500px:h-[750px] 500px:w-[175px]">
-            <LoadingImageWithImageData imageData={Landing_1} />
+          <div className="1700px:h-[956px] 1700px:w-[373px] 970px:w-[270px] 500px:h-[750px] 500px:w-[175px] relative">
+            {/* <LoadingImageWithImageData imageData={Landing_1} /> */}
+            <Image
+              src={Landing_1}
+              alt="product"
+              fill
+              className="object-cover"
+              priority={true}
+              fetchPriority='high'
+            />
           </div>
         </div>
       </div>
